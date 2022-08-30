@@ -1,4 +1,4 @@
-package com.hanghae.greenstep.member.kakaoLogin;
+package com.hanghae.greenstep.kakaoLogin;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,6 +9,7 @@ import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.TokenDto;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.jwt.UserDetailsImpl;
+import com.hanghae.greenstep.kakaoLogin.KakaoMemberInfoDto;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
 import lombok.RequiredArgsConstructor;

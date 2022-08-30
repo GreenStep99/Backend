@@ -1,4 +1,4 @@
-package com.hanghae.greenstep.member.kakaoLogin;
+package com.hanghae.greenstep.kakaoLogin;
 
 
 import lombok.AllArgsConstructor;
