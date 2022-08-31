@@ -6,19 +6,15 @@ import lombok.Getter;
 public class MemberRequestDto {
     private String nickname;
 
-    private String password;
-
     private String name;
 
-    private String loginId;
+    private String profilePhoto;
 
     public MemberRequestDto(){}
 
-    public MemberRequestDto(String nickname, String password, String name, String loginId){
+    public MemberRequestDto(String nickname, String name, String profilePhoto){
         this.nickname=nickname;
-        this.password=password;
         this.name=name;
-        this.loginId=loginId;
-
+        this.profilePhoto=profilePhoto;
     }
 }

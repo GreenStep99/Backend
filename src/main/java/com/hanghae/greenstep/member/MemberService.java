@@ -7,6 +7,7 @@ import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.jwt.RefreshTokenRepository;
 import com.hanghae.greenstep.jwt.TokenDto;
 import com.hanghae.greenstep.jwt.TokenProvider;
+import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,8 @@ public class MemberService {
     private final TokenProvider tokenProvider;
 
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final Check check;
 
 
     public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
@@ -69,4 +72,12 @@ public class MemberService {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
+
+    public ResponseEntity<?> updateProfileInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
+        Member member = check.accessTokenCheck(request);
+        member.update(memberRequestDto);
+    return new ResponseEntity<>(Message.success(null),HttpStatus.OK);
+    }
+
+
 }
