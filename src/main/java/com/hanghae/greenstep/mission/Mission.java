@@ -2,11 +2,9 @@ package com.hanghae.greenstep.mission;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -27,5 +25,8 @@ public class Mission {
 
     @Column(length = 80)
     private String missionType;
+
+    @Column
+    private Boolean onShow = false;
 
 }
