@@ -2,6 +2,8 @@ package com.hanghae.greenstep.jwt;
 
 
 
+import com.hanghae.greenstep.exception.CustomException;
+import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.member.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -78,7 +80,7 @@ public class TokenProvider {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || AnonymousAuthenticationToken.class.
                 isAssignableFrom(authentication.getClass())) {
-            return null;
+            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
         }
         return ((UserDetailsImpl) authentication.getPrincipal()).getMember();
     }
@@ -96,7 +98,7 @@ public class TokenProvider {
         } catch (IllegalArgumentException e) {
             log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
         }
-        return false;
+        throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
     @Transactional(readOnly = true)
