@@ -89,4 +89,10 @@ public class Member {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public void update(MemberRequestDto memberRequestDto){
+        if(memberRequestDto.getName()!=null)this.name = memberRequestDto.getName();
+        if(memberRequestDto.getNickname()!=null)this.nickname=memberRequestDto.getNickname();
+        if(memberRequestDto.getProfilePhoto()!=null)this.profilePhoto=memberRequestDto.getProfilePhoto();
+    }
 }
