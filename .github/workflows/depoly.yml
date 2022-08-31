@@ -24,6 +24,25 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         shell: bash
+        
+      - name: make email_pwd.properties
+        if: contains(github.ref, 'main')
+        run: |
+          echo "ls -a . & pwd"
+          pwd
+          ls -a .
+          echo "mkdir & touch"
+          mkdir -p ./src/main/resources 
+          cd ./src/main/resources
+          touch ./email_pwd.properties
+          pwd
+          ls -a .
+          echo "copy properties"
+          echo $DEV_PROP >> ./email_pwd.properties
+          cat email_pwd.properties
+        shell: bash
+        env:
+          DEV_PROP: ${{ secrets.EMAIL_PASSWORD }}
 
       - name: Build with Gradle
         run: ./gradlew build
