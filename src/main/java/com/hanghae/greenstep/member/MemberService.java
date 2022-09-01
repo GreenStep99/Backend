@@ -28,9 +28,9 @@ public class MemberService {
 
 
     public ResponseEntity<?> refreshToken( HttpServletRequest request, HttpServletResponse response) {
-        tokenProvider.validateToken(request.getHeader("Refresh_Token"));
+        tokenProvider.validateToken(request.getHeader("Refresh-Token"));
         Member requestingMember = validateMember(request);
-        long accessTokenExpire = Long.parseLong(request.getHeader("Access_Token_Expire_Time"));
+        long accessTokenExpire = Long.parseLong(request.getHeader("Access-Token-Expire-Time"));
         long now = (new Date().getTime());
         if (now>accessTokenExpire){
             tokenProvider.deleteRefreshToken(requestingMember);
@@ -40,7 +40,7 @@ public class MemberService {
         if (refreshTokenConfirm == null) {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
         }
-        if (Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh_Token"))) {
+        if (Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh-Token"))) {
             TokenDto tokenDto = tokenProvider.generateAccessTokenDto(requestingMember);
             accessTokenToHeaders(tokenDto, response);
             return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
@@ -51,7 +51,7 @@ public class MemberService {
     }
     public void accessTokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
+        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
     public ResponseEntity<?> updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
@@ -61,8 +61,8 @@ public class MemberService {
     }
 
     public Member validateMember(HttpServletRequest request) {
-        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
+        if (!tokenProvider.validateToken(request.getHeader("Refresh-Token"))) {
+            return null;
         }
         return tokenProvider.getMemberFromAuthentication();
     }
