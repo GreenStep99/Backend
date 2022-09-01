@@ -93,7 +93,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
-       throw new CustomException(ErrorCode.INVALID_TOKEN);
+       return null;
     }
 
 }
