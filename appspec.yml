@@ -5,7 +5,7 @@ files:
   - source: /
     destination: /home/ubuntu/app
 permissions:
-  - object: /opt/greenstep/
+  - object: /home/ubuntu/app
     owner: ubuntu
     group: ubuntu
     mode: 755
