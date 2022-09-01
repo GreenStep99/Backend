@@ -16,13 +16,4 @@ public class MemberResponseDto {
     private String email;
     private String profilePhoto;
 
-public MemberResponseDto(Member member){
-    this.memberId = member.getId();
-    this.nickname = member.getNickname();
-    this.name = member.getName();
-    this.email = member.getEmail();
-    this.profilePhoto = member.getProfilePhoto();
-
-}
-
 }

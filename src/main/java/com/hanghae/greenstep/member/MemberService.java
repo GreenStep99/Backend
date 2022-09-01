@@ -54,7 +54,7 @@ public class MemberService {
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
-    public ResponseEntity<?> updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
+    public ResponseEntity<?> updateProfileInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         member.update(memberRequestDto);
     return new ResponseEntity<>(Message.success(null),HttpStatus.OK);
@@ -65,11 +65,5 @@ public class MemberService {
             throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         return tokenProvider.getMemberFromAuthentication();
-    }
-
-    public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
-        Member member =check.accessTokenCheck(request);
-        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
-        return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
     }
 }
