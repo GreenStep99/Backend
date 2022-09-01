@@ -41,7 +41,10 @@ public class MemberService {
             throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
         }
         if (Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh-Token"))) {
-            TokenDto tokenDto = tokenProvider.generateAccessTokenDto(requestingMember);
+
+            TokenDto tokenDto = tokenProvider.generateTokenDto(requestingMember, false);
+
+
             accessTokenToHeaders(tokenDto, response);
             return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
         } else {
@@ -54,7 +57,7 @@ public class MemberService {
         response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
-    public ResponseEntity<?> updateProfileInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
+    public ResponseEntity<?> updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         member.update(memberRequestDto);
     return new ResponseEntity<>(Message.success(null),HttpStatus.OK);
@@ -65,5 +68,17 @@ public class MemberService {
             return null;
         }
         return tokenProvider.getMemberFromAuthentication();
+    }
+
+    public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
+        Member member = check.accessTokenCheck(request);
+        MemberResponseDto memberResponseDto = MemberResponseDto.builder()
+                .memberId(member.getId())
+                .nickname(member.getNickname())
+                .name(member.getName())
+                .email(member.getEmail())
+                .profilePhoto(member.getProfilePhoto())
+                .build();
+        return new ResponseEntity<>(Message.success(memberResponseDto), HttpStatus.OK);
     }
 }
