@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: /opt/greenstep
+    destination: /home/ubuntu/app
 permissions:
   - object: /opt/greenstep/
     owner: ubuntu
