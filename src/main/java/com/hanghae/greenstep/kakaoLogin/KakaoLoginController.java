@@ -24,7 +24,8 @@ public class KakaoLoginController {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
         TokenDto tokenDto= kakaoLoginService.kakaoLogin(code);
         tokenDto.tokenToHeaders(response);
-        return new ResponseEntity<>(Message.success("로그인에 성공하였습니다."), HttpStatus.OK);
+        LoginResponseDto loginResponseDto = kakaoLoginService.loginInfo(tokenDto);
+        return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
     }
 
 }
