@@ -1,7 +1,5 @@
 package com.hanghae.greenstep.jwt;
 
-
-
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.member.Member;
@@ -21,7 +19,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_MEMBER;
-
 
 @Slf4j
 @Component
@@ -45,7 +42,6 @@ public class TokenProvider {
 
     public TokenDto generateTokenDto(Member member) {
         long now = (new Date().getTime());
-
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
                 .setSubject(member.getNickname())
@@ -58,7 +54,6 @@ public class TokenProvider {
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
 
         RefreshToken refreshTokenObject = RefreshToken.builder()
                 .id(member.getId())
@@ -80,10 +75,11 @@ public class TokenProvider {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || AnonymousAuthenticationToken.class.
                 isAssignableFrom(authentication.getClass())) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
         return ((UserDetailsImpl) authentication.getPrincipal()).getMember();
     }
+
 
     public boolean validateToken(String token) {
         try {
@@ -93,6 +89,7 @@ public class TokenProvider {
             log.info("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token, 만료된 JWT token 입니다.");
+            throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
@@ -104,7 +101,9 @@ public class TokenProvider {
     @Transactional(readOnly = true)
     public RefreshToken isPresentRefreshToken(Member member) {
         Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByMember(member);
-        return optionalRefreshToken.orElse(null);
+        return optionalRefreshToken.orElseThrow(
+                () -> new CustomException(ErrorCode.INVALID_TOKEN)
+        );
     }
 
     @Transactional
@@ -112,5 +111,21 @@ public class TokenProvider {
         RefreshToken refreshToken = isPresentRefreshToken(member);
         refreshTokenRepository.delete(refreshToken);
     }
-
+    public TokenDto generateAccessTokenDto(Member member) {
+        long now = (new Date().getTime());
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = Jwts.builder()
+                .setSubject(member.getNickname())
+                .claim(AUTHORITIES_KEY, ROLE_MEMBER.toString())
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+        String refreshToken = refreshTokenRepository.findByMember(member).get().getValue();
+        return TokenDto.builder()
+                .grantType(BEARER_PREFIX)
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+                .refreshToken(refreshToken)
+                .build();
+    }
 }
