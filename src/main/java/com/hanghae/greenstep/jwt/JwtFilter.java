@@ -47,7 +47,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filteChain)
+                                    FilterChain filterChain)
             throws IOException, ServletException {
 
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -68,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.setContentType("application/json;charset=UTF-8");
                 response.getWriter().println(
                         new ObjectMapper().writeValueAsString(
-                                new ResponseEntity<>(Message.fail("BAD_REQUEST", "권한이 업습니다."), HttpStatus.BAD_REQUEST)
+                                new ResponseEntity<>(Message.fail("BAD_REQUEST", "권한이 없습니다."), HttpStatus.BAD_REQUEST)
                         )
                 );
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -86,14 +86,14 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        filteChain.doFilter(request, response);
+        filterChain.doFilter(request, response);
     }
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
-       throw new CustomException(ErrorCode.INVALID_TOKEN);
+        return null;
     }
 
 }
