@@ -19,7 +19,7 @@ public class TokenDto {
 
     public void tokenToHeaders(HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + getAccessToken());
-        response.addHeader("Refresh-Token", getRefreshToken());
-        response.addHeader("Access-Token-Expire-Time", getAccessTokenExpiresIn().toString());
+        response.addHeader("Refresh_Token", getRefreshToken());
+        response.addHeader("Access_Token_Expire_Time", getAccessTokenExpiresIn().toString());
     }
 }
