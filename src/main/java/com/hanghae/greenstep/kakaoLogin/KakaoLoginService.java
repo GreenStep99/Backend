@@ -50,8 +50,7 @@ public class KakaoLoginService {
         KakaoMemberInfoDto kakaoMemberInfo = getKakaoUserInfo(accessToken);
         // DB 에 중복된 Kakao Id 가 있는지 확인
         Long kakaoId = kakaoMemberInfo.getId();
-        Member kakaoUser = memberRepository.findByKakaoId(kakaoId)
-                .orElse(null);
+        Member kakaoUser = memberRepository.findByKakaoId(kakaoId).orElse(null);
         boolean newComer = false;
 
         if (kakaoUser == null) {
