@@ -64,6 +64,7 @@ public class Member {
 
     @Builder
     public Member(Long id, String email,String name, String nickname, String password, String profilePhoto) {
+        this.id =getId();
         this.kakaoId = id;
         this.email = email;
         this.name = name;
