@@ -72,11 +72,6 @@ public class Member {
         this.profilePhoto = profilePhoto;
     }
 
-
-    public boolean validatePassword(PasswordEncoder passwordEncoder, String password){
-        return passwordEncoder.matches(password,this.password);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
