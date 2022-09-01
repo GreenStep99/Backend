@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-REPOSITORY=/opt/
+REPOSITORY=/opt/greenstep
 cd $REPOSITORY
 
 APP_NAME=action_codedeploy
