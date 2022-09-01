@@ -52,6 +52,7 @@ public class KakaoLoginService {
         Long kakaoId = kakaoMemberInfo.getId();
         Member kakaoUser = memberRepository.findByKakaoId(kakaoId)
                 .orElse(null);
+        boolean newComer = false;
 
         if (kakaoUser == null) {
             // 회원가입
@@ -68,6 +69,7 @@ public class KakaoLoginService {
             // role: 일반 사용자
             kakaoUser = new Member(kakaoId, email, " ", nickname,  encodedPassword, profileImage);
             memberRepository.save(kakaoUser);
+            newComer = true;
         }
 
         // 4. 강제 kakao로그인 처리
@@ -77,7 +79,7 @@ public class KakaoLoginService {
         Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(
                 () -> new CustomException(ErrorCode.INVALID_MEMBER_INFO)
         );
-        return tokenProvider.generateTokenDto(member);
+        return tokenProvider.generateTokenDto(member, newComer);
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -139,5 +141,13 @@ public class KakaoLoginService {
     }
 
 
+    public LoginResponseDto loginInfo(TokenDto tokenDto) {
+        return LoginResponseDto.builder()
+                .memberId(tokenDto.getMember().getId())
+                .nickname(tokenDto.getMember().getNickname())
+                .profilePhoto(tokenDto.getMember().getProfilePhoto())
+                .newComer(tokenDto.getNewComer())
+                .build();
+    }
 }
 
