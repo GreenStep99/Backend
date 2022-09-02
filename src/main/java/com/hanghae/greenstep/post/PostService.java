@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +21,12 @@ public class PostService {
 
     public ResponseEntity<?> getMyPost(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
-        List<PostResponseDto> postList = postRepository.findByMemberOrderByCreatedAtDesc(member);
-        return new ResponseEntity<>(Message.success(postList), HttpStatus.OK);
+        List<Post> postList = postRepository.findByMemberOrderByCreatedAtDesc(member);
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+        for(Post post:postList){
+            PostResponseDto postResponseDto =new PostResponseDto(post);
+            postResponseDtoList.add(postResponseDto);
+        }
+        return new ResponseEntity<>(Message.success(postResponseDtoList), HttpStatus.OK);
     }
 }
