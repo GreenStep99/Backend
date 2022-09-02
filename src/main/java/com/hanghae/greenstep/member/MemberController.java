@@ -16,13 +16,18 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    @PatchMapping
-    public ResponseEntity<?> updateProfileInfo(@RequestBody MemberRequestDto memberRequestDto,HttpServletRequest request){
-        return memberService.updateProfileInfo(memberRequestDto,request);
+    @PatchMapping("/users/info")
+    public ResponseEntity<?> updateMemberInfo(@RequestBody MemberRequestDto memberRequestDto,HttpServletRequest request){
+        return memberService.updateMemberInfo(memberRequestDto,request);
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshTokenCheck(@RequestBody String nickname, HttpServletRequest request, HttpServletResponse response){
-        return memberService.refreshToken(nickname, request, response);
+    public ResponseEntity<?> refreshTokenCheck(HttpServletRequest request, HttpServletResponse response){
+        return memberService.refreshToken(request, response);
+    }
+
+    @GetMapping("/users/info")
+    public ResponseEntity<?> getProfileInfo(HttpServletRequest request){
+        return memberService.getMemberInfo(request);
     }
 }

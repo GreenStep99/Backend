@@ -2,6 +2,8 @@ package com.hanghae.greenstep.jwt;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hanghae.greenstep.exception.CustomException;
+import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.shared.Message;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -91,7 +93,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
-        return null;
+       return null;
     }
 
 }

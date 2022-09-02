@@ -12,72 +12,62 @@ import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-
-    private final MemberRepository memberRepository;
-
-    private final PasswordEncoder passwordEncoder;
-
     private final TokenProvider tokenProvider;
-
     private final RefreshTokenRepository refreshTokenRepository;
-
     private final Check check;
 
 
-    public void tokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
-        response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
-        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
-    }
+    public ResponseEntity<?> refreshToken( HttpServletRequest request, HttpServletResponse response) {
+        tokenProvider.validateToken(request.getHeader("Refresh_Token"));
+        Member requestingMember = validateMember(request);
+        long accessTokenExpire = Long.parseLong(request.getHeader("Access_Token_Expire_Time"));
+        long now = (new Date().getTime());
+        if (now>accessTokenExpire){
+            tokenProvider.deleteRefreshToken(requestingMember);
+            throw new CustomException(ErrorCode.INVALID_TOKEN);}
 
-    public ResponseEntity<?> refreshToken(String nickname, HttpServletRequest request, HttpServletResponse response) {
-        if (null == request.getHeader("Refresh-Token")) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-        Member requestingMember = memberRepository.findByNickname(nickname).orElse(null);
-        if (requestingMember == null) {
-            throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
-        }
-        RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(requestingMember).orElse(null);
-        if (refreshTokenConfirm == null) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        if (!refreshTokenConfirm.getCreatedAt().plusHours(3).equals(currentDateTime)) {
-            throw new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED);
-        }//고려
-        if (Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh-Token"))) {
-            TokenDto tokenDto = tokenProvider.generateTokenDto(requestingMember);
+        RefreshToken refreshTokenConfirm = refreshTokenRepository.findByMember(requestingMember).orElseThrow(
+                ()-> new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
+        if (Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh_Token"))) {
+            TokenDto tokenDto = tokenProvider.generateAccessTokenDto(requestingMember);
             accessTokenToHeaders(tokenDto, response);
             return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
-        } else {
-            tokenProvider.deleteRefreshToken(memberRepository.findByNickname(nickname).orElseThrow(
-                    () -> new CustomException(ErrorCode.INVALID_TOKEN))
-            );
-            throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
         }
+        tokenProvider.deleteRefreshToken(requestingMember);
+        throw new CustomException(ErrorCode.INVALID_TOKEN);
+
     }
     public void accessTokenToHeaders(TokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
+        response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
-    public ResponseEntity<?> updateProfileInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
+    public ResponseEntity<?> updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         member.update(memberRequestDto);
     return new ResponseEntity<>(Message.success(null),HttpStatus.OK);
     }
 
+    public Member validateMember(HttpServletRequest request) {
+        if (!tokenProvider.validateToken(request.getHeader("Refresh_Token"))) {
+            return null;
+        }
+        return tokenProvider.getMemberFromAuthentication();
+    }
 
+    public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
+        Member member =check.accessTokenCheck(request);
+        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
+        return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
+    }
 }

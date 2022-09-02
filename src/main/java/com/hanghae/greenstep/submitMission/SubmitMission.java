@@ -1,6 +1,9 @@
 package com.hanghae.greenstep.submitMission;
 
+
 import com.hanghae.greenstep.shared.Status;
+import com.hanghae.greenstep.admin.SubmitMissionResponseDto;
+
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Mission;
 import com.hanghae.greenstep.post.Post;
@@ -22,6 +25,9 @@ public class SubmitMission extends Timestamped {
 
     @Column
     private Status status;
+
+    @Column
+    private String imgUrl;
 
     @Column
     private String imgUrl;
