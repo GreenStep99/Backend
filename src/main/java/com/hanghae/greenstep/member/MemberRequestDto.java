@@ -1,20 +1,17 @@
 package com.hanghae.greenstep.member;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MemberRequestDto {
     private String nickname;
 
     private String name;
 
     private String profilePhoto;
-
-    public MemberRequestDto(){}
-
-    public MemberRequestDto(String nickname, String name, String profilePhoto){
-        this.nickname=nickname;
-        this.name=name;
-        this.profilePhoto=profilePhoto;
-    }
+    
 }
