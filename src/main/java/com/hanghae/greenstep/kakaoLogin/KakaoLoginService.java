@@ -29,6 +29,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -67,9 +68,11 @@ public class KakaoLoginService {
             String email = kakaoMemberInfo.getEmail();
             String profileImage = kakaoMemberInfo.getProfilePhoto();
             // role: 일반 사용자
-            kakaoUser = new Member(kakaoId, email, " ", nickname,  encodedPassword, profileImage);
+            kakaoUser = new Member(kakaoId, email, "이름", nickname,  encodedPassword, profileImage);
             memberRepository.save(kakaoUser);
-            newComer = true;
+        }
+        if(Objects.equals(kakaoUser.getName(),"이름")){
+            newComer =true;
         }
 
         // 4. 강제 kakao로그인 처리

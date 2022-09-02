@@ -1,5 +1,6 @@
 package com.hanghae.greenstep.feed;
 
+import com.hanghae.greenstep.clap.ClapRepository;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.member.Member;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class FeedService {
     private final Check check;
     private final PostRepository postRepository;
     private final FeedRepository feedRepository;
+    private final ClapRepository clapRepository;
 
     public ResponseEntity<?> createFeed(Long postId, String content, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -35,5 +39,26 @@ public class FeedService {
                 .build();
         feedRepository.save(feed);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getFeed(HttpServletRequest request) {
+        Member member = check.accessTokenCheck(request);
+        List<Feed> feedList = feedRepository.findAllByOrderByCreatedAtDesc();
+        List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
+        for (Feed feed : feedList) {
+            boolean hearByMe_isEdit = clapRepository.findByMemberAndFeed(member, feed);
+
+            feedResponseDtoList.add(
+                    FeedResponseDto.builder()
+                            .postId(feed.getId())
+                            .missionName(feed.getMissionName())
+                            .imgUrl(feed.getImgUrl())
+                            .content(feed.getContent())
+                            .clapByMe(hearByMe_isEdit)
+                            .clapCount(feed.getClapCount())
+                            .build()
+            );
+        }
+        return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 }
