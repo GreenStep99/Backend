@@ -2,7 +2,6 @@ package com.hanghae.greenstep.submitMission;
 
 
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.admin.SubmitMissionResponseDto;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Mission;

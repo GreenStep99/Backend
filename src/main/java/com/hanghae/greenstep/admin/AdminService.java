@@ -1,10 +1,10 @@
 package com.hanghae.greenstep.admin;
 
 
-import com.hanghae.greenstep.post.Post;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
+import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

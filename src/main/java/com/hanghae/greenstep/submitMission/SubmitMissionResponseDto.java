@@ -1,5 +1,6 @@
-package com.hanghae.greenstep.admin;
+package com.hanghae.greenstep.submitMission;
 
+import com.hanghae.greenstep.shared.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,5 +16,5 @@ public class SubmitMissionResponseDto {
     private String nickname;
     private String missionName;
     private String missionImgUrl;
-    private Boolean status;
+    private Status status;
 }
