@@ -1,5 +1,6 @@
 package com.hanghae.greenstep.jwt;
 
+import com.hanghae.greenstep.admin.AdminTokenDto;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.member.Member;
@@ -18,6 +19,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Optional;
 
+import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 import static com.hanghae.greenstep.shared.Authority.ROLE_MEMBER;
 
 @Slf4j
@@ -44,7 +46,7 @@ public class TokenProvider {
         long now = (new Date().getTime());
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(member.getNickname())
+                .setSubject(member.getEmail())
                 .claim(AUTHORITIES_KEY, ROLE_MEMBER.toString())
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -82,7 +84,6 @@ public class TokenProvider {
         return ((UserDetailsImpl) authentication.getPrincipal()).getMember();
     }
 
-
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -117,7 +118,7 @@ public class TokenProvider {
         long now = (new Date().getTime());
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(member.getNickname())
+                .setSubject(member.getEmail())
                 .claim(AUTHORITIES_KEY, ROLE_MEMBER.toString())
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -128,6 +129,38 @@ public class TokenProvider {
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    public AdminTokenDto generateTokenDto(Member admin) {
+        long now = (new Date().getTime());
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = Jwts.builder()
+                .setSubject(admin.getEmail())
+                .claim(AUTHORITIES_KEY, ROLE_ADMIN.toString())
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        String refreshToken = Jwts.builder()
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        RefreshToken refreshTokenObject = RefreshToken.builder()
+                .id(admin.getId())
+                .member(admin)
+                .value(refreshToken)
+                .build();
+
+        refreshTokenRepository.save(refreshTokenObject);
+
+        return AdminTokenDto.builder()
+                .grantType(BEARER_PREFIX)
+                .accessToken(accessToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
+                .refreshToken(refreshToken)
+                .admin(admin)
                 .build();
     }
 }

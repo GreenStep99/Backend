@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 
@@ -20,7 +21,7 @@ public class RefreshToken extends Timestamped {
     @Column(nullable = false)
     private Long id;
 
-    @JoinColumn(name = "members_id",nullable = false)
+    @JoinColumn(name = "members_id")
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 

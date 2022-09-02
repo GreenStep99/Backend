@@ -1,4 +1,4 @@
-package com.hanghae.greenstep.admin;
+package com.hanghae.greenstep.submitMission;
 
 import com.hanghae.greenstep.shared.Status;
 import lombok.AllArgsConstructor;

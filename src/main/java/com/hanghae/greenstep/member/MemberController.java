@@ -16,7 +16,7 @@ public class MemberController {
     private final MemberService memberService;
 
 
-    @PatchMapping("/users/info")
+    @PatchMapping("/info")
     public ResponseEntity<?> updateMemberInfo(@RequestBody MemberRequestDto memberRequestDto,HttpServletRequest request){
         return memberService.updateMemberInfo(memberRequestDto,request);
     }
@@ -26,7 +26,7 @@ public class MemberController {
         return memberService.refreshToken(request, response);
     }
 
-    @GetMapping("/users/info")
+    @GetMapping("/info")
     public ResponseEntity<?> getProfileInfo(HttpServletRequest request){
         return memberService.getMemberInfo(request);
     }

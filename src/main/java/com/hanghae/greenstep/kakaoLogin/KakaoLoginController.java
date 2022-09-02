@@ -26,5 +26,4 @@ public class KakaoLoginController {
         LoginResponseDto loginResponseDto = kakaoLoginService.loginInfo(tokenDto);
         return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
     }
-
 }

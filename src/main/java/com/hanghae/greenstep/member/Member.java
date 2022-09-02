@@ -6,6 +6,7 @@ import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.post.Post;
+import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +33,7 @@ public class Member {
     @Column
     private Long kakaoId;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column(nullable = false,length = 60)
@@ -44,6 +45,9 @@ public class Member {
     @Column(nullable = false)
     @JsonIgnore
     private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    private Authority role;
 
     @Column(nullable = false)
     private String profilePhoto;
