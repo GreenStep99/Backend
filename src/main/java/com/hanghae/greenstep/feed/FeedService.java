@@ -46,7 +46,7 @@ public class FeedService {
         List<Feed> feedList = feedRepository.findAllByOrderByCreatedAtDesc();
         List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
-            boolean hearByMe_isEdit = clapRepository.findByMemberAndFeed(member, feed);
+            boolean clapByMe_isEdit = clapRepository.findByMemberAndFeed(member, feed);
 
             feedResponseDtoList.add(
                     FeedResponseDto.builder()
@@ -54,7 +54,7 @@ public class FeedService {
                             .missionName(feed.getMissionName())
                             .imgUrl(feed.getImgUrl())
                             .content(feed.getContent())
-                            .clapByMe(hearByMe_isEdit)
+                            .clapByMe(clapByMe_isEdit)
                             .clapCount(feed.getClapCount())
                             .build()
             );
