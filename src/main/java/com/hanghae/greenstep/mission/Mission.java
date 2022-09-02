@@ -29,4 +29,7 @@ public class Mission {
     @Column
     private Boolean onShow = false;
 
+    public void updateOnShow(Boolean check) {
+        this.onShow = check;
+    }
 }
