@@ -21,7 +21,6 @@ public class KakaoLoginController {
 
     @GetMapping("/users/kakao/callback")
     public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        // authorizedCode: 카카오 서버로부터 받은 인가 코드
         TokenDto tokenDto= kakaoLoginService.kakaoLogin(code);
         tokenDto.tokenToHeaders(response);
         LoginResponseDto loginResponseDto = kakaoLoginService.loginInfo(tokenDto);
