@@ -7,12 +7,14 @@ import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.jwt.RefreshTokenRepository;
 import com.hanghae.greenstep.jwt.TokenDto;
 import com.hanghae.greenstep.jwt.TokenProvider;
+import com.hanghae.greenstep.kakaoLogin.LoginResponseDto;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,10 +54,12 @@ public class MemberService {
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
+    @Transactional
     public ResponseEntity<?> updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         member.update(memberRequestDto);
-    return new ResponseEntity<>(Message.success(null),HttpStatus.OK);
+        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
+    return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
     }
 
     public Member validateMember(HttpServletRequest request) {
@@ -64,6 +68,7 @@ public class MemberService {
         }
         return tokenProvider.getMemberFromAuthentication();
     }
+
 
     public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
