@@ -1,6 +1,7 @@
 package com.hanghae.greenstep.feed;
 
 import com.hanghae.greenstep.member.Member;
+import com.hanghae.greenstep.member.MemberRequestDto;
 import com.hanghae.greenstep.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,5 +41,9 @@ public class Feed extends Timestamped {
         this.imgUrl = imgUrl;
         this.content = content;
         this.clapCount = 0;
+    }
+
+    public void update(Integer clapCount){
+        this.clapCount = clapCount;
     }
 }
