@@ -1,7 +1,7 @@
 package com.hanghae.greenstep.admin;
 
 
-import com.hanghae.greenstep.post.Post;
+import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
@@ -10,12 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+    private final AdminRepository adminRepository;
+    private final TokenProvider tokenProvider;
     private final SubmitMissionRepository submitMissionRepository;
     public ResponseEntity<?> getSubmitMission() {
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
@@ -35,4 +38,17 @@ public class AdminService {
         return new ResponseEntity<>(Message.success(submitMissionResponseDtoList), HttpStatus.OK);
     }
 
+    public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
+        Admin admin = adminRepository.findByUsername(adminLoginRequestDto.getUsername());
+        AdminTokenDto tokenDto = tokenProvider.generateTokenDto(admin);
+        tokenToHeaders(tokenDto, response);
+        AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto(admin.getId(), admin.getName());
+        return new ResponseEntity<>(Message.success(adminLoginResponseDto), HttpStatus.OK);
+    }
+
+    public void tokenToHeaders(AdminTokenDto tokenDto, HttpServletResponse response) {
+        response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
+        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
+        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
+    }
 }
