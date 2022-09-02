@@ -29,9 +29,6 @@ public class SubmitMission extends Timestamped {
     @Column
     private String imgUrl;
 
-    @Column
-    private String imgUrl;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
