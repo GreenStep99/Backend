@@ -1,8 +1,6 @@
 package com.hanghae.greenstep.admin;
 
 
-import com.hanghae.greenstep.exception.CustomException;
-import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
@@ -45,7 +43,6 @@ public class AdminService {
 
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         Member admin = memberRepository.findByEmail(adminLoginRequestDto.getEmail()).orElseThrow(
-                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
         AdminTokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
@@ -55,7 +52,7 @@ public class AdminService {
 
     public void tokenToHeaders(AdminTokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Refresh-Token", tokenDto.getRefreshToken());
-        response.addHeader("Access-Token-Expire-Time", tokenDto.getAccessTokenExpiresIn().toString());
+        response.addHeader("Refresh_Token", tokenDto.getRefreshToken());
+        response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 }
