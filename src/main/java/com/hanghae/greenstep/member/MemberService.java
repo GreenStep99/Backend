@@ -27,6 +27,7 @@ public class MemberService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final Check check;
+    private final MemberRepository memberRepository;
 
 
     public ResponseEntity<?> refreshToken( HttpServletRequest request, HttpServletResponse response) {
@@ -56,7 +57,9 @@ public class MemberService {
 
     @Transactional
     public ResponseEntity<?> updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
-        Member member = check.accessTokenCheck(request);
+        Member member = memberRepository.findByEmail(check.accessTokenCheck(request).getEmail()).orElseThrow(
+                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
         member.update(memberRequestDto);
         MemberResponseDto memberResponseDto = new MemberResponseDto(member);
     return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);

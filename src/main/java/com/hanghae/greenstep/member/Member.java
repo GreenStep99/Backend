@@ -4,6 +4,7 @@ package com.hanghae.greenstep.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.feed.Feed;
+import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.post.Post;
 import com.hanghae.greenstep.shared.Authority;
@@ -13,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@DynamicUpdate
 public class Member {
 
     @Id
@@ -64,7 +66,8 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<SubmitMission> submitMissionList;
 
-
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+    private RefreshToken refreshToken;
 
     @Builder
     public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto) {
@@ -91,9 +94,10 @@ public class Member {
         return getClass().hashCode();
     }
 
+
     public void update(MemberRequestDto memberRequestDto){
-        if(memberRequestDto.getName()!=null)this.name = memberRequestDto.getName();
-        if(memberRequestDto.getNickname()!=null)this.nickname=memberRequestDto.getNickname();
-        if(memberRequestDto.getProfilePhoto()!=null)this.profilePhoto=memberRequestDto.getProfilePhoto();
+        if (memberRequestDto.getName() != null) this.name = memberRequestDto.getName();
+        if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
+        if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
     }
 }
