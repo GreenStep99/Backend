@@ -12,6 +12,7 @@ import com.hanghae.greenstep.jwt.UserDetailsImpl;
 import com.hanghae.greenstep.kakaoLogin.KakaoMemberInfoDto;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
+import com.hanghae.greenstep.shared.Authority;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.hanghae.greenstep.shared.Authority.ROLE_MEMBER;
 
 @RequiredArgsConstructor
 @Service
@@ -68,7 +71,7 @@ public class KakaoLoginService {
             String email = kakaoMemberInfo.getEmail();
             String profileImage = kakaoMemberInfo.getProfilePhoto();
             // role: 일반 사용자
-            kakaoUser = new Member(kakaoId, email, "이름", nickname,  encodedPassword, profileImage);
+            kakaoUser = new Member(kakaoId, email, "이름",ROLE_MEMBER, nickname,  encodedPassword, profileImage);
             memberRepository.save(kakaoUser);
         }
         if(Objects.equals(kakaoUser.getName(),"이름")){

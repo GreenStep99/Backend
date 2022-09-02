@@ -7,6 +7,7 @@ import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ public class KakaoLoginController {
 
     private final KakaoLoginService kakaoLoginService;
 
-
+    @Transactional
     @GetMapping("/users/kakao/callback")
     public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         TokenDto tokenDto= kakaoLoginService.kakaoLogin(code);

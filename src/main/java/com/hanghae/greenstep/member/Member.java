@@ -67,11 +67,12 @@ public class Member {
 
 
     @Builder
-    public Member(Long id, String email,String name, String nickname, String password, String profilePhoto) {
+    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto) {
         this.id =getId();
         this.kakaoId = id;
         this.email = email;
         this.name = name;
+        this.role = role;
         this.nickname = nickname;
         this.password = password;
         this.profilePhoto = profilePhoto;
