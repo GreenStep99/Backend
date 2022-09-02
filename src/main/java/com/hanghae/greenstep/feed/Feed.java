@@ -26,7 +26,7 @@ public class Feed extends Timestamped {
     @Column
     private String imgUrl;
 
-    @Column(length = 280)
+    @Column(columnDefinition = "TEXT", length = 280)
     private String content;
 
     @Column

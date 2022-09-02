@@ -64,17 +64,13 @@ public class Member {
 
     @Builder
     public Member(Long id, String email,String name, String nickname, String password, String profilePhoto) {
+        this.id =getId();
         this.kakaoId = id;
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
         this.profilePhoto = profilePhoto;
-    }
-
-
-    public boolean validatePassword(PasswordEncoder passwordEncoder, String password){
-        return passwordEncoder.matches(password,this.password);
     }
 
     @Override
