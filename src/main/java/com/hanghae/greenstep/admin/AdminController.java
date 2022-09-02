@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin")
 public class AdminController {
 
-    AdminService adminService;
+    private final AdminService adminService;
 
     @GetMapping("/verification")
     public ResponseEntity<?> getSubmitMission(){
