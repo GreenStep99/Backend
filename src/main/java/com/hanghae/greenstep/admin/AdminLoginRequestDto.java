@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminLoginRequestDto {
 
-    private String username;
+    private String email;
     private String password;
 }

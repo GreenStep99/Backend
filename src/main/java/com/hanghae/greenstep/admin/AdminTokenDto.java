@@ -1,6 +1,5 @@
 package com.hanghae.greenstep.admin;
 
-import com.hanghae.greenstep.admin.Admin;
 import com.hanghae.greenstep.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +17,7 @@ public class AdminTokenDto {
     private String accessToken;
     private String refreshToken;
     private Long accessTokenExpiresIn;
-    private Admin admin;
+    private Member admin;
 
     public void tokenToHeaders(HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + getAccessToken());

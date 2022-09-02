@@ -1,6 +1,5 @@
 package com.hanghae.greenstep.jwt;
 
-import com.hanghae.greenstep.admin.Admin;
 import com.hanghae.greenstep.admin.AdminTokenDto;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
@@ -20,6 +19,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Optional;
 
+import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 import static com.hanghae.greenstep.shared.Authority.ROLE_MEMBER;
 
 @Slf4j
@@ -132,12 +132,12 @@ public class TokenProvider {
                 .build();
     }
 
-    public AdminTokenDto generateTokenDto(Admin admin) {
+    public AdminTokenDto generateTokenDto(Member admin) {
         long now = (new Date().getTime());
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
-                .setSubject(admin.getUsername())
-                .claim(AUTHORITIES_KEY, ROLE_MEMBER.toString())
+                .setSubject(admin.getEmail())
+                .claim(AUTHORITIES_KEY, ROLE_ADMIN.toString())
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -149,7 +149,7 @@ public class TokenProvider {
 
         RefreshToken refreshTokenObject = RefreshToken.builder()
                 .id(admin.getId())
-                .admin(admin)
+                .member(admin)
                 .value(refreshToken)
                 .build();
 

@@ -1,10 +1,15 @@
 package com.hanghae.greenstep.admin;
 
 
+import com.hanghae.greenstep.exception.CustomException;
+import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.TokenProvider;
+import com.hanghae.greenstep.member.Member;
+import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
+import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +22,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
-    private final AdminRepository adminRepository;
+    private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final SubmitMissionRepository submitMissionRepository;
     public ResponseEntity<?> getSubmitMission() {
@@ -39,7 +44,9 @@ public class AdminService {
     }
 
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
-        Admin admin = adminRepository.findByUsername(adminLoginRequestDto.getUsername());
+        Member admin = memberRepository.findByEmail(adminLoginRequestDto.getEmail()).orElseThrow(
+                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
         AdminTokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
         AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto(admin.getId(), admin.getName());
