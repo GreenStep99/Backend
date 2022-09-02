@@ -137,7 +137,7 @@ public class KakaoLoginService {
                 .get("email").asText();
         String profilePhoto = jsonNode.get("properties").get("profile_image").asText();
 
-        return new KakaoMemberInfoDto(id, nickname, " ",email, profilePhoto);
+        return new KakaoMemberInfoDto(id, nickname, email, profilePhoto);
     }
 
 
