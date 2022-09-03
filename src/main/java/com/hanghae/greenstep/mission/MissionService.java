@@ -1,6 +1,4 @@
 package com.hanghae.greenstep.mission;
-import com.hanghae.greenstep.shared.Base64Util;
-import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
@@ -10,6 +8,7 @@ import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -102,9 +101,7 @@ public class MissionService {
                 .missionStatus(WAITING)
                 .build();
         missionStatusRepository.save(missionStatus);
-        File file = base64Util.getImageFromBase64(missionRequestDto.getBase64String(), UUID.randomUUID().toString());
-        MultipartFile multipartFile = base64Util.convertFileToMultipartFile(file);
-        String imgUrl = imageService.getImgUrl(multipartFile);
+        String imgUrl = imageService.getImgUrl(missionRequestDto.getBase64String());
         SubmitMission submitMission = SubmitMission.builder()
                 .imgUrl(imgUrl)
                 .mission(mission)
