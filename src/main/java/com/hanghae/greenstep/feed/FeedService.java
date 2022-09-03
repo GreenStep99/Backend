@@ -44,10 +44,10 @@ public class FeedService {
     }
 
     @Transactional
-    public ResponseEntity<?> getFeed(int lastFeedId, HttpServletRequest request) {
+    public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
-        List<Feed> feedList = feedRepository.findByIdLessThanInOrderByIdDesc(lastFeedId, pageRequest);
+        List<Feed> feedList = feedRepository.findByIdLessThanOrderByIdDesc(lastFeedId, pageRequest);
         List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
 
