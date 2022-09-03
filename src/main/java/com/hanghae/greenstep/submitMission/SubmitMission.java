@@ -9,12 +9,15 @@ import com.hanghae.greenstep.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@Audited
 public class SubmitMission extends Timestamped {
 
     @Id
@@ -33,9 +36,11 @@ public class SubmitMission extends Timestamped {
     @Column
     private String adminName;
 
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @ManyToOne(fetch = FetchType.LAZY)
     private Mission mission;
 
@@ -48,4 +53,13 @@ public class SubmitMission extends Timestamped {
         this.mission = mission;
     }
 
+    public SubmitMission(Status status, String imgUrl, String reason, String adminName, Member member, Mission mission) {
+        this.id = getId();
+        this.status = status;
+        this.imgUrl = imgUrl;
+        this.reason = reason;
+        this.adminName = adminName;
+        this.member = member;
+        this.mission = mission;
+    }
 }

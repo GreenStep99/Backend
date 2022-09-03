@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,7 +26,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@DynamicUpdate
 public class Member {
 
     @Id
@@ -69,6 +69,7 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<SubmitMission> submitMissionList;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     private RefreshToken refreshToken;
 
