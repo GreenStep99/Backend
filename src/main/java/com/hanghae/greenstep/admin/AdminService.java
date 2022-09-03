@@ -1,9 +1,11 @@
 package com.hanghae.greenstep.admin;
 
 
+
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
+import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,8 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final SubmitMissionRepository submitMissionRepository;
+
+    private final Check check;
     public ResponseEntity<?> getSubmitMission() {
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
         List<SubmitMissionResponseDto> submitMissionResponseDtoList = new ArrayList<>();

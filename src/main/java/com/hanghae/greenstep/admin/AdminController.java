@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -23,5 +24,11 @@ public class AdminController {
     @GetMapping("/verification")
     public ResponseEntity<?> getSubmitMission(){
         return adminService.getSubmitMission();
+    }
+
+
+    @PatchMapping("/verification/completion/{submitMissionId}")
+    public ResponseEntity<?> completeSubmitMission(@PathVariable Long submitMissionId, HttpServletRequest request) {
+        return adminService.completeSubmitMission(submitMissionId, request);
     }
 }
