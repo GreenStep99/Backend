@@ -24,7 +24,7 @@ public class MissionStatus {
     @ManyToOne(fetch = FetchType.LAZY)
     private Mission mission;
 
-    @Column
+    @Enumerated(EnumType.STRING)
     private Status missionStatus;
 
     @Builder

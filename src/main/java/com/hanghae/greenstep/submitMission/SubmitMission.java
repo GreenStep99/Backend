@@ -24,7 +24,8 @@ public class SubmitMission extends Timestamped {
     @GeneratedValue
     private Long id;
 
-    @Column
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column
