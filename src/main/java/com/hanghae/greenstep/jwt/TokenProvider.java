@@ -137,7 +137,7 @@ public class TokenProvider {
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
                 .setSubject(admin.getEmail())
-                .claim(AUTHORITIES_KEY, admin.getRole().toString())
+                .claim(AUTHORITIES_KEY, ROLE_ADMIN.toString())
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();

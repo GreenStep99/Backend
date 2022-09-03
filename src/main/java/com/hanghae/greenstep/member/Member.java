@@ -74,6 +74,7 @@ public class Member {
     private RefreshToken refreshToken;
 
     @Builder
+
     public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type) {
         this.id =getId();
         this.kakaoId = id;

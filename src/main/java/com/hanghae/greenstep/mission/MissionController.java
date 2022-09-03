@@ -34,7 +34,7 @@ public class MissionController {
     }
 
     @PostMapping("/missions/{missionId}")
-    public ResponseEntity<?> submitMission(@PathVariable Long missionId, HttpServletRequest request, @RequestParam("photo") MultipartFile photo) throws Exception {
-        return missionService.submitMission(missionId, request, photo);
+    public ResponseEntity<?> submitMission(@PathVariable Long missionId, HttpServletRequest request, @RequestBody MissionRequestDto missionRequestDto) throws Exception {
+        return missionService.submitMission(missionId, request, missionRequestDto);
     }
 }
