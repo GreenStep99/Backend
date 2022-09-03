@@ -27,8 +27,4 @@ public class AdminController {
     }
 
 
-    @PatchMapping("/verification/completion/{submitMissionId}")
-    public ResponseEntity<?> completeSubmitMission(@PathVariable Long submitMissionId, HttpServletRequest request) {
-        return adminService.completeSubmitMission(submitMissionId, request);
-    }
 }

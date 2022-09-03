@@ -1,6 +1,4 @@
 package com.hanghae.greenstep.mission;
-import com.hanghae.greenstep.shared.Base64Util;
-import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
@@ -10,17 +8,17 @@ import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
+import static com.hanghae.greenstep.shared.Status.WAITING;
 
 import static com.hanghae.greenstep.shared.Status.WAITING;
 
@@ -37,8 +35,6 @@ public class MissionService {
     private final ImageService imageService;
 
     private final Check check;
-
-    private final Base64Util base64Util;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getDailyMissions(HttpServletRequest request) {
@@ -104,9 +100,9 @@ public class MissionService {
                 .missionStatus(WAITING)
                 .build();
         missionStatusRepository.save(missionStatus);
-        File file = base64Util.getImageFromBase64(missionRequestDto.getBase64String(), UUID.randomUUID().toString());
-        MultipartFile multipartFile = base64Util.convertFileToMultipartFile(file);
-        String imgUrl = imageService.getImgUrl(multipartFile);
+//        File file = base64Util.getImageFromBase64(missionRequestDto.getBase64String(), UUID.randomUUID().toString());
+//        MultipartFile multipartFile = base64Util.convertFileToMultipartFile(file);
+        String imgUrl = imageService.getImgUrlBase64(missionRequestDto.getBase64String());
         SubmitMission submitMission = SubmitMission.builder()
                 .imgUrl(imgUrl)
                 .mission(mission)
