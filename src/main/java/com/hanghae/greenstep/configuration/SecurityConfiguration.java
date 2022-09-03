@@ -62,7 +62,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/admin/login").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
 
                 .and()
                 .apply(new JwtSecurityConfiguration(SECRET_KEY, tokenProvider, userDetailsService));
