@@ -18,8 +18,8 @@ public class FeedController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<?> getFeed(HttpServletRequest request){
-        return feedService.getFeed(request);
+    public ResponseEntity<?> getFeed(int lastFeedId, HttpServletRequest request){
+        return feedService.getFeed(lastFeedId, request);
     }
 
 }
