@@ -33,6 +33,9 @@ public class Feed extends Timestamped {
     @Column
     private Integer clapCount;
 
+    @Column
+    private String categories;
+
     @Builder
     public Feed(Member member, String missionName, String imgUrl, String content){
         this.id = getId();

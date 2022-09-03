@@ -21,5 +21,9 @@ public class FeedController {
     public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request){
         return feedService.getFeed(lastFeedId, request);
     }
+    @GetMapping("/feed/categories/{category}")
+    public ResponseEntity<?> getCategoriesFeed(@PathVariable String category, Long lastFeedId, HttpServletRequest request){
+        return feedService.getCategoriesFeed(category, lastFeedId, request);
+    }
 
 }
