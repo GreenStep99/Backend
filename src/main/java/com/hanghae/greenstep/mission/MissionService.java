@@ -67,6 +67,7 @@ public class MissionService {
             missionResponseDtoList.add(
                     MissionResponseDto.builder()
                             .missionId(mission.getId())
+                            .missionName(mission.getMissionName())
                             .missionContent(mission.getMissionContent())
                             .missionImageUrl(mission.getMissionImageUrl())
                             .missionType(mission.getMissionType())
@@ -84,6 +85,7 @@ public class MissionService {
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new Exception("미션이 없습니다."));
         return new ResponseEntity<>(Message.success(MissionResponseDto.builder()
                 .missionId(mission.getId())
+                .missionName(mission.getMissionName())
                 .missionImageUrl(mission.getMissionImageUrl())
                 .missionContent(mission.getMissionContent())
                 .missionType(mission.getMissionType())

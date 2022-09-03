@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,7 +26,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@DynamicUpdate
 public class Member {
 
     @Id
@@ -51,6 +51,9 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Authority role;
 
+    @Column
+    private String type;
+
     @Column(nullable = false)
     private String profilePhoto;
 
@@ -66,12 +69,14 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<SubmitMission> submitMissionList;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     private RefreshToken refreshToken;
 
     @Builder
-    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto) {
-        this.id = getId();
+
+    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type) {
+        this.id =getId();
         this.kakaoId = id;
         this.email = email;
         this.name = name;
@@ -79,6 +84,7 @@ public class Member {
         this.nickname = nickname;
         this.password = password;
         this.profilePhoto = profilePhoto;
+        this.type =type;
     }
 
     @Override
@@ -100,4 +106,5 @@ public class Member {
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
     }
+
 }

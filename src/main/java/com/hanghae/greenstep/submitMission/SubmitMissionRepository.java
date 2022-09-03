@@ -1,6 +1,5 @@
 package com.hanghae.greenstep.submitMission;
 
-import com.hanghae.greenstep.post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

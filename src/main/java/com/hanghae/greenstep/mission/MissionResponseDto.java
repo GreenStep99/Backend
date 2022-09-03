@@ -14,9 +14,7 @@ public class MissionResponseDto {
 
     private Long missionId;
 
-
     private String missionContent;
-
 
     private String missionImageUrl;
 
