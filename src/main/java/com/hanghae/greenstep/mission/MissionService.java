@@ -1,4 +1,5 @@
 package com.hanghae.greenstep.mission;
+import com.hanghae.greenstep.shared.Base64Util;
 import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
@@ -16,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,8 @@ public class MissionService {
     private final ImageService imageService;
 
     private final Check check;
+
+    private final Base64Util base64Util;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getDailyMissions(HttpServletRequest request) {
@@ -84,7 +89,7 @@ public class MissionService {
     }
 
     @Transactional
-    public ResponseEntity<?> submitMission(Long missionId, HttpServletRequest request, MultipartFile photo) throws Exception {
+    public ResponseEntity<?> submitMission(Long missionId, HttpServletRequest request, MissionRequestDto missionRequestDto) throws Exception {
         Member member = check.accessTokenCheck(request);
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new Exception("미션이 없습니다."));
         MissionStatus missionStatus = MissionStatus.builder()
@@ -93,7 +98,9 @@ public class MissionService {
                 .missionStatus(Status.WAITING)
                 .build();
         missionStatusRepository.save(missionStatus);
-        String imgUrl = imageService.getImgUrl(photo);
+        File file = base64Util.getImageFromBase64(missionRequestDto.getBase64String(), UUID.randomUUID().toString());
+        MultipartFile multipartFile = base64Util.convertFileToMultipartFile(file);
+        String imgUrl = imageService.getImgUrl(multipartFile);
         SubmitMission submitMission = SubmitMission.builder()
                 .imgUrl(imgUrl)
                 .mission(mission)

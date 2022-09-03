@@ -5,6 +5,7 @@ package com.hanghae.greenstep.admin;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
+import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
@@ -25,6 +26,8 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final SubmitMissionRepository submitMissionRepository;
+
+    private final Check check;
     public ResponseEntity<?> getSubmitMission() {
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
         List<SubmitMissionResponseDto> submitMissionResponseDtoList = new ArrayList<>();
@@ -56,9 +59,5 @@ public class AdminService {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
         response.addHeader("Refresh_Token", tokenDto.getRefreshToken());
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
-    }
-
-    public ResponseEntity<?> completeSubmitMission(Long submitMissionId, HttpServletRequest request){
-        
     }
 }
