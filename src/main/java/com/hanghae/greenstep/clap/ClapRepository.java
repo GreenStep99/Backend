@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 public interface ClapRepository extends JpaRepository<Clap,Long> {
-    Boolean findByMemberAndFeed(Member member, Feed feed);
-    Optional<Clap> findByMember_IdAndFeed(Long memberId, Feed feed);
+    boolean existsByMemberAndFeed(Member member, Feed feed);
+    Optional<Clap> findByMemberAndFeed(Member member, Feed feed);
     Integer countByFeed(Feed feed);
 }
