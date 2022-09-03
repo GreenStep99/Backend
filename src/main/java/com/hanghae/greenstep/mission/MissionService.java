@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.hanghae.greenstep.shared.Status.WAITING;
+
 @Service
 @RequiredArgsConstructor
 public class MissionService {
@@ -68,6 +70,7 @@ public class MissionService {
                             .missionContent(mission.getMissionContent())
                             .missionImageUrl(mission.getMissionImageUrl())
                             .missionType(mission.getMissionType())
+                            .missionName(mission.getMissionName())
                             .onShow(mission.getOnShow())
                             .build()
             );
@@ -84,6 +87,7 @@ public class MissionService {
                 .missionImageUrl(mission.getMissionImageUrl())
                 .missionContent(mission.getMissionContent())
                 .missionType(mission.getMissionType())
+                .missionName(mission.getMissionName())
                 .onShow(mission.getOnShow())
                 .build()), HttpStatus.OK);
     }
@@ -95,7 +99,7 @@ public class MissionService {
         MissionStatus missionStatus = MissionStatus.builder()
                 .member(member)
                 .mission(mission)
-                .missionStatus(Status.WAITING)
+                .missionStatus(WAITING)
                 .build();
         missionStatusRepository.save(missionStatus);
         File file = base64Util.getImageFromBase64(missionRequestDto.getBase64String(), UUID.randomUUID().toString());
@@ -105,7 +109,7 @@ public class MissionService {
                 .imgUrl(imgUrl)
                 .mission(mission)
                 .member(member)
-                .status(Status.WAITING)
+                .status(WAITING)
                 .build();
         submitMissionRepository.save(submitMission);
         return new ResponseEntity<>(Message.success("전송 완료"),HttpStatus.OK);

@@ -14,6 +14,7 @@ public class MissionResponseDto {
 
     private Long missionId;
 
+
     private String missionContent;
 
 
@@ -22,6 +23,7 @@ public class MissionResponseDto {
 
     private String missionType;
 
+    private String missionName;
 
     private Boolean onShow;
 }
