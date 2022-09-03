@@ -23,12 +23,12 @@ public class ClapService {
     private final FeedRepository feedRepository;
     private final ClapRepository clapRepository;
     @Transactional
-    public ResponseEntity<?> upDownClap(Long postId, HttpServletRequest request) {
+    public ResponseEntity<?> upDownClap(Long feedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
-        Feed feed = feedRepository.findById(postId).orElseThrow(
+        Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new CustomException(ErrorCode.CARD_NOT_FOUND));
 
-        Clap findClap = clapRepository.findByMember_IdAndFeed(member.getId(),feed).orElse(null);
+        Clap findClap = clapRepository.findByMemberAndFeed(member,feed).orElse(null);
 
         if(findClap == null){
             ClapRequestDto clapRequestDto = new ClapRequestDto(member, feed);
