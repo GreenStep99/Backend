@@ -51,6 +51,9 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Authority role;
 
+    @Column
+    private String type;
+
     @Column(nullable = false)
     private String profilePhoto;
 
@@ -70,7 +73,7 @@ public class Member {
     private RefreshToken refreshToken;
 
     @Builder
-    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto) {
+    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type) {
         this.id =getId();
         this.kakaoId = id;
         this.email = email;
@@ -79,6 +82,7 @@ public class Member {
         this.nickname = nickname;
         this.password = password;
         this.profilePhoto = profilePhoto;
+        this.type =type;
     }
 
     @Override
@@ -100,4 +104,5 @@ public class Member {
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
     }
+
 }
