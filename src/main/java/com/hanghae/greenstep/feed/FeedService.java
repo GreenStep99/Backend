@@ -46,7 +46,7 @@ public class FeedService {
         List<Feed> feedList = feedRepository.findAllByOrderByCreatedAtDesc();
         List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
-            boolean clapByMe_isEdit = clapRepository.findByMemberAndFeed(member, feed);
+            boolean clapByMe_isEdit = clapRepository.existsByMemberAndFeed(member, feed);
 
             feedResponseDtoList.add(
                     FeedResponseDto.builder()
