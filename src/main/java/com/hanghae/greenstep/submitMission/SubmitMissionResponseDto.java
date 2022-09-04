@@ -1,13 +1,10 @@
 package com.hanghae.greenstep.submitMission;
 
-import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.shared.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Builder
 @Getter
