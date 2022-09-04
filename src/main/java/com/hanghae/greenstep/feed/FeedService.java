@@ -80,6 +80,7 @@ public class FeedService {
             case "goods" -> "#환경용품사용";
             case "energy" -> "#에너지절약";
             case "etc" -> "#기타";
+            default -> throw new CustomException(ErrorCode.INVALID_VALUE);
         };
         List<Feed> feedList = feedRepository.findByIdLessThanAndTagOrderByIdDesc(lastFeedId, tagName, pageRequest);
         List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();

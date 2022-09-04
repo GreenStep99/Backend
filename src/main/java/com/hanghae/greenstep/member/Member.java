@@ -6,7 +6,6 @@ import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
-import com.hanghae.greenstep.post.Post;
 import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
@@ -54,9 +53,6 @@ public class Member {
 
     @Column(nullable = false)
     private String profilePhoto;
-
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    private List<Post> postList;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
