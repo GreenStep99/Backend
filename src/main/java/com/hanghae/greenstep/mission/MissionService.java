@@ -36,28 +36,29 @@ public class MissionService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getDailyMissions(HttpServletRequest request) {
-        check.accessTokenCheck(request);
+        Member member = check.accessTokenCheck(request);
         List<Mission> missionList = missionRepository.findDailyMissionByOnShow();
-        return getResponseEntity(missionList);
+        return getResponseEntity(missionList, member);
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getWeeklyMissions(HttpServletRequest request) {
-        check.accessTokenCheck(request);
+        Member member = check.accessTokenCheck(request);
         List<Mission> missionList = missionRepository.findWeeklyMissionByOnShow();
-        return getResponseEntity(missionList);
+        return getResponseEntity(missionList, member);
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> getTodayMission(HttpServletRequest request) {
-        check.accessTokenCheck(request);
+        Member member = check.accessTokenCheck(request);
         List<Mission> missionList = missionRepository.findTodayMissionByOnShow();
-        return getResponseEntity(missionList);
+        return getResponseEntity(missionList, member);
     }
 
-    private ResponseEntity<?> getResponseEntity(List<Mission> missionList) {
+    private ResponseEntity<?> getResponseEntity(List<Mission> missionList, Member member) {
         List<MissionResponseDto> missionResponseDtoList = new ArrayList<>();
         for (Mission mission : missionList) {
+            MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(member, mission);
             missionResponseDtoList.add(
                     MissionResponseDto.builder()
                             .missionId(mission.getId())
@@ -67,6 +68,7 @@ public class MissionService {
                             .missionType(mission.getMissionType())
                             .missionName(mission.getMissionName())
                             .onShow(mission.getOnShow())
+                            .status(missionStatus.getMissionStatus())
                             .build()
             );
         }
@@ -96,6 +98,7 @@ public class MissionService {
                 .member(member)
                 .mission(mission)
                 .missionStatus(WAITING)
+                .missionType(mission.getMissionType())
                 .build();
         missionStatusRepository.save(missionStatus);
         String imgUrl = imageService.getImgUrlBase64(missionRequestDto.getBase64String());

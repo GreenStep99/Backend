@@ -1,6 +1,7 @@
 package com.hanghae.greenstep.mission;
 
 
+import com.hanghae.greenstep.shared.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,6 @@ public class MissionResponseDto {
     private Boolean onShow;
 
     private String tag;
+
+    private Status status;
 }

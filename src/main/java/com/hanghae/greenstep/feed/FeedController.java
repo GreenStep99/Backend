@@ -18,11 +18,11 @@ public class FeedController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request){
+    public ResponseEntity<?> getFeed(@RequestParam Long lastFeedId, HttpServletRequest request){
         return feedService.getFeed(lastFeedId, request);
     }
-    @GetMapping("/feed/categories/{tag}")
-    public ResponseEntity<?> getCategoriesFeed(@PathVariable String tag, Long lastFeedId, HttpServletRequest request){
+    @GetMapping("/feed/tags/{tag}")
+    public ResponseEntity<?> getCategoriesFeed(@PathVariable String tag, @RequestParam Long lastFeedId, HttpServletRequest request){
         return feedService.getCategoriesFeed(tag, lastFeedId, request);
     }
 
