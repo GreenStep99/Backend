@@ -99,6 +99,7 @@ public class MissionService {
                 .build();
         missionStatusRepository.save(missionStatus);
         String imgUrl = imageService.getImgUrlBase64(missionRequestDto.getBase64String());
+
         SubmitMission submitMission = SubmitMission.builder()
                 .imgUrl(imgUrl)
                 .mission(mission)

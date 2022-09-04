@@ -12,18 +12,18 @@ public class FeedController {
 
     private final FeedService feedService;
 
-    @PostMapping("/profiles/missions/{postId}")
-    public ResponseEntity<?> createFeed(@PathVariable Long postId, @RequestBody String content, HttpServletRequest request){
-        return feedService.createFeed(postId, content, request);
+    @PostMapping("/profiles/missions/{submitMissionId}")
+    public ResponseEntity<?> createFeed(@PathVariable Long submitMissionId, @RequestBody String content, HttpServletRequest request){
+        return feedService.createFeed(submitMissionId, content, request);
     }
 
     @GetMapping("/feed")
     public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request){
         return feedService.getFeed(lastFeedId, request);
     }
-    @GetMapping("/feed/categories/{category}")
-    public ResponseEntity<?> getCategoriesFeed(@PathVariable String category, Long lastFeedId, HttpServletRequest request){
-        return feedService.getCategoriesFeed(category, lastFeedId, request);
+    @GetMapping("/feed/categories/{tag}")
+    public ResponseEntity<?> getCategoriesFeed(@PathVariable String tag, Long lastFeedId, HttpServletRequest request){
+        return feedService.getCategoriesFeed(tag, lastFeedId, request);
     }
 
 }

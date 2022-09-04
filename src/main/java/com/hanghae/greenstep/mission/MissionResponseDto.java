@@ -24,4 +24,6 @@ public class MissionResponseDto {
     private String missionName;
 
     private Boolean onShow;
+
+    private String tag;
 }
