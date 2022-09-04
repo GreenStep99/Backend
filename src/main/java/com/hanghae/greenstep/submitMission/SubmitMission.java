@@ -26,11 +26,17 @@ public class SubmitMission extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(length = 80)
+    private String missionName;
+
+    @Column(length = 80)
+    private String missionType;
+
     @Column
     private String imgUrl;
 
     @Column
-    private String reason;
+    private String info;
 
     @Column
     private String adminName;
@@ -51,19 +57,19 @@ public class SubmitMission extends Timestamped {
         this.mission = mission;
     }
 
-    public SubmitMission(Status status, String imgUrl, String reason, String adminName, Member member, Mission mission) {
+    public SubmitMission(Status status, String imgUrl, String info, String adminName, Member member, Mission mission) {
         this.id = getId();
         this.status = status;
         this.imgUrl = imgUrl;
-        this.reason = reason;
+        this.info = info;
         this.adminName = adminName;
         this.member = member;
         this.mission = mission;
     }
 
-    public void update(Status status,String reason, String adminName){
+    public void update(Status status,String info, String adminName){
         this.status = status;
-        this.reason = reason;
+        this.info = info;
         this.adminName = adminName;
     }
 }

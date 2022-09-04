@@ -8,13 +8,16 @@ import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,11 +44,15 @@ public class AdminService {
         for (SubmitMission submitMission : submitMissionList) {
             submitMissionResponseDtoList.add(
                     SubmitMissionResponseDto.builder()
+                            .id(submitMission.getId())
                             .userId(submitMission.getMember().getId())
                             .profilePhoto(submitMission.getMember().getProfilePhoto())
-                            .nickname(submitMission.getMember().getNickname())
-                            .missionName(submitMission.getMission().getMissionName())
+                            .email(submitMission.getMember().getEmail())
+                            .missionName(submitMission.getMissionName())
+                            .missionType(submitMission.getMissionType())
                             .missionImgUrl(submitMission.getImgUrl())
+                            .adminName(submitMission.getAdminName())
+                            .info(submitMission.getInfo())
                             .status(submitMission.getStatus())
                             .build()
             );
@@ -68,24 +75,28 @@ public class AdminService {
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
-    public ResponseEntity<?> verifySubmitMission(String verification,Long submitMissionId, HttpServletRequest request, String info) {
+    @Transactional
+    public ResponseEntity<?> verifySubmitMission(Status verification,Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
-        SubmitMission submitMission =submitMissionRepository.findById(submitMissionId).orElseThrow();
+        SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
         verifyMission(verification,submitMission,admin, info);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
     }
 
-    public void verifyMission(String verification, SubmitMission submitMission, Member admin, String info){
-        if (Objects.equals(verification, "OK")){
-            submitMission.update(DONE, null, admin.getName());
+    public void verifyMission(Status verification, SubmitMission submitMission, Member admin, String info){
+           submitMission.update(verification, info, admin.getName());
             MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
-            missionStatus.update(DONE);
-        }
-        if (Objects.equals(verification, "NO")){
-            submitMission.update(REJECTED, info, admin.getName());
-            MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
-            missionStatus.update(REJECTED);
-        }
+            missionStatus.update(verification);
+            if(verification == DONE){
+                if(Objects.equals(submitMission.getMissionType(), "dailyMission")){
+                    submitMission.getMember().earnDailyPoint();
+                }else if(Objects.equals(submitMission.getMissionType(), "weeklyMission")){
+                    submitMission.getMember().earnWeeklyPoint();
+                }else{
+                    submitMission.getMember().earnChallengePoint();
+                }
+            }
     }
+
 }

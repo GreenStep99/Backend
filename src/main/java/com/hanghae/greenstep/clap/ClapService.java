@@ -25,7 +25,7 @@ public class ClapService {
     public ResponseEntity<?> upDownClap(Long feedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         Feed feed = feedRepository.findById(feedId).orElseThrow(
-                () -> new CustomException(ErrorCode.CARD_NOT_FOUND));
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         Clap findClap = clapRepository.findByMemberAndFeed(member,feed).orElse(null);
 
