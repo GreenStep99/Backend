@@ -18,7 +18,7 @@ public class SubmitMissionResponseDto {
     private String missionName;
     private String missionImgUrl;
     private Status status;
-    private String reason;
+    private String info;
     private String adminName;
 
     public SubmitMissionResponseDto(SubmitMission submitMission){
@@ -28,7 +28,7 @@ public class SubmitMissionResponseDto {
         this.missionName = submitMission.getMission().getMissionName();
         this.missionImgUrl = submitMission.getImgUrl();
         this.status = submitMission.getStatus();
-        this.reason = submitMission.getReason();
+        this.info = submitMission.getInfo();
         this.adminName = submitMission.getAdminName();
 
     }
