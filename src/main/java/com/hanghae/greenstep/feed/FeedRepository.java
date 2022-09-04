@@ -11,6 +11,6 @@ import java.util.List;
 
 public interface FeedRepository extends JpaRepository<Feed,Long> {
     List<Feed> findByIdLessThanOrderByIdDesc(Long lastFeedId, PageRequest pageRequest);
-    List<Feed> findByIdLessThanAndCategoriesOrderByIdDesc(Long lastFeedId, String categories, PageRequest pageRequest);
+    List<Feed> findByIdLessThanAndTagOrderByIdDesc(Long lastFeedId, String tag, PageRequest pageRequest);
 }
 

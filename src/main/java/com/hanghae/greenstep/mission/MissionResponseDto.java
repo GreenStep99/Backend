@@ -14,9 +14,7 @@ public class MissionResponseDto {
 
     private Long missionId;
 
-
     private String missionContent;
-
 
     private String missionImageUrl;
 
@@ -26,4 +24,6 @@ public class MissionResponseDto {
     private String missionName;
 
     private Boolean onShow;
+
+    private String tag;
 }

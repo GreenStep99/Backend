@@ -69,7 +69,7 @@ public class KakaoLoginService {
             String email = kakaoMemberInfo.getEmail();
             String profileImage = kakaoMemberInfo.getProfilePhoto();
             // role: 일반 사용자
-            kakaoUser = new Member(kakaoId, email, "이름", ROLE_MEMBER, nickname,  encodedPassword, profileImage);
+            kakaoUser = new Member(kakaoId, email, "이름", ROLE_MEMBER, nickname,  encodedPassword, profileImage, "kakao");
             memberRepository.save(kakaoUser);
         }
         if(Objects.equals(kakaoUser.getName(),"이름")){

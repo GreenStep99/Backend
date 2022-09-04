@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
 import java.util.UUID;
 @Slf4j
 @Service
@@ -53,5 +56,27 @@ public class ImageService {
         }
 
         return amazonS3Client.getUrl(bucket, originalName).toString();
+    }
+
+    public String getImgUrlBase64(String base64){
+            String[] strings = base64.split(",");
+            String extension = switch (strings[0]) { // check image's extension
+                case "data:image/jpeg;base64" -> ".jpeg";
+                case "data:image/png;base64" -> ".png";
+                default -> // should write cases for more images types
+                        ".jpg";
+            };
+        // convert base64 string to binary data
+        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+        long now = new Date().getTime();
+        String fileName = UUID.randomUUID().toString() + now + extension;
+        InputStream img = new ByteArrayInputStream(data);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(data.length);
+        metadata.setContentType("image/"+extension.substring(1));
+        metadata.setCacheControl("public, max-age=31536000");
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, img, metadata)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 }
