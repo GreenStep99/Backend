@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FeedResponseDto {
-    private Long postId;
+    private Long id;
     private String missionName;
     private String imgUrl;
     private String content;
     private Boolean clapByMe;
     private Integer clapCount;
+    private String tag;
+
 }

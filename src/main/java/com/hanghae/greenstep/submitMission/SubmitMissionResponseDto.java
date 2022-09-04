@@ -31,6 +31,5 @@ public class SubmitMissionResponseDto {
         this.status = submitMission.getStatus();
         this.info = submitMission.getInfo();
         this.adminName = submitMission.getAdminName();
-
     }
 }
