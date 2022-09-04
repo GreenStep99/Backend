@@ -15,7 +15,6 @@ import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Status.DONE;
-import static com.hanghae.greenstep.shared.Status.REJECTED;
 
 @Service
 @RequiredArgsConstructor

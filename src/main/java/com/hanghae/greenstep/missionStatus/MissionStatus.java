@@ -6,7 +6,6 @@ import com.hanghae.greenstep.shared.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 

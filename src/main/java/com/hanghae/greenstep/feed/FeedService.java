@@ -51,22 +51,7 @@ public class FeedService {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
         List<Feed> feedList = feedRepository.findByIdLessThanOrderByIdDesc(lastFeedId, pageRequest);
-        List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
-        for (Feed feed : feedList) {
-
-            boolean clapByMe_isEdit = clapRepository.existsByMemberAndFeed(member, feed);
-
-            feedResponseDtoList.add(
-                    FeedResponseDto.builder()
-                            .postId(feed.getId())
-                            .missionName(feed.getMissionName())
-                            .imgUrl(feed.getImgUrl())
-                            .content(feed.getContent())
-                            .clapByMe(clapByMe_isEdit)
-                            .clapCount(feed.getClapCount())
-                            .build()
-            );
-        }
+        List<FeedResponseDto> feedResponseDtoList = makeFeedList(feedList, member);
         return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 
@@ -84,14 +69,24 @@ public class FeedService {
             default -> throw new CustomException(ErrorCode.INVALID_VALUE);
         };
         List<Feed> feedList = feedRepository.findByIdLessThanAndTagOrderByIdDesc(lastFeedId, tagName, pageRequest);
-        List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
+         List<FeedResponseDto> feedResponseDtoList = makeFeedList(feedList, member);
+        return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> getMyFeed(HttpServletRequest request) {
+        Member member = check.accessTokenCheck(request);
+        List<Feed> feedList = feedRepository.findAllByMember(member);
+        List<FeedResponseDto> feedResponseDtoList = makeFeedList(feedList, member);
+        return new ResponseEntity<>(Message.success(feedResponseDtoList),HttpStatus.OK);
+    }
+
+    public List<FeedResponseDto> makeFeedList(List<Feed> feedList, Member member){
+        List<FeedResponseDto> feedResponseDtoList =new ArrayList<>();
         for (Feed feed : feedList) {
-
             boolean clapByMe_isEdit = clapRepository.existsByMemberAndFeed(member, feed);
-
             feedResponseDtoList.add(
                     FeedResponseDto.builder()
-                            .postId(feed.getId())
+                            .id(feed.getId())
                             .missionName(feed.getMissionName())
                             .imgUrl(feed.getImgUrl())
                             .content(feed.getContent())
@@ -100,6 +95,6 @@ public class FeedService {
                             .build()
             );
         }
-        return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
+        return feedResponseDtoList;
     }
 }

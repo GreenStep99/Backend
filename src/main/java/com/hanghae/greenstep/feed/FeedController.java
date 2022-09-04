@@ -26,4 +26,8 @@ public class FeedController {
         return feedService.getCategoriesFeed(tag, lastFeedId, request);
     }
 
+    @GetMapping("/profiles/feed")
+    public ResponseEntity<?> getMyFeed(HttpServletRequest request){
+        return feedService.getMyFeed(request);
+    }
 }
