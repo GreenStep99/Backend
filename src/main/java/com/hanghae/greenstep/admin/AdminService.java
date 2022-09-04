@@ -44,11 +44,14 @@ public class AdminService {
         for (SubmitMission submitMission : submitMissionList) {
             submitMissionResponseDtoList.add(
                     SubmitMissionResponseDto.builder()
+                            .id(submitMission.getId())
                             .userId(submitMission.getMember().getId())
                             .profilePhoto(submitMission.getMember().getProfilePhoto())
-                            .nickname(submitMission.getMember().getNickname())
+                            .email(submitMission.getMember().getEmail())
                             .missionName(submitMission.getMission().getMissionName())
                             .missionImgUrl(submitMission.getImgUrl())
+                            .adminName(submitMission.getAdminName())
+                            .info(submitMission.getInfo())
                             .status(submitMission.getStatus())
                             .build()
             );

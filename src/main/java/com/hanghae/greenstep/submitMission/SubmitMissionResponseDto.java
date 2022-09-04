@@ -14,7 +14,7 @@ public class SubmitMissionResponseDto {
     private Long id;
     private Long userId;
     private String profilePhoto;
-    private String nickname;
+    private String email;
     private String missionName;
     private String missionImgUrl;
     private Status status;
@@ -24,7 +24,7 @@ public class SubmitMissionResponseDto {
     public SubmitMissionResponseDto(SubmitMission submitMission){
         this.id = submitMission.getId();
         this.userId = submitMission.getMember().getId();
-        this.nickname = submitMission.getMember().getNickname();
+        this.email = submitMission.getMember().getEmail();
         this.missionName = submitMission.getMission().getMissionName();
         this.missionImgUrl = submitMission.getImgUrl();
         this.status = submitMission.getStatus();
