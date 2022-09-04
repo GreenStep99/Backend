@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,27 +69,26 @@ public class AdminService {
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
+    @Transactional
     public ResponseEntity<?> verifySubmitMission(String verification,Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
-        SubmitMission submitMission =submitMissionRepository.findById(submitMissionId).orElseThrow();
+        SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
         verifyMission(verification,submitMission,admin, info);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
     }
 
     public void verifyMission(String verification, SubmitMission submitMission, Member admin, String info){
-        if (Objects.equals(verification, "OK")){
+        if (Objects.equals(verification, "DONE")){
             submitMission.update(DONE, null, admin.getName());
             MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
             missionStatus.update(DONE);
         }
-        if (Objects.equals(verification, "NO")){
+        if (Objects.equals(verification, "REJECTED")){
             submitMission.update(REJECTED, info, admin.getName());
             MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
             missionStatus.update(REJECTED);
         }
     }
-
-
 
 }
