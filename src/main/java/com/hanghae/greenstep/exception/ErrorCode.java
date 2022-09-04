@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.BAD_REQUEST.value(), "M005", "유효하지 않은 토큰 입니다."),
     DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST.value(),"M006","이미 사용되고 있는 닉네임입니다."),
     INVALID_MEMBER_INFO(HttpStatus.BAD_REQUEST.value(),"M007" ,"잘못된 사용자 정보입니다."),
+    INVALID_VALUE(HttpStatus.BAD_REQUEST.value(), "M008", "잘못된 태그 정보입니다."),
 
 
     //CARD
@@ -29,6 +30,7 @@ public enum ErrorCode {
     // FILE
     FILE_TYPE_INVALID(HttpStatus.BAD_REQUEST.value(), "F001", "잘못된 파일 형식입니다."),
     FILE_SIZE_INVALID(HttpStatus.BAD_REQUEST.value(), "F002", "파일 크기가 너무 큽니다.");
+
 
 
 
