@@ -103,6 +103,7 @@ public class MissionService {
 //        File file = base64Util.getImageFromBase64(missionRequestDto.getBase64String(), UUID.randomUUID().toString());
 //        MultipartFile multipartFile = base64Util.convertFileToMultipartFile(file);
         String imgUrl = imageService.getImgUrlBase64(missionRequestDto.getBase64String());
+
         SubmitMission submitMission = SubmitMission.builder()
                 .imgUrl(imgUrl)
                 .mission(mission)

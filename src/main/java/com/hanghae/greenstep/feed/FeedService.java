@@ -4,10 +4,10 @@ import com.hanghae.greenstep.clap.ClapRepository;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.member.Member;
-import com.hanghae.greenstep.post.Post;
-import com.hanghae.greenstep.post.PostRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.submitMission.SubmitMission;
+import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -24,20 +24,22 @@ import java.util.List;
 public class FeedService {
 
     private final Check check;
-    private final PostRepository postRepository;
+
+    private final SubmitMissionRepository submitMissionRepository;
     private final FeedRepository feedRepository;
     private final ClapRepository clapRepository;
 
-    public ResponseEntity<?> createFeed(Long postId, String content, HttpServletRequest request) {
+    public ResponseEntity<?> createFeed(Long submitMissionId, String content, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
-        Post post = postRepository.findById(postId).orElseThrow(
+        SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.CARD_NOT_FOUND)
         );
         Feed feed = Feed.builder()
                 .member(member)
-                .missionName(post.getMissionName())
+                .missionName(submitMission.getMission().getMissionName())
                 .content(content)
-                .imgUrl(post.getImgUrl())
+                .imgUrl(submitMission.getImgUrl())
+                .tag(submitMission.getMission().getTag())
                 .build();
         feedRepository.save(feed);
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
@@ -68,10 +70,18 @@ public class FeedService {
     }
 
     @Transactional
-    public ResponseEntity<?> getCategoriesFeed(String categories, Long lastFeedId, HttpServletRequest request) {
+    public ResponseEntity<?> getCategoriesFeed(String tag, Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
-        List<Feed> feedList = feedRepository.findByIdLessThanAndCategoriesOrderByIdDesc(lastFeedId, categories, pageRequest);
+        String tagName = switch (tag) {
+            case "disposable" -> "#NO일회용품";
+            case "separate" -> "#분리수거";
+            case "environmental" -> "#환경운동";
+            case "goods" -> "#환경용품사용";
+            case "energy" -> "#에너지절약";
+            case "etc" -> "#기타";
+        };
+        List<Feed> feedList = feedRepository.findByIdLessThanAndTagOrderByIdDesc(lastFeedId, tagName, pageRequest);
         List<FeedResponseDto> feedResponseDtoList = new ArrayList<>();
         for (Feed feed : feedList) {
 

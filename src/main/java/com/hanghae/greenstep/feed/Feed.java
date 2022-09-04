@@ -34,16 +34,17 @@ public class Feed extends Timestamped {
     private Integer clapCount;
 
     @Column
-    private String categories;
+    private String tag;
 
     @Builder
-    public Feed(Member member, String missionName, String imgUrl, String content){
+    public Feed(Member member, String missionName, String imgUrl, String content, String tag){
         this.id = getId();
         this.member = member;
         this.missionName = missionName;
         this.imgUrl = imgUrl;
         this.content = content;
         this.clapCount = 0;
+        this.tag = tag;
     }
 
     public void update(Integer clapCount){

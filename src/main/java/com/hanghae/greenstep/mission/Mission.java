@@ -29,6 +29,9 @@ public class Mission {
     @Column
     private Boolean onShow = false;
 
+    @Column(length = 80)
+    private String tag;
+
     public void updateOnShow(Boolean check) {
         this.onShow = check;
     }
