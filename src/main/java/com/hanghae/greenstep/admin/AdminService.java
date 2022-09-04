@@ -8,12 +8,14 @@ import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,7 +72,7 @@ public class AdminService {
     }
 
     @Transactional
-    public ResponseEntity<?> verifySubmitMission(String verification,Long submitMissionId, HttpServletRequest request, String info) {
+    public ResponseEntity<?> verifySubmitMission(Status verification,Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
         verifyMission(verification,submitMission,admin, info);
@@ -78,17 +80,10 @@ public class AdminService {
         return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
     }
 
-    public void verifyMission(String verification, SubmitMission submitMission, Member admin, String info){
-        if (Objects.equals(verification, "DONE")){
-            submitMission.update(DONE, null, admin.getName());
+    public void verifyMission(Status verification, SubmitMission submitMission, Member admin, String info){
+           submitMission.update(verification, info, admin.getName());
             MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
-            missionStatus.update(DONE);
-        }
-        if (Objects.equals(verification, "REJECTED")){
-            submitMission.update(REJECTED, info, admin.getName());
-            MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
-            missionStatus.update(REJECTED);
-        }
+            missionStatus.update(verification);
     }
 
 }

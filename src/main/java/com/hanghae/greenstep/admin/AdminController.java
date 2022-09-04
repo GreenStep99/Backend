@@ -1,8 +1,10 @@
 package com.hanghae.greenstep.admin;
 
 
+import com.hanghae.greenstep.shared.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +29,7 @@ public class AdminController {
     }
 
     @PostMapping("/verification/{submitMissionId}")
-    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId,@RequestBody String info, @RequestParam String verification, HttpServletRequest request){
+    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId, @Nullable @RequestBody String info, @RequestParam Status verification, HttpServletRequest request){
         return adminService.verifySubmitMission(verification, submitMissionId, request, info);
     }
 
