@@ -54,6 +54,15 @@ public class Member {
     @Column(nullable = false)
     private String profilePhoto;
 
+    @Column
+    private Long missionPoint;
+
+    @Column
+    private Long dailyMissionPoint;
+
+    @Column
+    private Long weeklyMissionPoint;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
@@ -100,5 +109,24 @@ public class Member {
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
     }
+
+    public void resetDailyPoint(){
+        this.dailyMissionPoint = 0L;
+    }
+
+    public void resetWeeklyPoint(){
+        this.weeklyMissionPoint = 0L;
+    }
+
+    public void earnDailyPoint(){
+        this.missionPoint += 1L;
+    }
+    public void earnWeeklyPoint(){
+        this.missionPoint += 2L;
+    }
+    public void earnChallengePoint(){
+        this.missionPoint += 3L;
+    }
+
 
 }
