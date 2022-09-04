@@ -46,9 +46,11 @@ public class AdminService {
                     SubmitMissionResponseDto.builder()
                             .userId(submitMission.getMember().getId())
                             .profilePhoto(submitMission.getMember().getProfilePhoto())
-                            .nickname(submitMission.getMember().getNickname())
+                            .email(submitMission.getMember().getEmail())
                             .missionName(submitMission.getMission().getMissionName())
                             .missionImgUrl(submitMission.getImgUrl())
+                            .adminName(submitMission.getAdminName())
+                            .info(submitMission.getInfo())
                             .status(submitMission.getStatus())
                             .build()
             );
