@@ -32,8 +32,9 @@ public class FeedService {
     public ResponseEntity<?> createFeed(Long submitMissionId, String content, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
-                () -> new CustomException(ErrorCode.CARD_NOT_FOUND)
+                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
+        check.checkMember(submitMission, member);
         Feed feed = Feed.builder()
                 .member(member)
                 .missionName(submitMission.getMission().getMissionName())
