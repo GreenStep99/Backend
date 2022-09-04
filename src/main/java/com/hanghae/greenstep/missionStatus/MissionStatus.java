@@ -1,8 +1,8 @@
 package com.hanghae.greenstep.missionStatus;
 
-import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Mission;
+import com.hanghae.greenstep.shared.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,5 +32,9 @@ public class MissionStatus {
         this.member = member;
         this.mission = mission;
         this.missionStatus = missionStatus;
+    }
+
+    public void update(Status verification) {
+        this.missionStatus = verification;
     }
 }

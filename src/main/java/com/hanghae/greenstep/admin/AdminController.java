@@ -26,5 +26,9 @@ public class AdminController {
         return adminService.getSubmitMission();
     }
 
+    @PostMapping("/verification/{submitMissionId}")
+    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId,@RequestBody String info, @RequestParam String verification, HttpServletRequest request){
+        return adminService.verifySubmitMission(verification, submitMissionId, request, info);
+    }
 
 }

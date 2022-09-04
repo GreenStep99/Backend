@@ -4,6 +4,8 @@ package com.hanghae.greenstep.admin;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
+import com.hanghae.greenstep.missionStatus.MissionStatus;
+import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
@@ -14,9 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static com.hanghae.greenstep.shared.Status.DONE;
+import static com.hanghae.greenstep.shared.Status.REJECTED;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +31,8 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final SubmitMissionRepository submitMissionRepository;
+
+    private final MissionStatusRepository missionStatusRepository;
 
     private final Check check;
     public ResponseEntity<?> getSubmitMission() {
@@ -58,4 +67,28 @@ public class AdminService {
         response.addHeader("Refresh_Token", tokenDto.getRefreshToken());
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
+
+    public ResponseEntity<?> verifySubmitMission(String verification,Long submitMissionId, HttpServletRequest request, String info) {
+        Member admin = check.accessTokenCheck(request);
+        SubmitMission submitMission =submitMissionRepository.findById(submitMissionId).orElseThrow();
+        verifyMission(verification,submitMission,admin, info);
+        SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
+        return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
+    }
+
+    public void verifyMission(String verification, SubmitMission submitMission, Member admin, String info){
+        if (Objects.equals(verification, "OK")){
+            submitMission.update(DONE, null, admin.getName());
+            MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
+            missionStatus.update(DONE);
+        }
+        if (Objects.equals(verification, "NO")){
+            submitMission.update(REJECTED, info, admin.getName());
+            MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
+            missionStatus.update(REJECTED);
+        }
+    }
+
+
+
 }
