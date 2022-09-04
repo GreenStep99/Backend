@@ -1,10 +1,9 @@
 package com.hanghae.greenstep.submitMission;
 
 
-import com.hanghae.greenstep.shared.Status;
-
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Mission;
+import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,6 @@ public class SubmitMission extends Timestamped {
     @Id
     @GeneratedValue
     private Long id;
-
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -45,7 +43,6 @@ public class SubmitMission extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     private Mission mission;
 
-
     @Builder
     public SubmitMission(Status status, String imgUrl, Member member, Mission mission) {
         this.status = status;
@@ -62,5 +59,11 @@ public class SubmitMission extends Timestamped {
         this.adminName = adminName;
         this.member = member;
         this.mission = mission;
+    }
+
+    public void update(Status status,String reason, String adminName){
+        this.status = status;
+        this.reason = reason;
+        this.adminName = adminName;
     }
 }

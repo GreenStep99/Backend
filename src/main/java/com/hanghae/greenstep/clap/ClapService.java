@@ -5,7 +5,6 @@ import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.feed.FeedRepository;
 import com.hanghae.greenstep.member.Member;
-import com.hanghae.greenstep.post.Post;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;

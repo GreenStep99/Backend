@@ -1,7 +1,6 @@
 package com.hanghae.greenstep.feed;
 
 import com.hanghae.greenstep.member.Member;
-import com.hanghae.greenstep.member.MemberRequestDto;
 import com.hanghae.greenstep.shared.Timestamped;
 import lombok.Builder;
 import lombok.Getter;

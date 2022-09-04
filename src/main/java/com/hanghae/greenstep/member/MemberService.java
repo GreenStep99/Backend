@@ -7,7 +7,6 @@ import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.jwt.RefreshTokenRepository;
 import com.hanghae.greenstep.jwt.TokenDto;
 import com.hanghae.greenstep.jwt.TokenProvider;
-import com.hanghae.greenstep.kakaoLogin.LoginResponseDto;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
