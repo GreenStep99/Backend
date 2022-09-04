@@ -88,6 +88,15 @@ public class AdminService {
            submitMission.update(verification, info, admin.getName());
             MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
             missionStatus.update(verification);
+            if(verification == DONE){
+                if(Objects.equals(submitMission.getMissionType(), "dailyMission")){
+                    submitMission.getMember().earnDailyPoint();
+                }else if(Objects.equals(submitMission.getMissionType(), "weeklyMission")){
+                    submitMission.getMember().earnWeeklyPoint();
+                }else{
+                    submitMission.getMember().earnChallengePoint();
+                }
+            }
     }
 
 }
