@@ -16,6 +16,7 @@ public class SubmitMissionResponseDto {
     private String profilePhoto;
     private String email;
     private String missionName;
+    private String missionType;
     private String missionImgUrl;
     private Status status;
     private String info;

@@ -26,6 +26,12 @@ public class SubmitMission extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(length = 80)
+    private String missionName;
+
+    @Column(length = 80)
+    private String missionType;
+
     @Column
     private String imgUrl;
 
