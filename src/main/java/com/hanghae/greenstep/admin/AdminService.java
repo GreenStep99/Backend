@@ -44,6 +44,7 @@ public class AdminService {
         for (SubmitMission submitMission : submitMissionList) {
             submitMissionResponseDtoList.add(
                     SubmitMissionResponseDto.builder()
+                            .id(submitMission.getId())
                             .userId(submitMission.getMember().getId())
                             .profilePhoto(submitMission.getMember().getProfilePhoto())
                             .email(submitMission.getMember().getEmail())
