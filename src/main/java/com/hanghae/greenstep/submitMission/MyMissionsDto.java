@@ -11,7 +11,6 @@ public class MyMissionsDto {
     private Long id;
     private String missionName;
     private String missionImgUrl;
-
     private Boolean onFeed;
 
 
