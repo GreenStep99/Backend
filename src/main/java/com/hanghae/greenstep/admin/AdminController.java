@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Optional;
+import java.util.SimpleTimeZone;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +32,10 @@ public class AdminController {
     }
 
     @PostMapping("/verification/{submitMissionId}")
-    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId, @Nullable @RequestBody String info, @RequestParam Status verification, HttpServletRequest request){
+    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId, @RequestBody(required = false) Map<String, String> infoMap, @RequestParam Status verification, HttpServletRequest request){
+        String info;
+        if(infoMap == null) info = null;
+        else info = infoMap.get("info");
         return adminService.verifySubmitMission(verification, submitMissionId, request, info);
     }
 

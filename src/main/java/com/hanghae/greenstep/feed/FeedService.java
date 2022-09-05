@@ -29,6 +29,7 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final ClapRepository clapRepository;
 
+    @Transactional
     public ResponseEntity<?> createFeed(Long submitMissionId, String content, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
