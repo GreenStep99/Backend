@@ -83,7 +83,7 @@ public class KakaoLoginService {
         Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(
                 () -> new CustomException(ErrorCode.INVALID_MEMBER_INFO)
         );
-        return tokenProvider.generateTokenDto(member, newComer);
+        return tokenProvider.generateTokenDto(member, newComer, accessToken);
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
