@@ -94,6 +94,7 @@ public class FeedService {
                             .content(feed.getContent())
                             .clapByMe(clapByMe)
                             .clapCount(feed.getClapCount())
+                            .tag(feed.getTag())
                             .build()
             );
         }
