@@ -109,9 +109,9 @@ public class AdminService {
         String title ="[GreenStep] 미션 인증이 ";
         String content = "인증하신 ";
         if(verification==DONE) {title +="완료되었습니다.";
-        content += submitMission.getMission().getMissionName()+"이 성공적으로 인증되었습니다!";}
+        content += "[" + submitMission.getMission().getMissionName() + "]가(이) 성공적으로 인증되었습니다!";}
         if(verification==REJECTED) {title +="실패하였습니다.";
-            content += submitMission.getMission().getMissionName()+"이 인증에 실패하였습니다.\n 인증 실패 사유: "+ info +"\n 다시 인증해주세요!";}
+            content += "[" + submitMission.getMission().getMissionName() + "]가(이) 인증에 실패하였습니다.\n 인증 실패 사유: " + info + "\n 다시 인증해주세요!";}
         MailDto mailDto = new MailDto(submitMission.getMember().getEmail(),title, content);
         emailUtil.sendEmail(mailDto);
     }
