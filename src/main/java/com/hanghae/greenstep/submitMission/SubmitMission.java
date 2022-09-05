@@ -50,11 +50,13 @@ public class SubmitMission extends Timestamped {
     private Mission mission;
 
     @Builder
-    public SubmitMission(Status status, String imgUrl, Member member, Mission mission) {
+    public SubmitMission(Status status, String imgUrl, Member member, Mission mission, String missionName, String missionType) {
         this.status = status;
         this.imgUrl = imgUrl;
         this.member = member;
         this.mission = mission;
+        this.missionName = missionName;
+        this.missionType = missionType;
     }
 
     public SubmitMission(Status status, String imgUrl, String info, String adminName, Member member, Mission mission) {
