@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @RequiredArgsConstructor
 public class Check {
-
     private final TokenProvider tokenProvider;
 
     public Member accessTokenCheck(HttpServletRequest request) {

@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -19,12 +18,12 @@ public class AdminController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> adminLogin(@RequestBody AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response){
+    public ResponseEntity<?> adminLogin(@RequestBody AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         return adminService.login(adminLoginRequestDto, response);
     }
 
     @GetMapping("/verification")
-    public ResponseEntity<?> getSubmitMission(){
+    public ResponseEntity<?> getSubmitMission() {
         return adminService.getSubmitMission();
     }
 

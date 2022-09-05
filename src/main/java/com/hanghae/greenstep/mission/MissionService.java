@@ -2,6 +2,7 @@ package com.hanghae.greenstep.mission;
 
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
@@ -122,5 +123,9 @@ public class MissionService {
                 .build();
         submitMissionRepository.save(submitMission);
         return new ResponseEntity<>(Message.success("전송 완료"),HttpStatus.OK);
+    }
+
+    public void changeStatus(){
+
     }
 }
