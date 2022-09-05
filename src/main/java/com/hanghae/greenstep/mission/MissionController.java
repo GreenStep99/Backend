@@ -36,4 +36,10 @@ public class MissionController {
     public ResponseEntity<?> submitMission(@PathVariable Long missionId, HttpServletRequest request, @RequestBody MissionRequestDto missionRequestDto) throws Exception {
         return missionService.submitMission(missionId, request, missionRequestDto);
     }
+
+
+    @GetMapping("/missions/done/{missionId}")
+    public ResponseEntity<?> getDoneMission(@PathVariable Long missionId, HttpServletRequest request){
+        return missionService.getDoneMission(missionId, request);
+    }
 }

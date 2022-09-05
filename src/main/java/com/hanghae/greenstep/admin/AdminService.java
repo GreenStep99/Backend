@@ -118,5 +118,4 @@ public class AdminService {
         MailDto mailDto = new MailDto(submitMission.getMember().getEmail(),title, content);
         emailUtil.sendEmail(mailDto);
     }
-
 }
