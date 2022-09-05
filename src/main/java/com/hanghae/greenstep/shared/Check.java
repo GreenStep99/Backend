@@ -26,13 +26,13 @@ public class Check {
     }
 
     public void checkMember(SubmitMission submitMission, Member member) {
-        if (!member.equals(submitMission.getMember())) {
+        if (!submitMission.getMember().equals(member)) {
             throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
 
     public void checkMember(Feed feed, Member member) {
-        if (!member.equals(feed.getMember())) {
+        if (!feed.getMember().equals(member)) {
             throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
