@@ -13,5 +13,7 @@ public class MemberRequestDto {
     private String name;
 
     private String profilePhoto;
+
+    private Boolean acceptMail;
     
 }

@@ -63,12 +63,18 @@ public class Member {
     @Column
     private Long weeklyMissionPoint;
 
+    @Column
+    private Boolean acceptMail;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<Clap> clapSet;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<MissionStatus> missionStatusSet;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<SubmitMission> submitMissionList;
 
@@ -78,7 +84,7 @@ public class Member {
 
     @Builder
 
-    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type) {
+    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type, Boolean acceptMail) {
         this.id =getId();
         this.kakaoId = id;
         this.email = email;
@@ -87,7 +93,8 @@ public class Member {
         this.nickname = nickname;
         this.password = password;
         this.profilePhoto = profilePhoto;
-        this.type =type;
+        this.type = type;
+        this.acceptMail = acceptMail;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
         this.weeklyMissionPoint = 0L;
@@ -111,6 +118,7 @@ public class Member {
         if (memberRequestDto.getName() != null) this.name = memberRequestDto.getName();
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
+        if (memberRequestDto.getAcceptMail() != null) this.acceptMail = memberRequestDto.getAcceptMail();
     }
 
     public void resetDailyPoint(){

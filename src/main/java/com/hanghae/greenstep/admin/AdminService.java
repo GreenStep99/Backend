@@ -86,7 +86,7 @@ public class AdminService {
     public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
-        sendMail(verification,submitMission,info);
+        if(submitMission.getMember().getAcceptMail()) sendMail(verification,submitMission,info);
         changeMissionStatus(verification, submitMission, admin, info);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
