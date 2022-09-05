@@ -56,7 +56,7 @@ public class FeedService {
     }
 
     @Transactional
-    public ResponseEntity<?> getCategoriesFeed(String tag, Long lastFeedId, HttpServletRequest request) {
+    public ResponseEntity<?> getFeedByTag(String tag, Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
         String tagName = switch (tag) {
@@ -83,14 +83,14 @@ public class FeedService {
     public List<FeedResponseDto> makeFeedList(List<Feed> feedList, Member member){
         List<FeedResponseDto> feedResponseDtoList =new ArrayList<>();
         for (Feed feed : feedList) {
-            boolean clapByMe_isEdit = clapRepository.existsByMemberAndFeed(member, feed);
+            boolean clapByMe = clapRepository.existsByMemberAndFeed(member, feed);
             feedResponseDtoList.add(
                     FeedResponseDto.builder()
                             .id(feed.getId())
                             .missionName(feed.getMissionName())
                             .imgUrl(feed.getImgUrl())
                             .content(feed.getContent())
-                            .clapByMe(clapByMe_isEdit)
+                            .clapByMe(clapByMe)
                             .clapCount(feed.getClapCount())
                             .build()
             );

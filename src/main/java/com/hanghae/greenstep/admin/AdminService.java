@@ -1,6 +1,8 @@
 package com.hanghae.greenstep.admin;
 
 
+import com.hanghae.greenstep.exception.CustomException;
+import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
@@ -36,6 +38,7 @@ public class AdminService {
     private final MissionStatusRepository missionStatusRepository;
 
     private final Check check;
+
     public ResponseEntity<?> getSubmitMission() {
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
         List<SubmitMissionResponseDto> submitMissionResponseDtoList = new ArrayList<>();
@@ -74,27 +77,28 @@ public class AdminService {
     }
 
     @Transactional
-    public ResponseEntity<?> verifySubmitMission(Status verification,Long submitMissionId, HttpServletRequest request, String info) {
+    public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
-        verifyMission(verification,submitMission,admin, info);
+        changeMissionStatus(verification, submitMission, admin, info);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
-        return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
+        return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
     }
 
-    public void verifyMission(Status verification, SubmitMission submitMission, Member admin, String info){
-           submitMission.update(verification, info, admin.getName());
-            MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(),submitMission.getMission());
-            missionStatus.update(verification);
-            if(verification == DONE){
-                if(Objects.equals(submitMission.getMissionType(), "dailyMission")){
-                    submitMission.getMember().earnDailyPoint();
-                }else if(Objects.equals(submitMission.getMissionType(), "weeklyMission")){
-                    submitMission.getMember().earnWeeklyPoint();
-                }else{
-                    submitMission.getMember().earnChallengePoint();
-                }
+    public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin, String info) {
+        submitMission.update(verification, info, admin.getName());
+        MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission())
+                .orElseThrow(() -> new CustomException(ErrorCode.MISSION_STATUS_NOT_FOUND));
+        missionStatus.update(verification);
+        if (verification == DONE) {
+            if (Objects.equals(submitMission.getMissionType(), "daily")) {
+                submitMission.getMember().earnDailyPoint();
+            } else if (Objects.equals(submitMission.getMissionType(), "weekly")) {
+                submitMission.getMember().earnWeeklyPoint();
+            } else {
+                submitMission.getMember().earnChallengePoint();
             }
+        }
     }
 
 }

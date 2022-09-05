@@ -22,8 +22,8 @@ public class FeedController {
         return feedService.getFeed(lastFeedId, request);
     }
     @GetMapping("/feed/tags/{tag}")
-    public ResponseEntity<?> getCategoriesFeed(@PathVariable String tag, @RequestParam Long lastFeedId, HttpServletRequest request){
-        return feedService.getCategoriesFeed(tag, lastFeedId, request);
+    public ResponseEntity<?> getFeedByTag(@PathVariable String tag, @RequestParam Long lastFeedId, HttpServletRequest request){
+        return feedService.getFeedByTag(tag, lastFeedId, request);
     }
 
     @GetMapping("/profiles/feed")

@@ -15,7 +15,7 @@ public class ClapController {
     private final ClapService clapService;
 
     @PostMapping("/feed/claps/{feedId}")
-    public ResponseEntity<?> upDownClap(@PathVariable Long feedId, HttpServletRequest request){
-        return clapService.upDownClap(feedId, request);
+    public ResponseEntity<?> toggleClap(@PathVariable Long feedId, HttpServletRequest request){
+        return clapService.toggleClap(feedId, request);
     }
 }
