@@ -9,6 +9,9 @@ import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
+import com.hanghae.greenstep.shared.mail.EmailUtil;
+import com.hanghae.greenstep.shared.mail.EmailUtilImpl;
+import com.hanghae.greenstep.shared.mail.MailDto;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
@@ -22,9 +25,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Status.DONE;
+import static com.hanghae.greenstep.shared.Status.REJECTED;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +41,8 @@ public class AdminService {
     private final MissionStatusRepository missionStatusRepository;
 
     private final Check check;
+    private final EmailUtilImpl emailUtil;
+
     public ResponseEntity<?> getSubmitMission() {
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
         List<SubmitMissionResponseDto> submitMissionResponseDtoList = new ArrayList<>();
@@ -78,6 +85,7 @@ public class AdminService {
         Member admin = check.accessTokenCheck(request);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
         verifyMission(verification,submitMission,admin, info);
+        sendMail(verification,submitMission,info);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
     }
@@ -95,6 +103,17 @@ public class AdminService {
                     submitMission.getMember().earnChallengePoint();
                 }
             }
+    }
+
+    public void sendMail(Status verification, SubmitMission submitMission, String info){
+        String title ="[GreenStep] 미션 인증이 ";
+        String content = "인증하신 ";
+        if(verification==DONE) {title +="완료되었습니다.";
+        content += submitMission.getMission().getMissionName()+"이 성공적으로 인증되었습니다!";}
+        if(verification==REJECTED) {title +="실패하였습니다.";
+            content += submitMission.getMission().getMissionName()+"이 인증에 실패하였습니다.\n 인증 실패 사유: "+ info +"\n 다시 인증해주세요!";}
+        MailDto mailDto = new MailDto(submitMission.getMember().getEmail(),title, content);
+        emailUtil.sendEmail(mailDto);
     }
 
 }

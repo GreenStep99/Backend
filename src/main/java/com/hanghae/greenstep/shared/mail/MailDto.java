@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MailDto {
 
-    private String fromAddress;
     private String toAddress;
     private String title; // 제목
     private String content; // 메일 내용
+
+
 
 }
 
