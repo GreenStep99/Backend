@@ -1,5 +1,4 @@
 package com.hanghae.greenstep.scheduler;
-
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.mission.Mission;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Component

@@ -41,6 +41,9 @@ public class SubmitMission extends Timestamped {
     @Column
     private String adminName;
 
+    @Column
+    private Boolean onFeed;
+
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -57,6 +60,7 @@ public class SubmitMission extends Timestamped {
         this.mission = mission;
         this.missionName = missionName;
         this.missionType = missionType;
+        this.onFeed = false;
     }
 
     public SubmitMission(Status status, String imgUrl, String info, String adminName, Member member, Mission mission) {
@@ -67,11 +71,16 @@ public class SubmitMission extends Timestamped {
         this.adminName = adminName;
         this.member = member;
         this.mission = mission;
+        this.onFeed = false;
     }
 
     public void update(Status status,String info, String adminName){
         this.status = status;
         this.info = info;
         this.adminName = adminName;
+    }
+
+    public void makeOnFeed() {
+        this.onFeed = true;
     }
 }
