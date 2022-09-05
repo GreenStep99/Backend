@@ -78,6 +78,7 @@ public class MissionService {
                             .missionName(mission.getMissionName())
                             .onShow(mission.getOnShow())
                             .status(status)
+                            .tag(mission.getTag())
                             .build()
             );
         }
