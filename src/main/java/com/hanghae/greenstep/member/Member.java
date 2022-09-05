@@ -88,6 +88,9 @@ public class Member {
         this.password = password;
         this.profilePhoto = profilePhoto;
         this.type =type;
+        this.missionPoint = 0L;
+        this.dailyMissionPoint = 0L;
+        this.weeklyMissionPoint = 0L;
     }
 
     @Override
