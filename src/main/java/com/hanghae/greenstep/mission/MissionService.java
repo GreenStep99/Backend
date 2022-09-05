@@ -6,6 +6,7 @@ import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static com.hanghae.greenstep.shared.Status.DEFAULT;
 import static com.hanghae.greenstep.shared.Status.WAITING;
 
 @Service
@@ -59,6 +62,8 @@ public class MissionService {
         List<MissionResponseDto> missionResponseDtoList = new ArrayList<>();
         for (Mission mission : missionList) {
             MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(member, mission);
+            Status status = DEFAULT;
+            if (missionStatus != null) status = missionStatus.getMissionStatus();
             missionResponseDtoList.add(
                     MissionResponseDto.builder()
                             .missionId(mission.getId())
@@ -68,7 +73,7 @@ public class MissionService {
                             .missionType(mission.getMissionType())
                             .missionName(mission.getMissionName())
                             .onShow(mission.getOnShow())
-                            .status(missionStatus.getMissionStatus())
+                            .status(status)
                             .build()
             );
         }
@@ -108,6 +113,8 @@ public class MissionService {
                 .mission(mission)
                 .member(member)
                 .status(WAITING)
+                .missionName(mission.getMissionName())
+                .missionType(mission.getMissionType())
                 .build();
         submitMissionRepository.save(submitMission);
         return new ResponseEntity<>(Message.success("전송 완료"),HttpStatus.OK);
