@@ -97,4 +97,25 @@ public class FeedService {
         }
         return feedResponseDtoList;
     }
+
+    public ResponseEntity<?> deleteFeed(Long feedId, HttpServletRequest request) {
+        Member member =check.accessTokenCheck(request);
+        Feed feed =feedRepository.findById(feedId).orElseThrow(
+                () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
+        );
+        check.checkMember(feed, member);
+        feedRepository.delete(feed);
+        return new ResponseEntity<>(Message.success(feedId+"번 게시물이 삭제되었습니다"),HttpStatus.OK);
+    }
+
+    public ResponseEntity<?> updateFeed(Long feedId, String content, HttpServletRequest request) {
+        Member member =check.accessTokenCheck(request);
+        Feed feed =feedRepository.findById(feedId).orElseThrow(
+                () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
+        );
+        check.checkMember(feed, member);
+        feed.update(content);
+        FeedResponseDto feedResponseDto = new FeedResponseDto(feed);
+        return new ResponseEntity<>(Message.success(feedResponseDto),HttpStatus.OK);
+    }
 }

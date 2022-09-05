@@ -49,4 +49,8 @@ public class Feed extends Timestamped {
     public void update(Integer clapCount){
         this.clapCount = clapCount;
     }
+
+    public void update(String content){
+        if(content != null) this.content = content;
+    }
 }
