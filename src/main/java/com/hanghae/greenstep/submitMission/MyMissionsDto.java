@@ -12,10 +12,13 @@ public class MyMissionsDto {
     private String missionName;
     private String missionImgUrl;
 
+    private Boolean onFeed;
+
 
     public MyMissionsDto(SubmitMission submitMission){
         this.id = submitMission.getId();
         this.missionName = submitMission.getMission().getMissionName();
         this.missionImgUrl = submitMission.getImgUrl();
+        this.onFeed = submitMission.getOnFeed();
     }
 }

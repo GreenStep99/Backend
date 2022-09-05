@@ -43,6 +43,7 @@ public class FeedService {
                 .tag(submitMission.getMission().getTag())
                 .build();
         feedRepository.save(feed);
+        submitMission.makeOnFeed();
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 

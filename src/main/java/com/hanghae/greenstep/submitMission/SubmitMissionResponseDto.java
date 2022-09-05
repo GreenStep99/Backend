@@ -22,6 +22,8 @@ public class SubmitMissionResponseDto {
     private String info;
     private String adminName;
 
+    private Boolean onFeed;
+
     public SubmitMissionResponseDto(SubmitMission submitMission){
         this.id = submitMission.getId();
         this.userId = submitMission.getMember().getId();
@@ -31,5 +33,6 @@ public class SubmitMissionResponseDto {
         this.status = submitMission.getStatus();
         this.info = submitMission.getInfo();
         this.adminName = submitMission.getAdminName();
+        this.onFeed = submitMission.getOnFeed();
     }
 }

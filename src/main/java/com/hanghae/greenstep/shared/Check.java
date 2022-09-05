@@ -27,13 +27,13 @@ public class Check {
 
     public void checkMember(SubmitMission submitMission, Member member) {
         if (!member.equals(submitMission.getMember())) {
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+            throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
 
     public void checkMember(Feed feed, Member member) {
         if (!member.equals(feed.getMember())) {
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+            throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
 }
