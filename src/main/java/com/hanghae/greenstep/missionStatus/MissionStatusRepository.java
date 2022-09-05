@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 public interface MissionStatusRepository extends JpaRepository<MissionStatus,Long> {
-    MissionStatus findByMemberAndMission(Member member, Mission mission);
+
+    Optional<MissionStatus> findByMemberAndMission(Member member, Mission mission);
 
     @Transactional
     @Modifying

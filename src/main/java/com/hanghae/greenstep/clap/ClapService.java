@@ -22,14 +22,14 @@ public class ClapService {
     private final FeedRepository feedRepository;
     private final ClapRepository clapRepository;
     @Transactional
-    public ResponseEntity<?> upDownClap(Long feedId, HttpServletRequest request) {
+    public ResponseEntity<?> toggleClap(Long feedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        Clap findClap = clapRepository.findByMemberAndFeed(member,feed).orElse(null);
+        Clap foundClap = clapRepository.findByMemberAndFeed(member,feed).orElse(null);
 
-        if(findClap == null){
+        if(foundClap == null){
             ClapRequestDto clapRequestDto = new ClapRequestDto(member, feed);
             Clap clap = new Clap(clapRequestDto);
             clapRepository.save(clap);
@@ -37,7 +37,7 @@ public class ClapService {
             feed.update(clapCount);
             return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         }
-            clapRepository.deleteById(findClap.getId());
+            clapRepository.deleteById(foundClap.getId());
             Integer clapCount = clapRepository.countByFeed(feed);
             feed.update(clapCount);
             return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
