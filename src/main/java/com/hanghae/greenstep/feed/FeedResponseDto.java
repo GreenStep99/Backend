@@ -18,4 +18,14 @@ public class FeedResponseDto {
     private Integer clapCount;
     private String tag;
 
+
+    public FeedResponseDto(Feed feed){
+        this.id = feed.getId();
+        this.missionName = feed.getMissionName();
+        this.imgUrl = feed.getImgUrl();
+        this.content = feed.getContent();
+        this.clapCount = feed.getClapCount();
+        this.tag = feed.getTag();
+    }
+
 }

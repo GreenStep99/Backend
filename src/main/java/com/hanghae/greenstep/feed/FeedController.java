@@ -30,4 +30,13 @@ public class FeedController {
     public ResponseEntity<?> getMyFeed(HttpServletRequest request){
         return feedService.getMyFeed(request);
     }
+
+    @DeleteMapping("/feed/{feedId}")
+    public ResponseEntity<?> deleteFeed(@PathVariable Long feedId, HttpServletRequest request){
+        return feedService.deleteFeed(feedId, request);
+    }
+    @PatchMapping("/feed/{feedId}")
+    public ResponseEntity<?> updateFeed(@PathVariable Long feedId,@RequestBody String content, HttpServletRequest request){
+        return feedService.updateFeed(feedId, content, request);
+    }
 }
