@@ -1,6 +1,7 @@
 package com.hanghae.greenstep.member;
 
 
+import com.hanghae.greenstep.shared.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     Optional<Member> findByEmail(String email);
     
     List<Member> findTop3ByOrderByDailyMissionPointDesc();
+
+    Optional<Member> findByEmailAndRole(String email, Authority authority);
 }
