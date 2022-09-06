@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -114,8 +115,16 @@ public class AdminService {
         if(verification==DONE) {title +="완료되었습니다.";
         content += "[" + submitMission.getMission().getMissionName() + "]가(이) 성공적으로 인증되었습니다!";}
         if(verification==REJECTED) {title +="실패하였습니다.";
-            content += "[" + submitMission.getMission().getMissionName() + "]가(이) 인증에 실패하였습니다.\n 인증 실패 사유: " + info + "\n 다시 인증해주세요!";}
+            content += "<html lang=\"en\" dir=\"ltr\">     //html 파일임을 정의. html 태그는 head 태그와 body 태그로 이루어짐.\n" +
+                    "  <head>                       //메타 데이터의 집합으로 웹 페이지에 직접적으로 보이지 않는 정보임. head 태그는 title, meta, link, style, script 태그로 구성됨.\n" +
+                    "    <meta charset=\"utf-8\">     //meta 태그는 <meta 속성=\"속성값\" />으로 스스토 닫는 태그이기 때문에 이렇게 나타낸다. 보기에 charset=\"utf-8\"는 글자 깨짐에 대해 다른 언어에서도 볼수 있도록 표기한 것이다.\n" +
+                    "    <title>[" + submitMission.getMission().getMissionName() + "]가(이) 인증에 실패하였습니다.\n 인증 실패 사유: " + info + "\n 다시 인증해주세요!"+"</title>            //title 태그는 페이지를 대표하는 내용의 제목을 넣어야 함.\n" +
+                    "  </head>\n" +
+                    "  <body>                       //본문의 내용을 담는 공간이다.\n" +
+                    " \n" +
+                    "  </body>\n" +
+                    "</html>";}
         MailDto mailDto = new MailDto(submitMission.getMember().getEmail(),title, content);
-        emailUtil.sendEmail(mailDto);
+
     }
 }

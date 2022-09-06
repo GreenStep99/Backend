@@ -27,13 +27,12 @@ public class EmailUtilImpl implements EmailUtil {
         try {
             helper.setTo(mailDto.getToAddress());
             helper.setSubject(mailDto.getTitle());
-            helper.setText(mailDto.getContent());
+            helper.setText("이게 되남", mailDto.getContent());
             result.put("resultCode", 200);
         } catch (MessagingException e) {
             e.printStackTrace();
-            result.put("resultCode", 500);
+            throw new CustomException(ErrorCode.FAILURE)
         }
-
         sender.send(message);
         return result;
     }
