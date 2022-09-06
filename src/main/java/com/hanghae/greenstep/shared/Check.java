@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -18,7 +19,9 @@ public class Check {
     private final TokenProvider tokenProvider;
 
     public Member accessTokenCheck(HttpServletRequest request) {
-        if (null == request.getHeader("Authorization")) throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
+        System.out.println(request.getHeader("Authorization"));
+        if (request.getHeader("Authorization") == null || request.getHeader("Authorization").length() < 7) throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
+
         if (tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
             return tokenProvider.getMemberFromAuthentication();
         }
