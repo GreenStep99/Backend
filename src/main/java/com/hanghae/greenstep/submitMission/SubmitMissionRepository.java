@@ -2,7 +2,6 @@ package com.hanghae.greenstep.submitMission;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Mission;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
