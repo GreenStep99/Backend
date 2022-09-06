@@ -24,8 +24,8 @@ public class AdminController {
     }
 
     @GetMapping("/verification")
-    public ResponseEntity<?> getSubmitMission(){
-        return adminService.getSubmitMission();
+    public ResponseEntity<?> getSubmitMission(HttpServletRequest request){
+        return adminService.getSubmitMission(request);
     }
 
     @PostMapping("/verification/{submitMissionId}")
