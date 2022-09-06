@@ -8,12 +8,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppRunner implements ApplicationRunner {
 
-    @Autowired
+    final
     ApplicatonEventPublisher publisher;
+
+    public AppRunner(ApplicatonEventPublisher publisher) {
+        this.publisher = publisher;
+    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        applicatonEventPublisher.publishEvent(new VerifyEvent(this, ))
+        publisher.publishEvent(new VerifyEvent(this, ))
 
     }
 

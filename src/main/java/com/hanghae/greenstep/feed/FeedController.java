@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,7 +15,8 @@ public class FeedController {
     private final FeedService feedService;
 
     @PostMapping("/profiles/missions/{submitMissionId}")
-    public ResponseEntity<?> createFeed(@PathVariable Long submitMissionId, @RequestBody String content, HttpServletRequest request){
+    public ResponseEntity<?> createFeed(@PathVariable Long submitMissionId, @RequestBody Map<String,String> contentMap, HttpServletRequest request){
+        String content = contentMap.get("content");
         return feedService.createFeed(submitMissionId, content, request);
     }
 
@@ -31,12 +34,16 @@ public class FeedController {
         return feedService.getMyFeed(request);
     }
 
-    @DeleteMapping("/feed/{feedId}")
-    public ResponseEntity<?> deleteFeed(@PathVariable Long feedId, HttpServletRequest request){
-        return feedService.deleteFeed(feedId, request);
+    @DeleteMapping("/feed")
+    public ResponseEntity<?> deleteFeeds(@RequestBody Long[] feedIdList, HttpServletRequest request){
+        for(Long id:feedIdList){
+        System.out.println(id);}
+        return feedService.deleteFeeds(feedIdList, request);
     }
+
     @PatchMapping("/feed/{feedId}")
-    public ResponseEntity<?> updateFeed(@PathVariable Long feedId,@RequestBody String content, HttpServletRequest request){
+    public ResponseEntity<?> updateFeed(@PathVariable Long feedId,@RequestBody Map<String,String> contentMap, HttpServletRequest request){
+        String content = contentMap.get("content");
         return feedService.updateFeed(feedId, content, request);
     }
 }

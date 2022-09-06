@@ -12,17 +12,21 @@ import lombok.NoArgsConstructor;
 public class FeedResponseDto {
     private Long id;
     private String missionName;
-    private String imgUrl;
+    private String missionImgUrl;
     private String content;
     private Boolean clapByMe;
     private Integer clapCount;
     private String tag;
 
+    private String authorName;
+
+    private String profilePhoto;
+
 
     public FeedResponseDto(Feed feed){
         this.id = feed.getId();
         this.missionName = feed.getMissionName();
-        this.imgUrl = feed.getImgUrl();
+        this.missionImgUrl = feed.getImgUrl();
         this.content = feed.getContent();
         this.clapCount = feed.getClapCount();
         this.tag = feed.getTag();

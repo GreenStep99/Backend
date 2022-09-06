@@ -4,10 +4,11 @@ package com.hanghae.greenstep.admin;
 import com.hanghae.greenstep.shared.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,12 +24,15 @@ public class AdminController {
     }
 
     @GetMapping("/verification")
-    public ResponseEntity<?> getSubmitMission() {
-        return adminService.getSubmitMission();
+    public ResponseEntity<?> getSubmitMission(HttpServletRequest request){
+        return adminService.getSubmitMission(request);
     }
 
     @PostMapping("/verification/{submitMissionId}")
-    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId, @Nullable @RequestBody String info, @RequestParam Status verification, HttpServletRequest request){
+    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId, @RequestBody(required = false) Map<String, String> infoMap, @RequestParam Status verification, HttpServletRequest request){
+        String info;
+        if(infoMap == null) info = null;
+        else info = infoMap.get("info");
         return adminService.verifySubmitMission(verification, submitMissionId, request, info);
     }
 

@@ -11,28 +11,36 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
+
 @Component
 @RequiredArgsConstructor
 public class Check {
     private final TokenProvider tokenProvider;
 
     public Member accessTokenCheck(HttpServletRequest request) {
-        if (null == request.getHeader("Authorization")) throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
+        if (null == request.getHeader("Authorization")|| request.getHeader("Authorization").length() < 7) throw new CustomException(ErrorCode.INVALID_TOKEN);
         if (tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
             return tokenProvider.getMemberFromAuthentication();
         }
         throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
+    public void checkAdmin(Member member) {
+        if(member.getRole()!= ROLE_ADMIN) throw new CustomException(ErrorCode.MEMBER_NOT_ALLOWED);
+    }
+
     public void checkMember(SubmitMission submitMission, Member member) {
-        if (!member.equals(submitMission.getMember())) {
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+        if (!submitMission.getMember().equals(member)) {
+            throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
 
     public void checkMember(Feed feed, Member member) {
-        if (!member.equals(feed.getMember())) {
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+        if (!feed.getMember().equals(member)) {
+            throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
+
+
 }
