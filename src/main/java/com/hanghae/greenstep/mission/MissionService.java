@@ -132,7 +132,7 @@ public class MissionService {
 
     public ResponseEntity<?> getDoneMission(Long missionId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
-        Mission mission =missionRepository.findById(missionId).orElseThrow(
+        Mission mission = missionRepository.findById(missionId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
         LocalDate today = LocalDate.now();
