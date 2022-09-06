@@ -18,6 +18,10 @@ public class FeedResponseDto {
     private Integer clapCount;
     private String tag;
 
+    private String authorName;
+
+    private String profilePhoto;
+
 
     public FeedResponseDto(Feed feed){
         this.id = feed.getId();

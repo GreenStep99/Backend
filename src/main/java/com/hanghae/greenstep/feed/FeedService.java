@@ -95,6 +95,8 @@ public class FeedService {
                             .clapByMe(clapByMe)
                             .clapCount(feed.getClapCount())
                             .tag(feed.getTag())
+                            .authorName(feed.getMember().getNickname())
+                            .profilePhoto(feed.getMember().getProfilePhoto())
                             .build()
             );
         }
