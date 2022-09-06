@@ -46,10 +46,6 @@ public class MissionScheduler {
     @Transactional
     public void resetAndUpdateWeeklyMission() {
         log.info("Scheduled Run");
-        List<Member> allMember = memberRepository.findAll();
-        for (Member member : allMember) {
-            member.resetWeeklyPoint();
-        }
         missionStatusRepository.deleteAllWeeklyMissionStatus();
         List<Mission> allDailyMissionList = missionRepository.findAllWeeklyMission();
         for (Mission mission : allDailyMissionList) {

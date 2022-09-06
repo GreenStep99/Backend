@@ -59,8 +59,6 @@ public class Member {
     @Column
     private Long dailyMissionPoint;
 
-    @Column
-    private Long weeklyMissionPoint;
 
     @Column
     private Boolean acceptMail;
@@ -96,7 +94,6 @@ public class Member {
         this.acceptMail = acceptMail;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
-        this.weeklyMissionPoint = 0L;
     }
 
     @Override
@@ -124,18 +121,17 @@ public class Member {
         this.dailyMissionPoint = 0L;
     }
 
-    public void resetWeeklyPoint(){
-        this.weeklyMissionPoint = 0L;
-    }
-
     public void earnDailyPoint(){
-        this.missionPoint += 1L;
+        this.missionPoint += 10L;
+        this.dailyMissionPoint += 10L;
     }
     public void earnWeeklyPoint(){
-        this.missionPoint += 2L;
+        this.missionPoint += 20L;
+        this.dailyMissionPoint += 20L;
     }
     public void earnChallengePoint(){
-        this.missionPoint += 3L;
+        this.missionPoint += 30L;
+        this.dailyMissionPoint += 30L;
     }
 
 
