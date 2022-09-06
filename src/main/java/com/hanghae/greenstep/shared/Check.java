@@ -18,7 +18,7 @@ public class Check {
     private final TokenProvider tokenProvider;
 
     public Member accessTokenCheck(HttpServletRequest request) {
-        if (null == request.getHeader("Authorization")) throw new CustomException(ErrorCode.TOKEN_IS_EXPIRED);
+        if (null == request.getHeader("Authorization")|| request.getHeader("Authorization").length() < 7) throw new CustomException(ErrorCode.INVALID_TOKEN);
         if (tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
             return tokenProvider.getMemberFromAuthentication();
         }
