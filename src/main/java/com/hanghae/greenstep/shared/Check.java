@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
+
 @Component
 @RequiredArgsConstructor
 public class Check {
@@ -25,6 +27,10 @@ public class Check {
         throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
+    public void checkAdmin(Member member) {
+        if(member.getRole()!= ROLE_ADMIN) throw new CustomException(ErrorCode.MEMBER_NOT_ALLOWED);
+    }
+
     public void checkMember(SubmitMission submitMission, Member member) {
         if (!submitMission.getMember().equals(member)) {
             throw new CustomException(ErrorCode.NOT_AUTHOR);
@@ -36,4 +42,6 @@ public class Check {
             throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
+
+
 }
