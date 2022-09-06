@@ -11,7 +11,6 @@ import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.mail.EmailUtil;
 import com.hanghae.greenstep.shared.mail.EmailUtilImpl;
 import com.hanghae.greenstep.shared.mail.MailDto;
 import com.hanghae.greenstep.submitMission.SubmitMission;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Status.DONE;
