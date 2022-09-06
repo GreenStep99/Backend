@@ -13,11 +13,11 @@ public class ContentDto {
 
 
     public ContentDto(String image_url, String content){
-        this.title = "";
+        this.title = "우리가 그린 푸른 발자국, 그린 스텝";
         this.description = content;
         this.image_url = image_url;
-        this.image_height = 0;
-        this.image_width = 0;
+        this.image_height = 264;
+        this.image_width = 130;
         this.linkDto = getLinkDto();
 
 
