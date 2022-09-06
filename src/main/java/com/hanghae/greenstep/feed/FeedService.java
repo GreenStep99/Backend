@@ -90,7 +90,7 @@ public class FeedService {
                     FeedResponseDto.builder()
                             .id(feed.getId())
                             .missionName(feed.getMissionName())
-                            .imgUrl(feed.getImgUrl())
+                            .missionImgUrl(feed.getImgUrl())
                             .content(feed.getContent())
                             .clapByMe(clapByMe)
                             .clapCount(feed.getClapCount())
