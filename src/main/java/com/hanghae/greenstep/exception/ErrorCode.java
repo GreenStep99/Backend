@@ -27,7 +27,9 @@ public enum ErrorCode {
     FILE_TYPE_INVALID(HttpStatus.BAD_REQUEST.value(), "I001", "잘못된 파일 형식입니다."),
     FILE_SIZE_INVALID(HttpStatus.BAD_REQUEST.value(), "I002", "파일 크기가 너무 큽니다."),
 
-    BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), "C001", "잘못된 요청입니다.");
+    BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), "C001", "잘못된 요청입니다."),
+
+    MAIL_SEND_FAILURE(HttpStatus.BAD_REQUEST.value(), "E001", "메일 전송에 실패하였습니다. ");
 
 
 

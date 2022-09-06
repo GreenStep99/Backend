@@ -31,7 +31,7 @@ public class EmailUtilImpl implements EmailUtil {
             result.put("resultCode", 200);
         } catch (MessagingException e) {
             e.printStackTrace();
-            throw new CustomException(ErrorCode.FAILURE)
+            throw new CustomException(ErrorCode.)
         }
         sender.send(message);
         return result;
