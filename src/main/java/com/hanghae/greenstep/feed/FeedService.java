@@ -103,7 +103,7 @@ public class FeedService {
         return feedResponseDtoList;
     }
 
-    public ResponseEntity<?> deleteFeeds(List<Long> feedIdList, HttpServletRequest request) {
+    public ResponseEntity<?> deleteFeeds(Long[] feedIdList, HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         for(Long feedId : feedIdList) {
             Feed feed = feedRepository.findById(feedId).orElseThrow(
@@ -111,7 +111,7 @@ public class FeedService {
             );
             check.checkMember(feed, member);
             System.out.println(feedId);
-//            feedRepository.delete(feed);
+            feedRepository.delete(feed);
         }
         return new ResponseEntity<>(Message.success("삭제되었습니다"),HttpStatus.OK);
     }

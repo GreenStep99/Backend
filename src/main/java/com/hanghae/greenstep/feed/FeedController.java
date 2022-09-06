@@ -35,7 +35,7 @@ public class FeedController {
     }
 
     @DeleteMapping("/feed")
-    public ResponseEntity<?> deleteFeeds(@RequestBody List<Long> feedIdList, HttpServletRequest request){
+    public ResponseEntity<?> deleteFeeds(@RequestBody Long[] feedIdList, HttpServletRequest request){
         for(Long id:feedIdList){
         System.out.println(id);}
         return feedService.deleteFeeds(feedIdList, request);
