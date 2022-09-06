@@ -123,12 +123,15 @@ public class Member {
 
     public void earnDailyPoint(){
         this.missionPoint += 1L;
+        this.dailyMissionPoint += 1L;
     }
     public void earnWeeklyPoint(){
         this.missionPoint += 2L;
+        this.dailyMissionPoint += 2L;
     }
     public void earnChallengePoint(){
         this.missionPoint += 3L;
+        this.dailyMissionPoint += 3L;
     }
 
 
