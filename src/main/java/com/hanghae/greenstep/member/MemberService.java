@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,6 +73,7 @@ public class MemberService {
     }
 
 
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         MemberResponseDto memberResponseDto = new MemberResponseDto(member);

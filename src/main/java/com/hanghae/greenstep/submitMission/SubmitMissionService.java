@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class SubmitMissionService {
     private final Check check;
     private final SubmitMissionRepository submitMissionRepository;
 
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getMyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByMember(member);

@@ -48,7 +48,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
-    @Transactional
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
@@ -57,7 +57,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 
-    @Transactional
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getFeedByTag(String tag, Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
@@ -75,6 +75,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getMyFeed(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<Feed> feedList = feedRepository.findAllByMember(member);

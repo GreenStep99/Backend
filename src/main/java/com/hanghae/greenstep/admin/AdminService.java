@@ -44,6 +44,7 @@ public class AdminService {
     private final Check check;
     private final EmailUtilImpl emailUtil;
 
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
