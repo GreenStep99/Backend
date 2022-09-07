@@ -97,6 +97,7 @@ public class FeedService {
                             .tag(feed.getTag())
                             .authorName(feed.getMember().getNickname())
                             .profilePhoto(feed.getMember().getProfilePhoto())
+                            .createdAt(feed.getCreatedAt())
                             .build()
             );
         }

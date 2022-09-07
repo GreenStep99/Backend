@@ -1,9 +1,12 @@
 package com.hanghae.greenstep.feed;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -22,6 +25,9 @@ public class FeedResponseDto {
 
     private String profilePhoto;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime createdAt;
+
 
     public FeedResponseDto(Feed feed){
         this.id = feed.getId();
@@ -30,6 +36,7 @@ public class FeedResponseDto {
         this.content = feed.getContent();
         this.clapCount = feed.getClapCount();
         this.tag = feed.getTag();
+        this.createdAt =feed.getCreatedAt();
     }
 
 }
