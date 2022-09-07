@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.UUID;
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImageService {

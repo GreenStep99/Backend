@@ -11,12 +11,11 @@ import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.mail.EmailUtilImpl;
-import com.hanghae.greenstep.shared.mail.MailDto;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,6 @@ import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 import static com.hanghae.greenstep.shared.Status.DONE;
-import static com.hanghae.greenstep.shared.Status.REJECTED;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +40,10 @@ public class AdminService {
     private final MissionStatusRepository missionStatusRepository;
 
     private final Check check;
-    private final EmailUtilImpl emailUtil;
+
+    @Autowired
+    ApplicationEventPublisher publisher;
+
 
     public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
         Member admin = check.accessTokenCheck(request);
@@ -87,8 +88,10 @@ public class AdminService {
     public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
-        SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
-        if(submitMission.getMember().getAcceptMail()) sendMail(verification,submitMission,info);
+        SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
+                () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
+        );
+        if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
@@ -108,16 +111,5 @@ public class AdminService {
                 submitMission.getMember().earnChallengePoint();
             }
         }
-    }
-
-    public void sendMail(Status verification, SubmitMission submitMission, String info){
-        String title ="[GreenStep] 미션 인증이 ";
-        String content = "인증하신 ";
-        if(verification==DONE) {title +="완료되었습니다.";
-        content += "[" + submitMission.getMission().getMissionName() + "]가(이) 성공적으로 인증되었습니다!";}
-        if(verification==REJECTED) {title +="실패하였습니다.";
-            content += "[" + submitMission.getMission().getMissionName() + "]가(이) 인증에 실패하였습니다.\n 인증 실패 사유: " + info + "\n 다시 인증해주세요!";}
-        MailDto mailDto = new MailDto(submitMission.getMember().getEmail(),title, content);
-        emailUtil.sendEmail(mailDto);
     }
 }
