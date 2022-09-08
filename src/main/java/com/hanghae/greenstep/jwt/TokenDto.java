@@ -19,10 +19,12 @@ public class TokenDto {
     private Long accessTokenExpiresIn;
     private Member member;
     private Boolean newComer;
+    private String kakaoAccessToken;
 
     public void tokenToHeaders(HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + getAccessToken());
         response.addHeader("Refresh_Token", getRefreshToken());
         response.addHeader("Access_Token_Expire_Time", getAccessTokenExpiresIn().toString());
+        response.addHeader("Kakao_Authorization", getKakaoAccessToken());
     }
 }
