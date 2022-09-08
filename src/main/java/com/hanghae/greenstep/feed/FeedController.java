@@ -33,10 +33,13 @@ public class FeedController {
         return feedService.getMyFeed(request);
     }
 
-    @DeleteMapping("/feed/{feedId}")
-    public ResponseEntity<?> deleteFeed(@PathVariable Long feedId, HttpServletRequest request){
-        return feedService.deleteFeed(feedId, request);
+    @DeleteMapping("/feed")
+    public ResponseEntity<?> deleteFeeds(@RequestBody Long[] feedIdList, HttpServletRequest request){
+        for(Long id:feedIdList){
+        System.out.println(id);}
+        return feedService.deleteFeeds(feedIdList, request);
     }
+
     @PatchMapping("/feed/{feedId}")
     public ResponseEntity<?> updateFeed(@PathVariable Long feedId,@RequestBody Map<String,String> contentMap, HttpServletRequest request){
         String content = contentMap.get("content");

@@ -48,7 +48,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
-    @Transactional
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
@@ -57,7 +57,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 
-    @Transactional
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getFeedByTag(String tag, Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
@@ -75,6 +75,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getMyFeed(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<Feed> feedList = feedRepository.findAllByMember(member);
@@ -97,20 +98,24 @@ public class FeedService {
                             .tag(feed.getTag())
                             .authorName(feed.getMember().getNickname())
                             .profilePhoto(feed.getMember().getProfilePhoto())
+                            .createdAt(feed.getCreatedAt())
                             .build()
             );
         }
         return feedResponseDtoList;
     }
 
-    public ResponseEntity<?> deleteFeed(Long feedId, HttpServletRequest request) {
+    public ResponseEntity<?> deleteFeeds(Long[] feedIdList, HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
-        Feed feed =feedRepository.findById(feedId).orElseThrow(
-                () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
-        );
-        check.checkMember(feed, member);
-        feedRepository.delete(feed);
-        return new ResponseEntity<>(Message.success(feedId+"번 게시물이 삭제되었습니다"),HttpStatus.OK);
+        for(Long feedId : feedIdList) {
+            Feed feed = feedRepository.findById(feedId).orElseThrow(
+                    () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
+            );
+            check.checkMember(feed, member);
+            System.out.println(feedId);
+            feedRepository.delete(feed);
+        }
+        return new ResponseEntity<>(Message.success("삭제되었습니다"),HttpStatus.OK);
     }
 
     public ResponseEntity<?> updateFeed(Long feedId, String content, HttpServletRequest request) {
@@ -123,4 +128,5 @@ public class FeedService {
         FeedResponseDto feedResponseDto = new FeedResponseDto(feed);
         return new ResponseEntity<>(Message.success(feedResponseDto),HttpStatus.OK);
     }
+
 }

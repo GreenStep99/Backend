@@ -1,7 +1,5 @@
 package com.hanghae.greenstep.shared.mail;
 
-import com.hanghae.greenstep.exception.CustomException;
-import com.hanghae.greenstep.exception.ErrorCode;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -20,18 +18,20 @@ public class EmailUtilImpl implements EmailUtil {
     }
 
     @Override
-    public Map<String, Object> sendEmail(MailDto mailDto) {
+    public Map<String, Object> sendEmail(MailDto mailDto) throws MessagingException {
         Map<String, Object> result = new HashMap<>();
         MimeMessage message = sender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         try {
             helper.setTo(mailDto.getToAddress());
             helper.setSubject(mailDto.getTitle());
-            helper.setText("이게 되남", mailDto.getContent());
+            helper.setText(mailDto.getContent(),true);
+            System.out.println("88888888888888888메일 전송 성공888888888888888888888888");
             result.put("resultCode", 200);
         } catch (MessagingException e) {
             e.printStackTrace();
-            throw new CustomException(ErrorCode.)
+            System.out.println("88888888888888888메일 전송 실패888888888888888888888888");
+            result.put("resultCode", 500);
         }
         sender.send(message);
         return result;
