@@ -8,7 +8,6 @@ import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
-import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
@@ -74,9 +73,9 @@ public class AdminService {
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-//        if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
-//            throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
-//        }
+        if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
+        }
         AdminTokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
         AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto(admin.getId(), admin.getName());
