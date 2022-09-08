@@ -9,9 +9,6 @@ import lombok.Getter;
 @Getter
 public class VerifiedEvent {
     private Status verification;
-
     private SubmitMission submitMission;
-
     private String info;
-
 }
