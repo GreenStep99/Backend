@@ -42,7 +42,7 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto generateTokenDto(Member member, Boolean newComer) {
+    public TokenDto generateTokenDto(Member member, Boolean newComer, String kakaoAccessToken) {
         long now = (new Date().getTime());
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
@@ -72,6 +72,7 @@ public class TokenProvider {
                 .refreshToken(refreshToken)
                 .member(member)
                 .newComer(newComer)
+                .kakaoAccessToken(kakaoAccessToken)
                 .build();
     }
 

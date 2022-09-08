@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -59,6 +60,8 @@ public class Member {
 
     @Column
     private Long dailyMissionPoint;
+    @Column
+    private Long weeklyMissionPoint;
 
 
     @Column
@@ -81,7 +84,6 @@ public class Member {
     private RefreshToken refreshToken;
 
     @Builder
-
     public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type, Boolean acceptMail) {
         this.id =getId();
         this.kakaoId = id;
@@ -95,6 +97,7 @@ public class Member {
         this.acceptMail = acceptMail;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
+        this.weeklyMissionPoint = 0L;
     }
 
     @Override
@@ -135,5 +138,8 @@ public class Member {
         this.dailyMissionPoint += 30L;
     }
 
+    public boolean validatePassword(PasswordEncoder passwordEncoder, String password){
+        return passwordEncoder.matches(password,this.password);
+    }
 
 }

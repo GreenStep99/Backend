@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,15 +37,15 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final SubmitMissionRepository submitMissionRepository;
-
     private final MissionStatusRepository missionStatusRepository;
-
     private final Check check;
 
     @Autowired
     ApplicationEventPublisher publisher;
 
+    private final Check check;
 
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
@@ -71,7 +72,10 @@ public class AdminService {
 
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
-        );
+                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
+        }
         AdminTokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
         AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto(admin.getId(), admin.getName());
@@ -91,9 +95,10 @@ public class AdminService {
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
         );
-        
+
         if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
+        earnMissionPoints(submitMission);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
     }
@@ -103,14 +108,14 @@ public class AdminService {
         MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission())
                 .orElseThrow(() -> new CustomException(ErrorCode.MISSION_STATUS_NOT_FOUND));
         missionStatus.update(verification);
-        if (verification == DONE) {
-            if (Objects.equals(submitMission.getMissionType(), "daily")) {
-                submitMission.getMember().earnDailyPoint();
-            } else if (Objects.equals(submitMission.getMissionType(), "weekly")) {
-                submitMission.getMember().earnWeeklyPoint();
-            } else {
-                submitMission.getMember().earnChallengePoint();
-            }
-        }
     }
+
+    public void earnMissionPoints(SubmitMission submitMission) {
+        if (Objects.equals(submitMission.getMissionType(), "daily"))
+            submitMission.getMember().earnDailyPoint();
+        if (Objects.equals(submitMission.getMissionType(), "weekly"))
+            submitMission.getMember().earnWeeklyPoint();
+        submitMission.getMember().earnChallengePoint();
+    }
+
 }

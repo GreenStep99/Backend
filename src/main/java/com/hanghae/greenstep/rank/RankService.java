@@ -17,7 +17,7 @@ import java.util.List;
 public class RankService {
     private final MemberRepository memberRepository;
 
-    @Transactional
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getDailyRankMissionPoint(){
         List<Member> memberDailyRankList = memberRepository.findTop3ByOrderByDailyMissionPointDesc();
         List<MemberRankResponseDto> memberRankResponseDtoList = makePointRankList(memberDailyRankList);

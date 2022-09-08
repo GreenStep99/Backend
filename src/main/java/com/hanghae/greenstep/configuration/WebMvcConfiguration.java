@@ -9,7 +9,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000","http://localhost:8080","http://13.209.16.253:8080" ,"https://greenstepapp.com","https://greenstepserver.link")
+                .allowedOrigins("http://localhost:3000","http://localhost:8080", "http://54.180.30.74:8080", "http://54.180.30.74","http://13.209.16.253:8080" )
                 .allowedMethods("*")
                 .exposedHeaders("Authorization","Refresh_Token","Access_Token_Expire_Time")
                 .allowCredentials(true)//make client read header("jwt-token")

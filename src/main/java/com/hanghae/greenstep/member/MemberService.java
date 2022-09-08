@@ -72,6 +72,7 @@ public class MemberService {
     }
 
 
+    @Transactional(readOnly=true)
     public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         MemberResponseDto memberResponseDto = new MemberResponseDto(member);
