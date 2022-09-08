@@ -11,7 +11,6 @@ import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.mail.EmailUtil;
 import com.hanghae.greenstep.shared.mail.EmailUtilImpl;
 import com.hanghae.greenstep.shared.mail.MailDto;
 import com.hanghae.greenstep.submitMission.SubmitMission;
@@ -27,9 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
+import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 import static com.hanghae.greenstep.shared.Status.DONE;
 import static com.hanghae.greenstep.shared.Status.REJECTED;
 
@@ -45,7 +44,10 @@ public class AdminService {
     private final Check check;
     private final EmailUtilImpl emailUtil;
 
-    public ResponseEntity<?> getSubmitMission() {
+    @Transactional(readOnly=true)
+    public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
+        Member admin = check.accessTokenCheck(request);
+        check.checkAdmin(admin);
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
         List<SubmitMissionResponseDto> submitMissionResponseDtoList = new ArrayList<>();
         for (SubmitMission submitMission : submitMissionList) {
@@ -68,7 +70,7 @@ public class AdminService {
     }
 
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
-        Member admin = memberRepository.findByEmail(adminLoginRequestDto.getEmail()).orElseThrow(
+        Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
         );
         AdminTokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
@@ -85,6 +87,7 @@ public class AdminService {
     @Transactional
     public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
+        check.checkAdmin(admin);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow();
         if(submitMission.getMember().getAcceptMail()) sendMail(verification,submitMission,info);
         changeMissionStatus(verification, submitMission, admin, info);

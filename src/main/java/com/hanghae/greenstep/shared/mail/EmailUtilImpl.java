@@ -1,7 +1,5 @@
 package com.hanghae.greenstep.shared.mail;
 
-import com.hanghae.greenstep.exception.CustomException;
-import com.hanghae.greenstep.exception.ErrorCode;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;

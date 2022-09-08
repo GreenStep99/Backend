@@ -101,15 +101,19 @@ public class MissionService {
     public ResponseEntity<?> submitMission(Long missionId, HttpServletRequest request, MissionRequestDto missionRequestDto) throws Exception {
         Member member = check.accessTokenCheck(request);
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
-        MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(member, mission)
-                .orElse(MissionStatus.builder()
-                        .member(member)
-                        .mission(mission)
-                        .missionStatus(WAITING)
-                        .missionType(mission.getMissionType())
-                        .build());
-        if(missionStatus.getMissionStatus() == REJECTED) missionStatus.update(WAITING);
-        missionStatusRepository.save(missionStatus);
+        Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(member, mission);
+        if(missionStatus.isPresent()){
+            if(missionStatus.get().getMissionStatus() == REJECTED) missionStatus.get().update(WAITING);
+            else throw new CustomException(ErrorCode.BAD_REQUEST);
+        } else {
+            MissionStatus newMissionStatus = MissionStatus.builder()
+                    .member(member)
+                    .mission(mission)
+                    .missionStatus(WAITING)
+                    .missionType(mission.getMissionType())
+                    .build();
+            missionStatusRepository.save(newMissionStatus);
+        }
         String imgUrl = imageService.getImgUrlBase64(missionRequestDto.getBase64String());
         SubmitMission submitMission = SubmitMission.builder()
                 .imgUrl(imgUrl)
