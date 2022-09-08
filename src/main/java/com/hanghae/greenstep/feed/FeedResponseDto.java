@@ -1,10 +1,10 @@
 package com.hanghae.greenstep.feed;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +25,7 @@ public class FeedResponseDto {
 
     private String profilePhoto;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdAt;
 
 
