@@ -11,12 +11,11 @@ import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.mail.EmailUtilImpl;
-import com.hanghae.greenstep.shared.mail.MailDto;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
+import static com.hanghae.greenstep.shared.Status.DONE;
 
 @Service
 @RequiredArgsConstructor
@@ -37,11 +37,11 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final SubmitMissionRepository submitMissionRepository;
-
     private final MissionStatusRepository missionStatusRepository;
+    private final Check check;
 
-    private final PasswordEncoder passwordEncoder;
-    private final EmailUtilImpl emailUtil;
+    @Autowired
+    ApplicationEventPublisher publisher;
 
     private final Check check;
 
@@ -95,9 +95,10 @@ public class AdminService {
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
         );
+
+        if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
-        if(submitMission.getMember().getAcceptMail()) emailUtil.sendEmail(new MailDto());
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
     }
@@ -116,4 +117,5 @@ public class AdminService {
             submitMission.getMember().earnWeeklyPoint();
         submitMission.getMember().earnChallengePoint();
     }
+
 }

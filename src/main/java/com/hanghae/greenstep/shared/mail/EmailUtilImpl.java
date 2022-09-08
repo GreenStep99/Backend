@@ -18,10 +18,10 @@ public class EmailUtilImpl implements EmailUtil {
     }
 
     @Override
-    public Map<String, Object> sendEmail(MailDto mailDto) {
+    public Map<String, Object> sendEmail(MailDto mailDto) throws MessagingException {
         Map<String, Object> result = new HashMap<>();
         MimeMessage message = sender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         try {
             helper.setTo(mailDto.getToAddress());
             helper.setSubject(mailDto.getTitle());

@@ -17,7 +17,6 @@ import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 @Component
 @RequiredArgsConstructor
 public class Check {
-
     private final TokenProvider tokenProvider;
 
     public Member accessTokenCheck(HttpServletRequest request) {
