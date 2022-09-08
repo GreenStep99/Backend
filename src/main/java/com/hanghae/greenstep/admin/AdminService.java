@@ -91,6 +91,7 @@ public class AdminService {
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
         );
+        
         if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);

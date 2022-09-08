@@ -8,6 +8,5 @@ import static com.hanghae.greenstep.shared.Status.DONE;
 public class ApplicationEventPublisher {
 
     public void publishEvent(VerifiedEvent verifiedEvent) {
-        if(verifiedEvent.getVerification() == DONE) ;
     }
 }

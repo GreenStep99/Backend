@@ -21,6 +21,7 @@ public class VerifiedEventHandler {
 
     @EventListener
     public Map<String, Object> sendMail(VerifiedEvent verifiedEvent) throws MessagingException {
+        System.out.println("메일 전송 중");
         String title = "[GreenStep] 미션 인증이 ";
         String content = "인증하신 ";
         if (verifiedEvent.getVerification() == DONE) {
