@@ -17,7 +17,6 @@ public interface SubmitMissionRepository extends JpaRepository<SubmitMission,Lon
     @Query("select s from SubmitMission s join fetch s.member where s.id = :submitMissionId")
     Optional<SubmitMission> findByIdFetchJoin(@Param("submitMissionId") Long submitMissionId);
 
-    @Query("select s from SubmitMission s where s.status = 'DONE' AND s.member = :member order by s.createdAt desc ")
-    List<SubmitMission> findAllByMember(@Param("member") Member member);
-
+    @Query("select s from SubmitMission s where s.status = 'DONE' AND s.member = :member AND s.onHide = :onHide order by s.createdAt desc ")
+    List<SubmitMission> findAllByMemberAndIsHidden(@Param("member") Member member, @Param("onHide") Boolean onHide);
 }

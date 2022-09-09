@@ -47,9 +47,12 @@ dependencies {
 
 	// 메일 SMTP
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	
+	//실시간 알림
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    //	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 }
 
 tasks.named('test') {

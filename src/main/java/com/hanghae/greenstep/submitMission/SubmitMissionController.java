@@ -3,6 +3,8 @@ package com.hanghae.greenstep.submitMission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,4 +19,15 @@ public class SubmitMissionController {
     public ResponseEntity<?> getMyMissions(HttpServletRequest request){
         return submitMissionService.getMyMissions(request);
     }
+
+    @GetMapping("/profiles/setting/hidden-missions")
+    public ResponseEntity<?> getHiddenMissions(HttpServletRequest request){
+        return submitMissionService.getHiddenMissions(request);
+    }
+
+    @PatchMapping("/profiles/missions")
+    public ResponseEntity<?> hideMyMissions( @RequestBody Long[] missionsIdList, HttpServletRequest request){
+        return submitMissionService.hideMyMissions(missionsIdList, request);
+    }
+
 }

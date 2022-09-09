@@ -118,7 +118,6 @@ public class FeedService {
                     () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
             );
             check.checkMember(feed, member);
-            System.out.println(feedId);
             feedRepository.delete(feed);
         }
         return new ResponseEntity<>(Message.success("삭제되었습니다"),HttpStatus.OK);
