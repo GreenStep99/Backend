@@ -21,6 +21,7 @@ public class ClapService {
     private final Check check;
     private final FeedRepository feedRepository;
     private final ClapRepository clapRepository;
+    //n+1 문제 없음
     @Transactional
     public ResponseEntity<?> toggleClap(Long feedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
