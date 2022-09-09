@@ -15,7 +15,6 @@ public class EmailService {
     private final EmailUtilImpl emailUtil;
 
     public void sendMail(VerifiedEvent verifiedEvent) throws MessagingException {
-        System.out.println("88888888888888888메일 전송 중888888888888888888888888");
         String title = "[GreenStep] 미션 인증이 ";
         String content = "인증하신 ";
         if (verifiedEvent.getVerification() == DONE) {
