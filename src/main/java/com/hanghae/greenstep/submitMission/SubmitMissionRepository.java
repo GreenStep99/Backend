@@ -14,12 +14,10 @@ public interface SubmitMissionRepository extends JpaRepository<SubmitMission,Lon
     @Query("select s from SubmitMission s join fetch s.member order by s.createdAt asc")
     List<SubmitMission> findAllByOrderByCreatedAtAscFetchJoin();
 
-    @Query("select s from SubmitMission s join fetch s.member where s.member.id = :submitMissionId")
-    Optional<SubmitMission> findByIdFetchJoin(Long submitMissionId);
+    @Query("select s from SubmitMission s join fetch s.member where s.id = :submitMissionId")
+    Optional<SubmitMission> findByIdFetchJoin(@Param("submitMissionId") Long submitMissionId);
 
     @Query("select s from SubmitMission s where s.status = 'DONE' AND s.member = :member order by s.createdAt desc ")
     List<SubmitMission> findAllByMember(@Param("member") Member member);
 
-    @Query("select s from SubmitMission s where s.mission = :mission AND s.member = :member AND s.status = 'DONE' order by s.createdAt")
-    List<SubmitMission> findAllByMemberAndMission(Member member, Mission mission);
 }
