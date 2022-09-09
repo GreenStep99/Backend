@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.util.Map;
-import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Status.DONE;
 import static com.hanghae.greenstep.shared.Status.REJECTED;

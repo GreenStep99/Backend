@@ -15,6 +15,7 @@ import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
-import static com.hanghae.greenstep.shared.Status.DONE;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -47,7 +48,7 @@ public class AdminService {
     public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
-        List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
+        List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAscFetchJoin();
         List<SubmitMissionResponseDto> submitMissionResponseDtoList = new ArrayList<>();
         for (SubmitMission submitMission : submitMissionList) {
             submitMissionResponseDtoList.add(
@@ -68,7 +69,9 @@ public class AdminService {
         return new ResponseEntity<>(Message.success(submitMissionResponseDtoList), HttpStatus.OK);
     }
 
+    //n+1 문제 없음
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
+        log.info("요청값?"+adminLoginRequestDto);
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
@@ -86,21 +89,24 @@ public class AdminService {
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
+    //n:1
     @Transactional
     public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
-        SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
-                () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
-        );
 
+        SubmitMission submitMission = submitMissionRepository.findByIdFetchJoin(submitMissionId).orElseThrow(
+                        () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
+                );
         if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
+
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
     }
 
+    //n+1 문제 없음
     public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin, String info) {
         submitMission.update(verification, info, admin.getName());
         Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
