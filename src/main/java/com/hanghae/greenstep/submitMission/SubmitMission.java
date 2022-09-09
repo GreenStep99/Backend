@@ -26,12 +26,6 @@ public class SubmitMission extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(length = 80)
-    private String missionName;
-
-    @Column(length = 80)
-    private String missionType;
-
     @Column
     private String imgUrl;
 
@@ -56,13 +50,11 @@ public class SubmitMission extends Timestamped {
     private Mission mission;
 
     @Builder
-    public SubmitMission(Status status, String imgUrl, Member member, Mission mission, String missionName, String missionType) {
+    public SubmitMission(Status status, String imgUrl, Member member, Mission mission) {
         this.status = status;
         this.imgUrl = imgUrl;
         this.member = member;
         this.mission = mission;
-        this.missionName = missionName;
-        this.missionType = missionType;
         this.onFeed = false;
         this.onHide = false;
     }

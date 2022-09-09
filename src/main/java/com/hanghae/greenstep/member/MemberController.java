@@ -15,7 +15,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-
     @PatchMapping("/info")
     public ResponseEntity<?> updateMemberInfo(@RequestBody MemberRequestDto memberRequestDto,HttpServletRequest request){
         return memberService.updateMemberInfo(memberRequestDto,request);

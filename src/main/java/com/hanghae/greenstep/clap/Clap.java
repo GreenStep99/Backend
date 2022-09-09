@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +22,6 @@ public class Clap {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Feed feed;
-
 
     public Clap(ClapRequestDto clapRequestDto) {
         if (clapRequestDto.getMember() != null) this.member = clapRequestDto.getMember();

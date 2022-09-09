@@ -34,7 +34,6 @@ public class SecurityConfiguration {
     private final AuthenticationEntryPointException authenticationEntryPointException;
     private final AccessDeniedHandlerException accessDeniedHandlerException;
 
-
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

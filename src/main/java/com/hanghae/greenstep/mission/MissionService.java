@@ -1,7 +1,5 @@
 package com.hanghae.greenstep.mission;
 
-import com.hanghae.greenstep.exception.CustomException;
-import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
@@ -9,7 +7,6 @@ import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.hanghae.greenstep.shared.Status.*;
+import static com.hanghae.greenstep.shared.Status.DEFAULT;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +35,7 @@ public class MissionService {
 
     private final Check check;
 
+    //n+1문제 없음
     @Transactional(readOnly = true)
     public ResponseEntity<?> getDailyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -45,6 +43,7 @@ public class MissionService {
         return getResponseEntity(missionList, member);
     }
 
+    //n+1문제 없음
     @Transactional(readOnly = true)
     public ResponseEntity<?> getWeeklyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -52,6 +51,7 @@ public class MissionService {
         return getResponseEntity(missionList, member);
     }
 
+    //n+1문제 없음
     @Transactional(readOnly = true)
     public ResponseEntity<?> getTodayMission(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -72,7 +72,6 @@ public class MissionService {
                             .missionContent(mission.getMissionContent())
                             .missionImageUrl(mission.getMissionImageUrl())
                             .missionType(mission.getMissionType())
-                            .missionName(mission.getMissionName())
                             .onShow(mission.getOnShow())
                             .status(status)
                             .tag(mission.getTag())
@@ -82,48 +81,21 @@ public class MissionService {
         return new ResponseEntity<>(Message.success(missionResponseDtoList), HttpStatus.OK);
     }
 
-    @Transactional(readOnly = true)
-    public ResponseEntity<?> getMissionDetail(Long missionId, HttpServletRequest request) {
-        check.accessTokenCheck(request);
-        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
-        return new ResponseEntity<>(Message.success(MissionResponseDto.builder()
-                .missionId(mission.getId())
-                .missionName(mission.getMissionName())
-                .missionImageUrl(mission.getMissionImageUrl())
-                .missionContent(mission.getMissionContent())
-                .missionType(mission.getMissionType())
-                .missionName(mission.getMissionName())
-                .onShow(mission.getOnShow())
-                .build()), HttpStatus.OK);
-    }
+    //n+1문제 없음
+//    @Transactional(readOnly = true)
+//    public ResponseEntity<?> getMissionDetail(Long missionId, HttpServletRequest request) {
+//        check.accessTokenCheck(request);
+//        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
+//        return new ResponseEntity<>(Message.success(MissionResponseDto.builder()
+//                .missionId(mission.getId())
+//                .missionName(mission.getMissionName())
+//                .missionImageUrl(mission.getMissionImageUrl())
+//                .missionContent(mission.getMissionContent())
+//                .missionType(mission.getMissionType())
+//                .missionName(mission.getMissionName())
+//                .onShow(mission.getOnShow())
+//                .build()), HttpStatus.OK);
+//    }
 
-    @Transactional
-    public ResponseEntity<?> submitMission(Long missionId, HttpServletRequest request, MissionRequestDto missionRequestDto) throws Exception {
-        Member member = check.accessTokenCheck(request);
-        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
-        Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(member, mission);
-        if(missionStatus.isPresent()){
-            if(missionStatus.get().getMissionStatus() == REJECTED) missionStatus.get().update(WAITING);
-            else throw new CustomException(ErrorCode.BAD_REQUEST);
-        } else {
-            MissionStatus newMissionStatus = MissionStatus.builder()
-                    .member(member)
-                    .mission(mission)
-                    .missionStatus(WAITING)
-                    .missionType(mission.getMissionType())
-                    .build();
-            missionStatusRepository.save(newMissionStatus);
-        }
-        String imgUrl = imageService.getImgUrlBase64(missionRequestDto.getBase64String());
-        SubmitMission submitMission = SubmitMission.builder()
-                .imgUrl(imgUrl)
-                .mission(mission)
-                .member(member)
-                .status(WAITING)
-                .missionName(mission.getMissionName())
-                .missionType(mission.getMissionType())
-                .build();
-        submitMissionRepository.save(submitMission);
-        return new ResponseEntity<>(Message.success("전송 완료"),HttpStatus.OK);
-    }
+
 }

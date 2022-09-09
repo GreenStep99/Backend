@@ -71,7 +71,6 @@ public class MemberService {
         return tokenProvider.getMemberFromAuthentication();
     }
 
-
     @Transactional(readOnly=true)
     public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
