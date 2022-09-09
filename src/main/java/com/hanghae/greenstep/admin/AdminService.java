@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 import static com.hanghae.greenstep.shared.Status.DONE;
@@ -39,11 +40,8 @@ public class AdminService {
     private final SubmitMissionRepository submitMissionRepository;
     private final MissionStatusRepository missionStatusRepository;
     private final Check check;
-
-    @Autowired
-    ApplicationEventPublisher publisher;
-
-    private final Check check;
+    private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher publisher;
 
     @Transactional(readOnly=true)
     public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
@@ -105,9 +103,8 @@ public class AdminService {
 
     public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin, String info) {
         submitMission.update(verification, info, admin.getName());
-        MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission())
-                .orElseThrow(() -> new CustomException(ErrorCode.MISSION_STATUS_NOT_FOUND));
-        missionStatus.update(verification);
+        Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
+        missionStatus.ifPresent(status -> status.update(verification));
     }
 
     public void earnMissionPoints(SubmitMission submitMission) {
