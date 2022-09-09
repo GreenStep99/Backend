@@ -29,6 +29,7 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final ClapRepository clapRepository;
 
+    //n+1 문제 없음
     @Transactional
     public ResponseEntity<?> createFeed(Long submitMissionId, String content, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -48,6 +49,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
     }
 
+    //n:1
     @Transactional(readOnly=true)
     public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -57,6 +59,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 
+    //n:1
     @Transactional(readOnly=true)
     public ResponseEntity<?> getFeedByTag(String tag, Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -75,14 +78,16 @@ public class FeedService {
         return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
     }
 
+    //n:1
     @Transactional(readOnly=true)
     public ResponseEntity<?> getMyFeed(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
-        List<Feed> feedList = feedRepository.findAllByMember(member);
+        List<Feed> feedList = feedRepository.findAllByMemberFetchJoin(member);
         List<FeedResponseDto> feedResponseDtoList = makeFeedList(feedList, member);
         return new ResponseEntity<>(Message.success(feedResponseDtoList),HttpStatus.OK);
     }
 
+    //n:1 n+1 문제 원인이 되는 메소드
     public List<FeedResponseDto> makeFeedList(List<Feed> feedList, Member member){
         List<FeedResponseDto> feedResponseDtoList =new ArrayList<>();
         for (Feed feed : feedList) {
@@ -105,6 +110,7 @@ public class FeedService {
         return feedResponseDtoList;
     }
 
+    //n+1문제 없음
     public ResponseEntity<?> deleteFeeds(Long[] feedIdList, HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         for(Long feedId : feedIdList) {
@@ -118,6 +124,7 @@ public class FeedService {
         return new ResponseEntity<>(Message.success("삭제되었습니다"),HttpStatus.OK);
     }
 
+    //n+1문제 없음
     public ResponseEntity<?> updateFeed(Long feedId, String content, HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         Feed feed =feedRepository.findById(feedId).orElseThrow(
