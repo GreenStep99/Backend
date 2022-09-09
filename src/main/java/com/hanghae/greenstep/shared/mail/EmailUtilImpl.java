@@ -18,8 +18,7 @@ public class EmailUtilImpl implements EmailUtil {
     }
 
     @Override
-    public Map<String, Object> sendEmail(MailDto mailDto) throws MessagingException {
-        Map<String, Object> result = new HashMap<>();
+    public void sendEmail(MailDto mailDto) throws MessagingException {
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         try {
@@ -27,13 +26,10 @@ public class EmailUtilImpl implements EmailUtil {
             helper.setSubject(mailDto.getTitle());
             helper.setText(mailDto.getContent(),true);
             System.out.println("88888888888888888메일 전송 성공888888888888888888888888");
-            result.put("resultCode", 200);
         } catch (MessagingException e) {
             e.printStackTrace();
             System.out.println("88888888888888888메일 전송 실패888888888888888888888888");
-            result.put("resultCode", 500);
         }
         sender.send(message);
-        return result;
     }
 }

@@ -17,6 +17,7 @@ import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,8 +44,7 @@ public class AdminService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    ApplicationEventPublisher publisher;
+    private  final ApplicationEventPublisher publisher;
 
 
     @Transactional(readOnly=true)
