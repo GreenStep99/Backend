@@ -17,7 +17,6 @@ import java.util.List;
 public class RankService {
     private final MemberRepository memberRepository;
 
-    //n+1문제 없음
     @Transactional(readOnly=true)
     public ResponseEntity<?> getDailyRankMissionPoint(){
         List<Member> memberDailyRankList = memberRepository.findTop3ByOrderByDailyMissionPointDesc();
