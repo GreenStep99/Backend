@@ -35,8 +35,6 @@ public class FeedController {
 
     @DeleteMapping("/feed")
     public ResponseEntity<?> deleteFeeds(@RequestBody Long[] feedIdList, HttpServletRequest request){
-        for(Long id:feedIdList){
-        System.out.println(id);}
         return feedService.deleteFeeds(feedIdList, request);
     }
 
@@ -45,4 +43,5 @@ public class FeedController {
         String content = contentMap.get("content");
         return feedService.updateFeed(feedId, content, request);
     }
+    
 }

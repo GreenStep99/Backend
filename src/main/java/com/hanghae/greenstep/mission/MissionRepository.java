@@ -16,7 +16,6 @@ public interface MissionRepository extends JpaRepository<Mission,Long> {
     @Query(value = "select m from Mission m where m.onShow = true AND m.missionType = 'challenge'")
     List<Mission> findTodayMissionByOnShow();
 
-
     @Query(value = "select * from mission where mission_type = 'daily'", nativeQuery = true)
     List<Mission> findAllDailyMission();
     @Query(value = "select * from mission where mission_type = 'daily' order by RAND() limit 8", nativeQuery = true)

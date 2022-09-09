@@ -12,6 +12,7 @@ public class MyMissionsDto {
     private String missionName;
     private String missionImgUrl;
     private Boolean onFeed;
+    private Boolean onHide;
 
     private String tag;
 
@@ -21,6 +22,7 @@ public class MyMissionsDto {
         this.missionName = submitMission.getMission().getMissionName();
         this.missionImgUrl = submitMission.getImgUrl();
         this.onFeed = submitMission.getOnFeed();
+        this.onHide = submitMission.getOnHide();
         this.tag = submitMission.getMission().getTag();
     }
 }

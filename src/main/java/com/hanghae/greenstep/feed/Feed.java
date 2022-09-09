@@ -1,5 +1,6 @@
 package com.hanghae.greenstep.feed;
 
+import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.shared.Timestamped;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -31,6 +33,9 @@ public class Feed extends Timestamped {
 
     @Column
     private Integer clapCount;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "feed", orphanRemoval = true)
+    private List<Clap> claps;
 
     @Column
     private String tag;
