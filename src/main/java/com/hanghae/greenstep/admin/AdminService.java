@@ -15,8 +15,7 @@ import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +31,6 @@ import java.util.Optional;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AdminService {
@@ -71,7 +69,6 @@ public class AdminService {
 
     //n+1 문제 없음
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
-        log.info("요청값?"+adminLoginRequestDto);
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
@@ -94,12 +91,10 @@ public class AdminService {
     public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
-
         SubmitMission submitMission = submitMissionRepository.findByIdFetchJoin(submitMissionId).orElseThrow(
                         () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
                 );
         if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
-
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
@@ -120,5 +115,4 @@ public class AdminService {
             submitMission.getMember().earnWeeklyPoint();
         submitMission.getMember().earnChallengePoint();
     }
-
 }
