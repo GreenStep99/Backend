@@ -20,6 +20,7 @@ public class SubmitMissionService {
     private final Check check;
     private final SubmitMissionRepository submitMissionRepository;
 
+    //n+1문제 없음
     @Transactional(readOnly=true)
     public ResponseEntity<?> getMyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
