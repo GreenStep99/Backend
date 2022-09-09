@@ -10,13 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 
 @Component
 @RequiredArgsConstructor
 public class Check {
-
     private final TokenProvider tokenProvider;
 
     public Member accessTokenCheck(HttpServletRequest request) {
@@ -42,6 +42,4 @@ public class Check {
             throw new CustomException(ErrorCode.NOT_AUTHOR);
         }
     }
-
-
 }

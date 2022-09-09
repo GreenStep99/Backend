@@ -9,7 +9,6 @@ import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.submitMission.MyMissionsDto;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -127,21 +125,5 @@ public class MissionService {
                 .build();
         submitMissionRepository.save(submitMission);
         return new ResponseEntity<>(Message.success("전송 완료"),HttpStatus.OK);
-    }
-
-    public ResponseEntity<?> getDoneMission(Long missionId, HttpServletRequest request) {
-        Member member = check.accessTokenCheck(request);
-        Mission mission = missionRepository.findById(missionId).orElseThrow(
-                () -> new CustomException(ErrorCode.POST_NOT_FOUND)
-        );
-        LocalDate today = LocalDate.now();
-        List<SubmitMission> submitMissionList = submitMissionRepository.findAllByMemberAndMission(member, mission);
-        for(SubmitMission submitMission: submitMissionList){
-            if (today.isEqual(submitMission.getCreatedAt().toLocalDate())) {
-                MyMissionsDto myMissionsDto = new MyMissionsDto(submitMission);
-                return new ResponseEntity<>(Message.success(myMissionsDto), HttpStatus.OK);
-            }
-        }
-        throw new CustomException(ErrorCode.POST_NOT_FOUND);
     }
 }

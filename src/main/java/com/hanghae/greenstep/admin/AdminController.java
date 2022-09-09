@@ -17,9 +17,8 @@ public class AdminController {
 
     private final AdminService adminService;
 
-
     @PostMapping("/login")
-    public ResponseEntity<?> adminLogin(@RequestBody AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response){
+    public ResponseEntity<?> adminLogin(@RequestBody AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         return adminService.login(adminLoginRequestDto, response);
     }
 
