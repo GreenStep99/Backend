@@ -53,7 +53,7 @@ public class KakaoShareService {
     }
 
 
-    public ResponseEntity<?> shareKakaoToFriends(Long feedId, List<String> kakaoFriends,HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<?> shareKakaoToFriends(Long feedId, String[] kakaoFriends,HttpServletRequest request) throws JsonProcessingException {
         String accessToken = request.getHeader("Kakao_Authorization");
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -88,7 +88,7 @@ public class KakaoShareService {
         return new ResponseEntity<>(Message.success("카카오톡 메세지가 성공적으로 전달되었습니다."), HttpStatus.OK);
     }
 
-    public KakaoTemplateDto boxKakaoTemplate(Feed feed, List<String> friendList){
+    public KakaoTemplateDto boxKakaoTemplate(Feed feed, String[] friendList){
         List<ButtonsDto> buttons= new ArrayList<>();
         ButtonsDto buttonsDto = new ButtonsDto();
         buttons.add(buttonsDto);

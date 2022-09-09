@@ -30,6 +30,7 @@ public class RankService {
         for (Member member : memberRankList) {
             memberRankResponseDtoList.add(
                     MemberRankResponseDto.builder()
+                            .memberId(member.getId())
                             .profilePhoto(member.getProfilePhoto())
                             .nickName(member.getNickname())
                             .name(member.getName())

@@ -40,7 +40,7 @@ public class FeedController {
         return feedService.deleteFeeds(feedIdList, request);
     }
 
-    @PatchMapping("/feed/{feedId}")
+    @PatchMapping("/feed/{feedId}")//
     public ResponseEntity<?> updateFeed(@PathVariable Long feedId,@RequestBody Map<String,String> contentMap, HttpServletRequest request){
         String content = contentMap.get("content");
         return feedService.updateFeed(feedId, content, request);
