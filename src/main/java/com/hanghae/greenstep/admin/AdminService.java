@@ -55,8 +55,8 @@ public class AdminService {
                             .userId(submitMission.getMember().getId())
                             .profilePhoto(submitMission.getMember().getProfilePhoto())
                             .email(submitMission.getMember().getEmail())
-                            .missionName(submitMission.getMissionName())
-                            .missionType(submitMission.getMissionType())
+                            .missionName(submitMission.getMission().getMissionName())
+                            .missionType(submitMission.getMission().getMissionType())
                             .missionImgUrl(submitMission.getImgUrl())
                             .adminName(submitMission.getAdminName())
                             .info(submitMission.getInfo())
@@ -109,9 +109,9 @@ public class AdminService {
     }
 
     public void earnMissionPoints(SubmitMission submitMission) {
-        if (Objects.equals(submitMission.getMissionType(), "daily"))
+        if (Objects.equals(submitMission.getMission().getMissionType(), "daily"))
             submitMission.getMember().earnDailyPoint();
-        if (Objects.equals(submitMission.getMissionType(), "weekly"))
+        if (Objects.equals(submitMission.getMission().getMissionType(), "weekly"))
             submitMission.getMember().earnWeeklyPoint();
         submitMission.getMember().earnChallengePoint();
     }

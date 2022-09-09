@@ -1,7 +1,6 @@
 package com.hanghae.greenstep.submitMission;
 
 import com.hanghae.greenstep.member.Member;
-import com.hanghae.greenstep.mission.Mission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +16,6 @@ public interface SubmitMissionRepository extends JpaRepository<SubmitMission,Lon
     @Query("select s from SubmitMission s join fetch s.member where s.id = :submitMissionId")
     Optional<SubmitMission> findByIdFetchJoin(@Param("submitMissionId") Long submitMissionId);
 
-    @Query("select s from SubmitMission s where s.status = 'DONE' AND s.member = :member order by s.createdAt desc ")
-    List<SubmitMission> findAllByMember(@Param("member") Member member);
-
+    @Query("select s from SubmitMission s where s.status = 'DONE' AND s.member = :member And s.onHide = :onHide order by s.createdAt desc ")
+    List<SubmitMission> findAllByMemberAndOnHide(@Param("member") Member member, @Param("onHide") boolean onHide);
 }

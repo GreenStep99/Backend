@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ public class KakaoShareController {
     }
 
     @GetMapping("/kakao-share/friends/{feedId}")
-    public ResponseEntity<?> getKakaoShareToFriends(@PathVariable Long feedId, @RequestBody List<String> kakaoFriends, HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<?> getKakaoShareToFriends(@PathVariable Long feedId, @RequestBody String[] kakaoFriends, HttpServletRequest request) throws JsonProcessingException {
         return kakaoShareService.shareKakaoToFriends(feedId, kakaoFriends, request);
     }
 

@@ -2,9 +2,11 @@ package com.hanghae.greenstep.kakaoShare.Dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Getter
 public class KakaoTemplateDto {
     private final String objectType = "feed";
@@ -15,10 +17,10 @@ public class KakaoTemplateDto {
 
     private List<ButtonsDto> buttons;
 
-    private List<String> friendIdList;
+    private String[] friendIdList;
 
     @Builder
-    public KakaoTemplateDto(ContentDto contentDto, SocialDto social, List<ButtonsDto> buttons, List<String> friendIdList){
+    public KakaoTemplateDto(ContentDto contentDto, SocialDto social, List<ButtonsDto> buttons, String[] friendIdList){
         this.content = contentDto;
         this.social = social;
         this.buttons = buttons;

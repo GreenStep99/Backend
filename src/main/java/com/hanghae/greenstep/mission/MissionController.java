@@ -2,7 +2,8 @@ package com.hanghae.greenstep.mission;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,14 +28,9 @@ public class MissionController {
         return missionService.getTodayMission(request);
     }
 
-    @GetMapping("/missions/{missionId}")
-    public ResponseEntity<?> getMissionDetail(@PathVariable Long missionId, HttpServletRequest request) throws Exception {
-        return missionService.getMissionDetail(missionId, request);
-    }
-
-    @PostMapping("/missions/{missionId}")
-    public ResponseEntity<?> submitMission(@PathVariable Long missionId, HttpServletRequest request, @RequestBody MissionRequestDto missionRequestDto) throws Exception {
-        return missionService.submitMission(missionId, request, missionRequestDto);
-    }
+//    @GetMapping("/missions/{missionId}")
+//    public ResponseEntity<?> getMissionDetail(@PathVariable Long missionId, HttpServletRequest request) {
+//        return missionService.getMissionDetail(missionId, request);
+//    }
 
 }

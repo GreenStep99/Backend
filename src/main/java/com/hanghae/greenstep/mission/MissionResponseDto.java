@@ -19,7 +19,6 @@ public class MissionResponseDto {
 
     private String missionImageUrl;
 
-
     private String missionType;
 
     private String missionName;

@@ -46,7 +46,8 @@ public class FeedService {
                 .build();
         feedRepository.save(feed);
         submitMission.makeOnFeed();
-        return new ResponseEntity<>(Message.success(null), HttpStatus.OK);
+        FeedResponseDto feedResponseDto = new FeedResponseDto(feed);
+        return new ResponseEntity<>(Message.success(feedResponseDto), HttpStatus.OK);
     }
 
     //n:1
@@ -121,7 +122,7 @@ public class FeedService {
             System.out.println(feedId);
             feedRepository.delete(feed);
         }
-        return new ResponseEntity<>(Message.success("삭제되었습니다"),HttpStatus.OK);
+        return new ResponseEntity<>(Message.success("삭제되었습니다."),HttpStatus.OK);
     }
 
     //n+1문제 없음

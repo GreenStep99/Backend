@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberRankResponseDto {
+    private Long memberId;
     private String profilePhoto;
     private String nickName;
     private String name;
 
-
-
     public MemberRankResponseDto(Member member){
+        this.memberId =member.getId();
         this.profilePhoto = member.getProfilePhoto();
         this.nickName = member.getNickname();
         this.name = member.getName();

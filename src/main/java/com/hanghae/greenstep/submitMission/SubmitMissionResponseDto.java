@@ -21,7 +21,6 @@ public class SubmitMissionResponseDto {
     private Status status;
     private String info;
     private String adminName;
-
     private Boolean onFeed;
 
     public SubmitMissionResponseDto(SubmitMission submitMission){
@@ -29,6 +28,7 @@ public class SubmitMissionResponseDto {
         this.userId = submitMission.getMember().getId();
         this.email = submitMission.getMember().getEmail();
         this.missionName = submitMission.getMission().getMissionName();
+        this.missionType = submitMission.getMission().getMissionType();
         this.missionImgUrl = submitMission.getImgUrl();
         this.status = submitMission.getStatus();
         this.info = submitMission.getInfo();
