@@ -15,8 +15,6 @@ import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class AdminService {
     private final MemberRepository memberRepository;
@@ -41,17 +39,14 @@ public class AdminService {
     private final SubmitMissionRepository submitMissionRepository;
     private final MissionStatusRepository missionStatusRepository;
     private final Check check;
-
     private final PasswordEncoder passwordEncoder;
-
-    private  final ApplicationEventPublisher publisher;
-
+    private final ApplicationEventPublisher publisher;
 
     @Transactional(readOnly=true)
     public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
-        List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAsc();
+        List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAscFetchJoin();
         List<SubmitMissionResponseDto> submitMissionResponseDtoList = new ArrayList<>();
         for (SubmitMission submitMission : submitMissionList) {
             submitMissionResponseDtoList.add(
@@ -72,6 +67,7 @@ public class AdminService {
         return new ResponseEntity<>(Message.success(submitMissionResponseDtoList), HttpStatus.OK);
     }
 
+    //n+1 문제 없음
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -90,14 +86,14 @@ public class AdminService {
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
+    //n:1
     @Transactional
     public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
-        SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
-                () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
-        );
-        log.info(submitMission.getMember().getAcceptMail().toString());
+        SubmitMission submitMission = submitMissionRepository.findByIdFetchJoin(submitMissionId).orElseThrow(
+                        () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
+                );
         if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
@@ -105,11 +101,11 @@ public class AdminService {
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
     }
 
+    //n+1 문제 없음
     public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin, String info) {
         submitMission.update(verification, info, admin.getName());
-        MissionStatus missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission())
-                .orElseThrow(() -> new CustomException(ErrorCode.MISSION_STATUS_NOT_FOUND));
-        missionStatus.update(verification);
+        Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
+        missionStatus.ifPresent(status -> status.update(verification));
     }
 
     public void earnMissionPoints(SubmitMission submitMission) {
