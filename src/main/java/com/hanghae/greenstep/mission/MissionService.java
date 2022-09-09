@@ -38,6 +38,7 @@ public class MissionService {
 
     private final Check check;
 
+    //n+1문제 없음
     @Transactional(readOnly = true)
     public ResponseEntity<?> getDailyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -45,6 +46,7 @@ public class MissionService {
         return getResponseEntity(missionList, member);
     }
 
+    //n+1문제 없음
     @Transactional(readOnly = true)
     public ResponseEntity<?> getWeeklyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -52,6 +54,7 @@ public class MissionService {
         return getResponseEntity(missionList, member);
     }
 
+    //n+1문제 없음
     @Transactional(readOnly = true)
     public ResponseEntity<?> getTodayMission(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -82,6 +85,7 @@ public class MissionService {
         return new ResponseEntity<>(Message.success(missionResponseDtoList), HttpStatus.OK);
     }
 
+    //n+1문제 없음
     @Transactional(readOnly = true)
     public ResponseEntity<?> getMissionDetail(Long missionId, HttpServletRequest request) {
         check.accessTokenCheck(request);
@@ -97,6 +101,7 @@ public class MissionService {
                 .build()), HttpStatus.OK);
     }
 
+    //n+1문제 없음
     @Transactional
     public ResponseEntity<?> submitMission(Long missionId, HttpServletRequest request, MissionRequestDto missionRequestDto) throws Exception {
         Member member = check.accessTokenCheck(request);
