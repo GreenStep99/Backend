@@ -60,8 +60,6 @@ public class Member {
 
     @Column
     private Long dailyMissionPoint;
-    @Column
-    private Long weeklyMissionPoint;
 
 
     @Column
@@ -97,7 +95,6 @@ public class Member {
         this.acceptMail = acceptMail;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
-        this.weeklyMissionPoint = 0L;
     }
 
     @Override
