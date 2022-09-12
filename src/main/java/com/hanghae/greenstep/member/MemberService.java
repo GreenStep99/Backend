@@ -80,6 +80,4 @@ public class MemberService {
         return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
     }
 
-
-
 }
