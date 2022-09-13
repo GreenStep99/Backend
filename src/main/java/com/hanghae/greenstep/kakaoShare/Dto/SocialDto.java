@@ -1,8 +1,10 @@
 package com.hanghae.greenstep.kakaoShare.Dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class SocialDto {
 
     private Integer clapCount;

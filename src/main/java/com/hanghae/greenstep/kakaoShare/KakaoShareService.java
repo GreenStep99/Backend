@@ -13,6 +13,7 @@ import com.hanghae.greenstep.kakaoShare.Dto.KakaoTemplateDto;
 import com.hanghae.greenstep.kakaoShare.Dto.SocialDto;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -24,31 +25,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class KakaoShareService {
 
     private final FeedRepository feedRepository;
 
     public ResponseEntity<?> shareKakaoToME(Long feedId, HttpServletRequest request) throws JsonProcessingException {
+        log.info("돈다");
         String accessToken = request.getHeader("Kakao_Authorization");
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
+        log.info("헤더 생성완료");
         Feed feed = feedRepository.findById(feedId).orElseThrow( () -> new CustomException(ErrorCode.FEED_NOT_FOUND));
         KakaoTemplateDto kakaoTemplateDto = boxKakaoTemplate(feed,null);
-
+        log.info("곧 된다");
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("template_object", kakaoTemplateDto);
         // HTTP 요청 보내기
          HttpEntity<MultiValueMap<String, Object>> kakaoShareRequest = new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
-                "https://kapi.kakao.com/v2/api/talk/memo/default/send",
+                "https://kapi.kakao.com/v2/api/talk/memo/scrap/send" ,
                 HttpMethod.POST,
                 kakaoShareRequest,
                 String.class
         );
+        log.info("거의 성공");
         return getResponseEntity(response);
     }
 

@@ -157,12 +157,13 @@ public class KakaoSocialService {
     }
 
 
+    @Transactional
     public ResponseEntity<?> kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
         Member member = check.accessTokenCheck(request);
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
-                "https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code",
+                "https://kauth.kakao.com/oauth/authorize?client_id="+kakaoClientId+"&redirect_uri="+RedirectURI+"&response_type=code",
                 HttpMethod.GET,
                 kakaoTokenRequest,
                 String.class
@@ -170,11 +171,9 @@ public class KakaoSocialService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        Long kakaoId = jsonNode.get("id").asLong();
-        if(Objects.equals(member.getKakaoId(), kakaoId)) {
-            refreshTokenRepository.deleteByMember(member);
-            return new ResponseEntity<>(Message.success("로그아웃 되었습니다"), HttpStatus.OK);}
-        else throw new CustomException(ErrorCode.INVALID_TOKEN);
+        Long id = jsonNode.get("id").asLong();
+        if(Objects.equals(member.getKakaoId(), id)) refreshTokenRepository.deleteByMember(member);
+        return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
     }
 
 
@@ -197,7 +196,7 @@ public class KakaoSocialService {
         Long kakaoId = jsonNode.get("id").asLong();
         if (Objects.equals(member.getKakaoId(), kakaoId)) {
             refreshTokenRepository.deleteByMember(member);
-            return new ResponseEntity<>(Message.success(memberId + "번 회원탈퇴처리가 정상적으로 처리되었습니다"), HttpStatus.OK);
+            return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         } else throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 

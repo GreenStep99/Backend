@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class LinkDto {
-    private String web_url;
+    private final String web_url ="https://greenstepapp.com";
     private String mobile_web_url;
 }

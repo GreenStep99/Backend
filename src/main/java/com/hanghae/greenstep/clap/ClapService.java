@@ -28,7 +28,7 @@ public class ClapService {
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        Clap foundClap = clapRepository.findByMemberAndFeed(member,feed).orElse(null);
+        Clap foundClap = clapRepository.findByMemberIdAndFeed(member.getId(),feed).orElse(null);
 
         if(foundClap == null){
             ClapRequestDto clapRequestDto = new ClapRequestDto(member, feed);
