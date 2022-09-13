@@ -1,12 +1,11 @@
 package com.hanghae.greenstep.notice.embeddable;
 
 
+import com.hanghae.greenstep.shared.notice.NotificationContent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class NotificationContentTest {
