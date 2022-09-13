@@ -16,6 +16,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	google()
 }
 
 dependencies {
@@ -51,9 +52,15 @@ dependencies {
 	//실시간 알림
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-	//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//firebase
+	implementation 'com.google.firebase:firebase-core:21.1.1'
+	implementation 'com.google.firebase:firebase-messaging:23.0.8'
+	implementation 'com.google.firebase:firebase-admin:9.0.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()

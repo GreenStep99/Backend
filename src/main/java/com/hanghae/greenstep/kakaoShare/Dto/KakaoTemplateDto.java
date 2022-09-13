@@ -2,11 +2,12 @@ package com.hanghae.greenstep.kakaoShare.Dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 public class KakaoTemplateDto {
     private final String objectType = "feed";

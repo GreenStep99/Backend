@@ -35,13 +35,13 @@ public class KakaoShareService {
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        Feed feed = feedRepository.findById(feedId).orElseThrow( () -> new CustomException(ErrorCode.FEED_NOT_FOUND));
-        KakaoTemplateDto kakaoTemplateDto = boxKakaoTemplate(feed,null);
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new CustomException(ErrorCode.FEED_NOT_FOUND));
+        KakaoTemplateDto kakaoTemplateDto = boxKakaoTemplate(feed, null);
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("template_object", kakaoTemplateDto);
         // HTTP 요청 보내기
-         HttpEntity<MultiValueMap<String, Object>> kakaoShareRequest = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, Object>> kakaoShareRequest = new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
                 "https://kapi.kakao.com/v2/api/talk/memo/default/send",
@@ -53,14 +53,14 @@ public class KakaoShareService {
     }
 
 
-    public ResponseEntity<?> shareKakaoToFriends(Long feedId, String[] kakaoFriends,HttpServletRequest request) throws JsonProcessingException {
+    public ResponseEntity<?> shareKakaoToFriends(Long feedId, String[] kakaoFriends, HttpServletRequest request) throws JsonProcessingException {
         String accessToken = request.getHeader("Kakao_Authorization");
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        Feed feed = feedRepository.findById(feedId).orElseThrow( () -> new CustomException(ErrorCode.FEED_NOT_FOUND));
-        KakaoTemplateDto kakaoTemplateDto = boxKakaoTemplate(feed,kakaoFriends);
+        Feed feed = feedRepository.findById(feedId).orElseThrow(() -> new CustomException(ErrorCode.FEED_NOT_FOUND));
+        KakaoTemplateDto kakaoTemplateDto = boxKakaoTemplate(feed, kakaoFriends);
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("receiver_uuids", kakaoFriends);
@@ -84,16 +84,16 @@ public class KakaoShareService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         int result = jsonNode.get("result_code").asInt();
-        if(result == 1)throw new CustomException(ErrorCode.SHARE_FAILURE);
+        if (result == 1) throw new CustomException(ErrorCode.SHARE_FAILURE);
         return new ResponseEntity<>(Message.success("카카오톡 메세지가 성공적으로 전달되었습니다."), HttpStatus.OK);
     }
 
-    public KakaoTemplateDto boxKakaoTemplate(Feed feed, String[] friendList){
-        List<ButtonsDto> buttons= new ArrayList<>();
+    public KakaoTemplateDto boxKakaoTemplate(Feed feed, String[] friendList) {
+        List<ButtonsDto> buttons = new ArrayList<>();
         ButtonsDto buttonsDto = new ButtonsDto();
         buttons.add(buttonsDto);
         SocialDto socialDto = new SocialDto(feed.getClapCount());
-        ContentDto contentDto = new ContentDto(feed.getImgUrl(),feed.getContent());
+        ContentDto contentDto = new ContentDto(feed.getImgUrl(), feed.getContent());
         return KakaoTemplateDto.builder()
                 .buttons(buttons)
                 .social(socialDto)
