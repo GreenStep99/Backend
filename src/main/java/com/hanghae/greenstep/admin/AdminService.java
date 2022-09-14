@@ -103,11 +103,11 @@ public class AdminService {
         earnMissionPoints(submitMission);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
 
-        //마이페이지로 이동하는 url
-        String Url = "https://www.greenstepapp.com/mypage";
-        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
-        String content = submitMission.getMember().getNickname()+"님! 미션 인증이 완료되었습니다!";
-        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url);
+//        //마이페이지로 이동하는 url
+//        String Url = "https://www.greenstepapp.com/mypage";
+//        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
+//        String content = submitMission.getMember().getNickname()+"님! 미션 인증이 완료되었습니다!";
+//        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url);
 
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
     }
