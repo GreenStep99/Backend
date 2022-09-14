@@ -72,6 +72,7 @@ public class AdminService {
 
     //n+1 문제 없음
     public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
+        blockSqlSentence(adminLoginRequestDto);
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
@@ -124,5 +125,12 @@ public class AdminService {
         if (Objects.equals(submitMission.getMission().getMissionType(), "weekly"))
             submitMission.getMember().earnWeeklyPoint();
         submitMission.getMember().earnChallengePoint();
+    }
+
+    public void blockSqlSentence(AdminLoginRequestDto requestDto) {
+        if (!requestDto.getEmail().matches("[a-zA-Z\\d]{3,15}@[a-zA-Z\\d]{3,15}[.][a-zA-Z]{2,5}")||
+                requestDto.getPassword().matches("^(?=./*[A-Za-z\\d@$!%*#?&]){4,18}$")){
+             throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
     }
 }

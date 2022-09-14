@@ -29,4 +29,6 @@ public class MemberController {
     public ResponseEntity<?> getProfileInfo(HttpServletRequest request){
         return memberService.getMemberInfo(request);
     }
+
+
 }

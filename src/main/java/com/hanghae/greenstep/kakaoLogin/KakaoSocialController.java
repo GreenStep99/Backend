@@ -9,24 +9,35 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
 @RestController
 @RequiredArgsConstructor
-public class KakaoLoginController {
+public class KakaoSocialController {
 
-    private final KakaoLoginService kakaoLoginService;
+    private final KakaoSocialService kakaoSocialService;
 
     @Transactional
     @GetMapping("/users/kakao/callback")
     public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        TokenDto tokenDto= kakaoLoginService.kakaoLogin(code);
+        TokenDto tokenDto= kakaoSocialService.kakaoLogin(code);
         tokenDto.tokenToHeaders(response);
-        LoginResponseDto loginResponseDto = kakaoLoginService.loginInfo(tokenDto);
+        LoginResponseDto loginResponseDto = kakaoSocialService.loginInfo(tokenDto);
         return new ResponseEntity<>(Message.success(loginResponseDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/kakao/logout")
+    public ResponseEntity<?> kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
+        return kakaoSocialService.kakaoLogout(request);
+    }
+    @PostMapping("/kakao/unregister")
+    public ResponseEntity<?> deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
+        return kakaoSocialService.deleteMemberInfo(request);
     }
 }

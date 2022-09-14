@@ -6,28 +6,30 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+import com.hanghae.greenstep.jwt.RefreshTokenRepository;
 import com.hanghae.greenstep.jwt.TokenDto;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.jwt.UserDetailsImpl;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
+import com.hanghae.greenstep.shared.Check;
+import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,7 +38,7 @@ import static com.hanghae.greenstep.shared.Authority.ROLE_MEMBER;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class KakaoLoginService {
+public class KakaoSocialService {
     @Value("${kakao.client_id}")
     String kakaoClientId;
     @Value("${kakao.redirect_uri}")
@@ -45,6 +47,8 @@ public class KakaoLoginService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final Check check;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenDto kakaoLogin(String code) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -106,7 +110,6 @@ public class KakaoLoginService {
                 kakaoTokenRequest,
                 String.class
         );
-
         // HTTP 응답 (JSON) -> 액세스 토큰 파싱
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -152,5 +155,61 @@ public class KakaoLoginService {
                 .newComer(tokenDto.getNewComer())
                 .build();
     }
+
+
+    @Transactional
+    public ResponseEntity<?> kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
+        Member member = check.accessTokenCheck(request);
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response = rt.exchange(
+                "https://kauth.kakao.com/oauth/authorize?client_id="+kakaoClientId+"&redirect_uri="+RedirectURI+"&response_type=code",
+                HttpMethod.GET,
+                kakaoTokenRequest,
+                String.class
+        );
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        Long id = jsonNode.get("id").asLong();
+        if(Objects.equals(member.getKakaoId(), id)) refreshTokenRepository.deleteByMember(member);
+        return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
+    }
+
+
+    @Transactional
+    public ResponseEntity<?> deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
+        Member member = check.accessTokenCheck(request);
+        Long memberId = member.getId();
+        memberRepository.deleteById(memberId);
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response = rt.exchange(
+                "https://kapi.kakao.com/v1/user/unlink",
+                HttpMethod.GET,
+                kakaoTokenRequest,
+                String.class
+        );
+        String responseBody = response.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        Long kakaoId = jsonNode.get("id").asLong();
+        if (Objects.equals(member.getKakaoId(), kakaoId)) {
+            refreshTokenRepository.deleteByMember(member);
+            return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
+        } else throw new CustomException(ErrorCode.INVALID_TOKEN);
+    }
+
+    public HttpEntity<MultiValueMap<String, String>> kakaoTokenHeaderMaker(HttpServletRequest request){
+        String accessToken = request.getHeader("Kakao_Authorization");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        // HTTP 요청 보내기
+        return new HttpEntity<>(headers);
+    }
+
+
+
 }
 
