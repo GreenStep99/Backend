@@ -92,7 +92,7 @@ public class FeedService {
     public List<FeedResponseDto> makeFeedList(List<Feed> feedList, Member member){
         List<FeedResponseDto> feedResponseDtoList =new ArrayList<>();
         for (Feed feed : feedList) {
-            boolean clapByMe = clapRepository.existsByMemberAndFeed(member, feed);
+            boolean clapByMe = clapRepository.existsByMemberIdAndFeed(member.getId(), feed);
             feedResponseDtoList.add(
                     FeedResponseDto.builder()
                             .id(feed.getId())
