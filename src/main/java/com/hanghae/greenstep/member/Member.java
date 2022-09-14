@@ -95,6 +95,10 @@ public class Member {
         this.dailyMissionPoint = 0L;
     }
 
+    public Member(long l) {
+        this.id = l;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

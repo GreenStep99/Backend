@@ -33,7 +33,10 @@ public enum ErrorCode {
 
     BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), "C001", "잘못된 요청입니다."),
 
-    SHARE_FAILURE(HttpStatus.BAD_REQUEST.value(), "K001", "카카오톡 메세지 보내기에 실패했습니다.");
+    SHARE_FAILURE(HttpStatus.BAD_REQUEST.value(), "K001", "카카오톡 메세지 보내기에 실패했습니다."),
+    
+    //NOTIFICATION
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "N001", "해당 알림을 찾을 수 없습니다.");
 
 
     private final int httpStatus;

@@ -8,9 +8,11 @@ import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
+import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
+import com.hanghae.greenstep.shared.notice.NotificationType;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
@@ -41,6 +43,7 @@ public class AdminService {
     private final Check check;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher publisher;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly=true)
     public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
@@ -99,6 +102,13 @@ public class AdminService {
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
         SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
+
+        //마이페이지로 이동하는 url
+        String Url = "https://www.greenstepapp.com/mypage";
+        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
+        String content = submitMission.getMember().getNickname()+"님! 미션 인증이 완료되었습니다!";
+        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url);
+
         return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
     }
 
