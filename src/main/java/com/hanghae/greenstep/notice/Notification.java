@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "id")
+//@EqualsAndHashCode(of = "id")
 public class Notification extends Timestamped {
 
     @Id
