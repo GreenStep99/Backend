@@ -39,10 +39,10 @@ public class ClapService {
             clapRepository.save(clap);
             Integer clapCount = clapRepository.countByFeed(feed);
             feed.update(clapCount);
-            String Url = "https://www.greenstepapp.com/feed";
-            //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송
-            String content = clap.getFeed().getMember().getNickname()+"님! 박수를 받으셨습니다.";
-            notificationService.send(clap.getFeed().getMember(), NotificationType.PRAISE, content, Url);
+//            String Url = "https://www.greenstepapp.com/feed";
+//            //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송
+//            String content = clap.getFeed().getMember().getNickname()+"님! 박수를 받으셨습니다.";
+//            notificationService.send(clap.getFeed().getMember(), NotificationType.PRAISE, content, Url);
             return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         }
             clapRepository.deleteById(foundClap.getId());
