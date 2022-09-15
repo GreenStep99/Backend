@@ -7,6 +7,7 @@ import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.shared.Authority;
+import com.hanghae.greenstep.shared.Timestamped;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Member {
+public class Member extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,8 +69,6 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
 
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    private Set<Clap> clapSet;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<MissionStatus> missionStatusSet;
@@ -95,6 +94,10 @@ public class Member {
         this.acceptMail = acceptMail;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
+    }
+
+    public Member(long l) {
+        this.id = l;
     }
 
     @Override
