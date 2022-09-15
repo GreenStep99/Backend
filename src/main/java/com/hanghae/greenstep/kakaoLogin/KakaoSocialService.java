@@ -73,10 +73,10 @@ public class KakaoSocialService {
             String email = kakaoMemberInfo.getEmail();
             String profileImage = kakaoMemberInfo.getProfilePhoto();
             // role: 일반 사용자
-            kakaoUser = new Member(kakaoId, email, "이름", ROLE_MEMBER, nickname,  encodedPassword, profileImage, "kakao", true);
+            kakaoUser = new Member(kakaoId, email, "이름을 입력해주세요", ROLE_MEMBER, nickname,  encodedPassword, profileImage, "kakao", true);
             memberRepository.save(kakaoUser);
         }
-        if(Objects.equals(kakaoUser.getName(),"이름")){
+        if(Objects.equals(kakaoUser.getName(),"이름을 입력해주세요")){
             newComer =true;
         }
 
