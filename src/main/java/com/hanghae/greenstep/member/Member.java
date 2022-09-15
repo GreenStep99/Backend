@@ -7,6 +7,7 @@ import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
 import com.hanghae.greenstep.shared.Authority;
+import com.hanghae.greenstep.shared.Timestamped;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Member {
+public class Member extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
