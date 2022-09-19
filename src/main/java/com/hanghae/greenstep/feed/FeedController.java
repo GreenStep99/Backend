@@ -1,14 +1,17 @@
 package com.hanghae.greenstep.feed;
 
+import com.hanghae.greenstep.feed.Dto.FeedContentDto;
+import com.hanghae.greenstep.feed.Dto.FeedResponseDto;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,9 +20,8 @@ public class FeedController {
     private final FeedService feedService;
 
     @PostMapping("/profiles/missions/{submitMissionId}")
-    public ResponseEntity<?> createFeed(@PathVariable Long submitMissionId, @RequestBody Map<String, String> contentMap, HttpServletRequest request) {
-        String content = contentMap.get("content");
-        FeedResponseDto feedResponseDto = feedService.createFeed(submitMissionId, content, request);
+    public ResponseEntity<?> createFeed(@PathVariable Long submitMissionId, @RequestBody FeedContentDto feedContentDto, HttpServletRequest request) {
+        FeedResponseDto feedResponseDto = feedService.createFeed(submitMissionId, feedContentDto.getContent(), request);
         return new ResponseEntity<>(Message.success(feedResponseDto), HttpStatus.OK);
     }
 
@@ -47,9 +49,8 @@ public class FeedController {
     }
 
     @PatchMapping("/feed/{feedId}")//
-    public ResponseEntity<?> updateFeed(@PathVariable Long feedId,@RequestBody Map<String,String> contentMap, HttpServletRequest request){
-        String content = contentMap.get("content");
-        FeedResponseDto feedResponseDto = feedService.updateFeed(feedId, content, request);
+    public ResponseEntity<?> updateFeed(@PathVariable Long feedId, @RequestBody @Nullable FeedContentDto feedContentDto, HttpServletRequest request){
+        FeedResponseDto feedResponseDto = feedService.updateFeed(feedId, Objects.requireNonNull(feedContentDto).getContent(), request);
         return new ResponseEntity<>(Message.success(feedResponseDto),HttpStatus.OK);
     }
     

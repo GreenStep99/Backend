@@ -1,5 +1,6 @@
 package com.hanghae.greenstep.mission;
 
+import com.hanghae.greenstep.mission.Dto.MissionResponseDto;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -3,6 +3,7 @@ package com.hanghae.greenstep.feed;
 import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.shared.Timestamped;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class Feed extends Timestamped {
 

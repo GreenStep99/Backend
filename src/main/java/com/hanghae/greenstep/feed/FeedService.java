@@ -3,15 +3,13 @@ package com.hanghae.greenstep.feed;
 import com.hanghae.greenstep.clap.ClapRepository;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+import com.hanghae.greenstep.feed.Dto.FeedResponseDto;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
