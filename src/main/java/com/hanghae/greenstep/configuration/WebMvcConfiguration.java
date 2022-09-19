@@ -11,7 +11,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000","http://localhost:8080", "http://54.180.30.74:8080", "http://54.180.30.74", "https://greenstepserver.link", "https://greenstepapp.com")
                 .allowedMethods("*")
-                .exposedHeaders("Authorization","Refresh_Token","Access_Token_Expire_Time")
+                .exposedHeaders("Authorization","Kakao_Authorization","Access_Token_Expire_Time")
                 .allowCredentials(true)//make client read header("jwt-token")
         ;
     }
