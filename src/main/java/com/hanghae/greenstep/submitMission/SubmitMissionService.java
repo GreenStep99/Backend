@@ -4,16 +4,12 @@ import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
+import com.hanghae.greenstep.mission.Dto.MissionRequestDto;
 import com.hanghae.greenstep.mission.Mission;
 import com.hanghae.greenstep.mission.MissionRepository;
-import com.hanghae.greenstep.mission.MissionRequestDto;
-import com.hanghae.greenstep.missionStatus.MissionStatus;
-import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.submitMission.Dto.MyMissionsDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

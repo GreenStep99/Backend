@@ -1,6 +1,7 @@
 package com.hanghae.greenstep.shared.mail;
 
 import com.hanghae.greenstep.admin.VerifiedEvent;
+import com.hanghae.greenstep.shared.mail.Dto.MailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

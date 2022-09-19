@@ -1,25 +1,25 @@
 package com.hanghae.greenstep.admin;
 
 
+import com.hanghae.greenstep.admin.Dto.AdminLoginRequestDto;
+import com.hanghae.greenstep.admin.Dto.AdminLoginResponseDto;
+import com.hanghae.greenstep.admin.Dto.AdminTokenDto;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
-import com.hanghae.greenstep.missionStatus.MissionStatus;
-import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.notice.NotificationType;
+import com.hanghae.greenstep.submitMission.Dto.SubmitMissionResponseDto;
+import com.hanghae.greenstep.submitMission.MissionStatus;
+import com.hanghae.greenstep.submitMission.MissionStatusRepository;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
-import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +91,7 @@ public class AdminService {
 
     //n:1
     @Transactional
-    public SubmitMissionResponseDto verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
+    public SubmitMissionResponseDto verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request,@Nullable String info) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
         SubmitMission submitMission = submitMissionRepository.findByIdFetchJoin(submitMissionId).orElseThrow(
@@ -111,7 +111,7 @@ public class AdminService {
     }
 
     //n+1 문제 없음
-    public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin, String info) {
+    public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin,@Nullable String info) {
         submitMission.update(verification, info, admin.getName());
         Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
         missionStatus.ifPresent(status -> status.update(verification));

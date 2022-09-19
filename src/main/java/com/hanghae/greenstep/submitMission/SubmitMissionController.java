@@ -1,7 +1,8 @@
 package com.hanghae.greenstep.submitMission;
 
-import com.hanghae.greenstep.mission.MissionRequestDto;
+import com.hanghae.greenstep.mission.Dto.MissionRequestDto;
 import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.submitMission.Dto.MyMissionsDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

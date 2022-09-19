@@ -1,5 +1,6 @@
 package com.hanghae.greenstep.clap;
 
+import com.hanghae.greenstep.clap.Dto.ClapRequestDto;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.feed.Feed;
@@ -7,11 +8,7 @@ import com.hanghae.greenstep.feed.FeedRepository;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.Message;
-import com.hanghae.greenstep.shared.notice.NotificationType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

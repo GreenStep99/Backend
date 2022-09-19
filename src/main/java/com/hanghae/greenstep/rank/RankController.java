@@ -1,5 +1,6 @@
 package com.hanghae.greenstep.rank;
 
+import com.hanghae.greenstep.rank.Dto.MemberRankResponseDto;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

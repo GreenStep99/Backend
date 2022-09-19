@@ -2,12 +2,12 @@ package com.hanghae.greenstep.member;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.jwt.RefreshToken;
-import com.hanghae.greenstep.missionStatus.MissionStatus;
+import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Timestamped;
+import com.hanghae.greenstep.submitMission.MissionStatus;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -62,13 +62,11 @@ public class Member extends Timestamped {
     @Column
     private Long dailyMissionPoint;
 
-
     @Column
     private Boolean acceptMail;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
-
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<MissionStatus> missionStatusSet;

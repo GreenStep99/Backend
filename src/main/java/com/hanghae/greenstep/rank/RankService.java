@@ -2,10 +2,8 @@ package com.hanghae.greenstep.rank;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
-import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.rank.Dto.MemberRankResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
