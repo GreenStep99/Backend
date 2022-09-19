@@ -2,24 +2,20 @@ package com.hanghae.greenstep.submitMission;
 
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+import com.hanghae.greenstep.feed.FeedRepository;
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
+import com.hanghae.greenstep.mission.Dto.MissionRequestDto;
 import com.hanghae.greenstep.mission.Mission;
 import com.hanghae.greenstep.mission.MissionRepository;
-import com.hanghae.greenstep.mission.MissionRequestDto;
-import com.hanghae.greenstep.missionStatus.MissionStatus;
-import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.submitMission.Dto.MyMissionsDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,51 +31,51 @@ public class SubmitMissionService {
     private final MissionRepository missionRepository;
     private final MissionStatusRepository missionStatusRepository;
     private final ImageService imageService;
+    private final FeedRepository feedRepository;
 
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getMyMissions(HttpServletRequest request) {
+    public List<MyMissionsDto> getMyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByMemberAndOnHide(member, false);
         return getMyMissionDtoList(submitMissionList);
     }
 
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getHiddenMissions(HttpServletRequest request) {
+    public List<MyMissionsDto> getHiddenMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByMemberAndOnHide(member, true);
         return getMyMissionDtoList(submitMissionList);
     }
 
-    private ResponseEntity<?> getMyMissionDtoList(List<SubmitMission> submitMissionList) {
+    private List<MyMissionsDto> getMyMissionDtoList(List<SubmitMission> submitMissionList) {
         List<MyMissionsDto> myMissionsDtoList = new ArrayList<>();
         for(SubmitMission submitMission:submitMissionList){
             MyMissionsDto myMissionsDto =new MyMissionsDto(submitMission);
             myMissionsDtoList.add(myMissionsDto);
         }
-        return new ResponseEntity<>(Message.success(myMissionsDtoList), HttpStatus.OK);
+        return myMissionsDtoList;
     }
 
     @Transactional
-    public ResponseEntity<?> hideMyMissions(Long[] missionsIdList, HttpServletRequest request) {
-        System.out.println(missionsIdList.length + "    "+ Arrays.toString(missionsIdList));
+    public List<MyMissionsDto> hideMyMissions(Long[] missionsIdList, HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         List<MyMissionsDto> myMissionsDtoList = new ArrayList<>();
-        System.out.println(missionsIdList.length + "    "+ Arrays.toString(missionsIdList));
         for(Long submitMissionId : missionsIdList) {
-            System.out.println(submitMissionId);
             SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
                     () -> new CustomException(ErrorCode.POST_NOT_FOUND)
             );
             check.checkMember(submitMission, member);
             submitMission.toggleOnHide();
+            if(feedRepository.existsBySubmitMissionId(submitMissionId))
+                feedRepository.findBySubmitMissionId(submitMissionId).toggleFeedOnHide();
             MyMissionsDto myMissionsDto =new MyMissionsDto(submitMission);
             myMissionsDtoList.add(myMissionsDto);
         }
-        return new ResponseEntity<>(Message.success(myMissionsDtoList),HttpStatus.OK);
+        return myMissionsDtoList;
     }
 
     @Transactional
-    public ResponseEntity<?> submitMission(Long missionId, HttpServletRequest request, MissionRequestDto missionRequestDto) throws Exception {
+    public void submitMission(Long missionId, HttpServletRequest request, MissionRequestDto missionRequestDto) throws Exception {
         Member member = check.accessTokenCheck(request);
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
         Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(member, mission);
@@ -104,6 +100,5 @@ public class SubmitMissionService {
                 .mission(mission)
                 .build();
         submitMissionRepository.save(submitMission);
-        return new ResponseEntity<>(Message.success("전송 완료"),HttpStatus.OK);
-    }
+        }
 }

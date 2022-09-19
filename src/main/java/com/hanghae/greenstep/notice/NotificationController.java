@@ -2,6 +2,8 @@ package com.hanghae.greenstep.notice;
 
 
 import com.hanghae.greenstep.jwt.UserDetailsImpl;
+import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
+import com.hanghae.greenstep.notice.Dto.NotificationResponseDto;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -2,10 +2,8 @@ package com.hanghae.greenstep.rank;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
-import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.rank.Dto.MemberRankResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +17,9 @@ public class RankService {
 
     //n+1문제 없음
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getDailyRankMissionPoint(){
+    public List<MemberRankResponseDto> getDailyRankMissionPoint(){
         List<Member> memberDailyRankList = memberRepository.findTop3ByOrderByDailyMissionPointDesc();
-        List<MemberRankResponseDto> memberRankResponseDtoList = makePointRankList(memberDailyRankList);
-        return new ResponseEntity<>(Message.success(memberRankResponseDtoList), HttpStatus.OK);
+        return makePointRankList(memberDailyRankList);
     }
 
     public List<MemberRankResponseDto> makePointRankList(List<Member> memberRankList){

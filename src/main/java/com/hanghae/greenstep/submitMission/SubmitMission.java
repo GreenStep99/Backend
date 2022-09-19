@@ -68,8 +68,8 @@ public class SubmitMission extends Timestamped {
         this.adminName = adminName;
     }
 
-    public void makeOnFeed() {
-        this.onFeed = true;
+    public void toggleOnFeed() {
+        this.onFeed = !getOnFeed();
     }
 
     public void toggleOnHide() {

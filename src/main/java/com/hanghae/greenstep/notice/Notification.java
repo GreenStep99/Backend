@@ -1,11 +1,14 @@
 package com.hanghae.greenstep.notice;
 
 import com.hanghae.greenstep.member.Member;
+import com.hanghae.greenstep.shared.Timestamped;
 import com.hanghae.greenstep.shared.notice.NotificationContent;
 import com.hanghae.greenstep.shared.notice.NotificationType;
 import com.hanghae.greenstep.shared.notice.RelatedURL;
-import com.hanghae.greenstep.shared.Timestamped;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 

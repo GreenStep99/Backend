@@ -1,5 +1,6 @@
 package com.hanghae.greenstep.shared.mail;
 
+import com.hanghae.greenstep.shared.mail.Dto.MailDto;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;

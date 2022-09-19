@@ -1,25 +1,25 @@
 package com.hanghae.greenstep.admin;
 
 
+import com.hanghae.greenstep.admin.Dto.AdminLoginRequestDto;
+import com.hanghae.greenstep.admin.Dto.AdminLoginResponseDto;
+import com.hanghae.greenstep.admin.Dto.AdminTokenDto;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
-import com.hanghae.greenstep.missionStatus.MissionStatus;
-import com.hanghae.greenstep.missionStatus.MissionStatusRepository;
 import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.Message;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.notice.NotificationType;
+import com.hanghae.greenstep.submitMission.Dto.SubmitMissionResponseDto;
+import com.hanghae.greenstep.submitMission.MissionStatus;
+import com.hanghae.greenstep.submitMission.MissionStatusRepository;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
-import com.hanghae.greenstep.submitMission.SubmitMissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +46,7 @@ public class AdminService {
     private final NotificationService notificationService;
 
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getSubmitMission(HttpServletRequest request) {
+    public List<SubmitMissionResponseDto> getSubmitMission(HttpServletRequest request) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByOrderByCreatedAtAscFetchJoin();
@@ -67,11 +67,11 @@ public class AdminService {
                             .build()
             );
         }
-        return new ResponseEntity<>(Message.success(submitMissionResponseDtoList), HttpStatus.OK);
+        return submitMissionResponseDtoList;
     }
 
     //n+1 문제 없음
-    public ResponseEntity<?> login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
+    public AdminLoginResponseDto login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         blockSqlSentence(adminLoginRequestDto);
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -80,8 +80,7 @@ public class AdminService {
         }
         AdminTokenDto tokenDto = tokenProvider.generateTokenDto(admin);
         tokenToHeaders(tokenDto, response);
-        AdminLoginResponseDto adminLoginResponseDto = new AdminLoginResponseDto(admin.getId(), admin.getName());
-        return new ResponseEntity<>(Message.success(adminLoginResponseDto), HttpStatus.OK);
+        return new AdminLoginResponseDto(admin.getId(), admin.getName());
     }
 
     public void tokenToHeaders(AdminTokenDto tokenDto, HttpServletResponse response) {
@@ -92,16 +91,15 @@ public class AdminService {
 
     //n:1
     @Transactional
-    public ResponseEntity<?> verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, String info) {
+    public SubmitMissionResponseDto verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request,@Nullable String info) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
         SubmitMission submitMission = submitMissionRepository.findByIdFetchJoin(submitMissionId).orElseThrow(
                         () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
                 );
-        if(submitMission.getMember().getAcceptMail()) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
+        if(Boolean.TRUE.equals(submitMission.getMember().getAcceptMail())) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
-        SubmitMissionResponseDto submitMissionResponseDto = new SubmitMissionResponseDto(submitMission);
 
 //        //마이페이지로 이동하는 url
 //        String Url = "https://www.greenstepapp.com/mypage";
@@ -109,11 +107,11 @@ public class AdminService {
 //        String content = submitMission.getMember().getNickname()+"님! 미션 인증이 완료되었습니다!";
 //        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url);
 
-        return new ResponseEntity<>(Message.success(submitMissionResponseDto), HttpStatus.OK);
+        return new SubmitMissionResponseDto(submitMission);
     }
 
     //n+1 문제 없음
-    public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin, String info) {
+    public void changeMissionStatus(Status verification, SubmitMission submitMission, Member admin,@Nullable String info) {
         submitMission.update(verification, info, admin.getName());
         Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
         missionStatus.ifPresent(status -> status.update(verification));
