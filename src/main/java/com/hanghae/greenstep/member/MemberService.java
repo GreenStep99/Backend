@@ -1,12 +1,15 @@
 package com.hanghae.greenstep.member;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.jwt.RefreshTokenRepository;
 import com.hanghae.greenstep.jwt.TokenDto;
 import com.hanghae.greenstep.jwt.TokenProvider;
+import com.hanghae.greenstep.kakaoLogin.KakaoMemberInfoDto;
+import com.hanghae.greenstep.kakaoLogin.KakaoSocialService;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ public class MemberService {
     private final Check check;
     private final MemberRepository memberRepository;
 
+    private final KakaoSocialService kakaoSocialService;
 
     public ResponseEntity<?> refreshToken( HttpServletRequest request, HttpServletResponse response) {
         tokenProvider.validateToken(request.getHeader("Refresh_Token"));
@@ -81,5 +85,10 @@ public class MemberService {
     }
 
 
-
+    public KakaoPhotoDto getKakaoPhoto(HttpServletRequest request) throws JsonProcessingException {
+        String accessToken = request.getHeader("Kakao_Authorization");
+        KakaoMemberInfoDto kakaoMemberInfoDto = kakaoSocialService.getKakaoUserInfo(accessToken);
+        KakaoPhotoDto kakaoPhotoDto = new KakaoPhotoDto(kakaoMemberInfoDto.getProfilePhoto());
+        return kakaoPhotoDto;
+    }
 }

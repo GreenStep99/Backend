@@ -117,7 +117,7 @@ public class KakaoSocialService {
         return jsonNode.get("access_token").asText();
     }
 
-    private KakaoMemberInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+    public KakaoMemberInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
 
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
