@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,9 +61,12 @@ public class SubmitMissionService {
 
     @Transactional
     public ResponseEntity<?> hideMyMissions(Long[] missionsIdList, HttpServletRequest request) {
+        System.out.println(missionsIdList.length + "    "+ Arrays.toString(missionsIdList));
         Member member =check.accessTokenCheck(request);
         List<MyMissionsDto> myMissionsDtoList = new ArrayList<>();
+        System.out.println(missionsIdList.length + "    "+ Arrays.toString(missionsIdList));
         for(Long submitMissionId : missionsIdList) {
+            System.out.println(submitMissionId);
             SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
                     () -> new CustomException(ErrorCode.POST_NOT_FOUND)
             );

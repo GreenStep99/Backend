@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class SubmitMissionController {
 
     @PatchMapping("/profiles/missions")
     public ResponseEntity<?> hideMyMissions( @RequestBody Long[] missionsIdList, HttpServletRequest request){
+        System.out.println(missionsIdList.length + "    "+ Arrays.toString(missionsIdList));
         return submitMissionService.hideMyMissions(missionsIdList, request);
     }
 

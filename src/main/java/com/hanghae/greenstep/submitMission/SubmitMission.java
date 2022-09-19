@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
@@ -36,9 +37,11 @@ public class SubmitMission extends Timestamped {
     private String adminName;
 
     @Column
+    @NotAudited
     private Boolean onFeed;
 
     @Column
+    @NotAudited
     private Boolean onHide;
 
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
@@ -70,7 +73,6 @@ public class SubmitMission extends Timestamped {
     }
 
     public void toggleOnHide() {
-        if (getOnHide()) this.onHide = false;
-        if (!getOnHide()) this.onHide = true;
+        this.onHide = !getOnHide();
     }
 }
