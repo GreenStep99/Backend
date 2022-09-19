@@ -116,7 +116,7 @@ public class Member extends Timestamped {
 
     public void update(MemberRequestDto memberRequestDto){
         if (memberRequestDto.getName() == null) this.name = "이름을 입력해주세요";
-        if (memberRequestDto.getName() != null) this.name = memberRequestDto.getName();
+        else this.name = memberRequestDto.getName();
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
         if (memberRequestDto.getAcceptMail() != null) this.acceptMail = memberRequestDto.getAcceptMail();
