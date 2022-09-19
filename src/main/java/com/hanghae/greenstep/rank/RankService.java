@@ -19,10 +19,9 @@ public class RankService {
 
     //n+1문제 없음
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getDailyRankMissionPoint(){
+    public List<MemberRankResponseDto> getDailyRankMissionPoint(){
         List<Member> memberDailyRankList = memberRepository.findTop3ByOrderByDailyMissionPointDesc();
-        List<MemberRankResponseDto> memberRankResponseDtoList = makePointRankList(memberDailyRankList);
-        return new ResponseEntity<>(Message.success(memberRankResponseDtoList), HttpStatus.OK);
+        return makePointRankList(memberDailyRankList);
     }
 
     public List<MemberRankResponseDto> makePointRankList(List<Member> memberRankList){

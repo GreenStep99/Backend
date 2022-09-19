@@ -31,7 +31,7 @@ public class KakaoShareService {
 
     private final FeedRepository feedRepository;
 
-    public ResponseEntity<?> shareKakaoToME(Long feedId, HttpServletRequest request) throws JsonProcessingException {
+    public void shareKakaoToME(Long feedId, HttpServletRequest request) throws JsonProcessingException {
         log.info("돈다");
         String accessToken = request.getHeader("Kakao_Authorization");
         HttpHeaders headers = new HttpHeaders();
@@ -44,7 +44,7 @@ public class KakaoShareService {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("template_object", kakaoTemplateDto);
         // HTTP 요청 보내기
-         HttpEntity<MultiValueMap<String, Object>> kakaoShareRequest = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, Object>> kakaoShareRequest = new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
                 "https://kapi.kakao.com/v2/api/talk/memo/scrap/send" ,
@@ -53,11 +53,11 @@ public class KakaoShareService {
                 String.class
         );
         log.info("거의 성공");
-        return getResponseEntity(response);
+        sendKakaoMessage(response);
     }
 
 
-    public ResponseEntity<?> shareKakaoToFriends(Long feedId, String[] kakaoFriends,HttpServletRequest request) throws JsonProcessingException {
+    public void shareKakaoToFriends(Long feedId, String[] kakaoFriends,HttpServletRequest request) throws JsonProcessingException {
         String accessToken = request.getHeader("Kakao_Authorization");
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -80,16 +80,15 @@ public class KakaoShareService {
                 kakaoShareRequest,
                 String.class
         );
-        return getResponseEntity(response);
+        sendKakaoMessage(response);
     }
 
-    private ResponseEntity<?> getResponseEntity(ResponseEntity<String> response) throws JsonProcessingException {
+    private void sendKakaoMessage(ResponseEntity<String> response) throws JsonProcessingException {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         int result = jsonNode.get("result_code").asInt();
         if(result == 1)throw new CustomException(ErrorCode.SHARE_FAILURE);
-        return new ResponseEntity<>(Message.success("카카오톡 메세지가 성공적으로 전달되었습니다."), HttpStatus.OK);
     }
 
     public KakaoTemplateDto boxKakaoTemplate(Feed feed, String[] friendList){

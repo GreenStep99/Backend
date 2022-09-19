@@ -158,7 +158,7 @@ public class KakaoSocialService {
 
 
     @Transactional
-    public ResponseEntity<?> kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
+    public void kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
         Member member = check.accessTokenCheck(request);
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
         RestTemplate rt = new RestTemplate();
@@ -173,12 +173,11 @@ public class KakaoSocialService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
         if(Objects.equals(member.getKakaoId(), id)) refreshTokenRepository.deleteByMember(member);
-        return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
     }
 
 
     @Transactional
-    public ResponseEntity<?> deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
+    public void deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
         Member member = check.accessTokenCheck(request);
         Long memberId = member.getId();
         memberRepository.deleteById(memberId);
@@ -196,7 +195,6 @@ public class KakaoSocialService {
         Long kakaoId = jsonNode.get("id").asLong();
         if (Objects.equals(member.getKakaoId(), kakaoId)) {
             refreshTokenRepository.deleteByMember(member);
-            return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
         } else throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
@@ -208,8 +206,5 @@ public class KakaoSocialService {
         // HTTP 요청 보내기
         return new HttpEntity<>(headers);
     }
-
-
-
 }
 

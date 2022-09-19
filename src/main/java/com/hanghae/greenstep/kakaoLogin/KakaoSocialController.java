@@ -34,10 +34,12 @@ public class KakaoSocialController {
 
     @GetMapping("/kakao/logout")
     public ResponseEntity<?> kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
-        return kakaoSocialService.kakaoLogout(request);
+        kakaoSocialService.kakaoLogout(request);
+        return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
     }
     @PostMapping("/kakao/unregister")
     public ResponseEntity<?> deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
-        return kakaoSocialService.deleteMemberInfo(request);
+        kakaoSocialService.deleteMemberInfo(request);
+        return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
     }
 }
