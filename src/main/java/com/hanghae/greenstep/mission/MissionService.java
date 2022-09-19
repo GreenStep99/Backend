@@ -37,29 +37,29 @@ public class MissionService {
 
     //n+1문제 없음
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getDailyMissions(HttpServletRequest request) {
+    public List<MissionResponseDto> getDailyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<Mission> missionList = missionRepository.findDailyMissionByOnShow();
-        return getResponseEntity(missionList, member);
+        return getMissionResponseDto(missionList, member);
     }
 
     //n+1문제 없음
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getWeeklyMissions(HttpServletRequest request) {
+    public List<MissionResponseDto> getWeeklyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<Mission> missionList = missionRepository.findWeeklyMissionByOnShow();
-        return getResponseEntity(missionList, member);
+        return getMissionResponseDto(missionList, member);
     }
 
     //n+1문제 없음
     @Transactional(readOnly = true)
-    public ResponseEntity<?> getTodayMission(HttpServletRequest request) {
+    public List<MissionResponseDto> getTodayMission(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<Mission> missionList = missionRepository.findTodayMissionByOnShow();
-        return getResponseEntity(missionList, member);
+        return getMissionResponseDto(missionList, member);
     }
 
-    private ResponseEntity<?> getResponseEntity(List<Mission> missionList, Member member) {
+    private List<MissionResponseDto> getMissionResponseDto(List<Mission> missionList, Member member) {
         List<MissionResponseDto> missionResponseDtoList = new ArrayList<>();
         for (Mission mission : missionList) {
             Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(member, mission);
@@ -78,7 +78,7 @@ public class MissionService {
                             .build()
             );
         }
-        return new ResponseEntity<>(Message.success(missionResponseDtoList), HttpStatus.OK);
+        return missionResponseDtoList;
     }
 
     //n+1문제 없음

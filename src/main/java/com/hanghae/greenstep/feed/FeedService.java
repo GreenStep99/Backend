@@ -31,7 +31,7 @@ public class FeedService {
 
     //n+1 문제 없음
     @Transactional
-    public ResponseEntity<?> createFeed(Long submitMissionId, String content, HttpServletRequest request) {
+    public FeedResponseDto createFeed(Long submitMissionId, String content, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         SubmitMission submitMission = submitMissionRepository.findById(submitMissionId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
@@ -46,23 +46,21 @@ public class FeedService {
                 .build();
         feedRepository.save(feed);
         submitMission.makeOnFeed();
-        FeedResponseDto feedResponseDto = new FeedResponseDto(feed);
-        return new ResponseEntity<>(Message.success(feedResponseDto), HttpStatus.OK);
+        return new FeedResponseDto(feed);
     }
 
     //n:1
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getFeed(Long lastFeedId, HttpServletRequest request) {
+    public List<FeedResponseDto> getFeed(Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
         List<Feed> feedList = feedRepository.findByIdLessThanOrderByIdDesc(lastFeedId, pageRequest);
-        List<FeedResponseDto> feedResponseDtoList = makeFeedList(feedList, member);
-        return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
+        return makeFeedList(feedList, member);
     }
 
     //n:1
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getFeedByTag(String tag, Long lastFeedId, HttpServletRequest request) {
+    public List<FeedResponseDto> getFeedByTag(String tag, Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
         String tagName = switch (tag) {
@@ -75,17 +73,15 @@ public class FeedService {
             default -> throw new CustomException(ErrorCode.INVALID_VALUE);
         };
         List<Feed> feedList = feedRepository.findByIdLessThanAndTagOrderByIdDesc(lastFeedId, tagName, pageRequest);
-         List<FeedResponseDto> feedResponseDtoList = makeFeedList(feedList, member);
-        return new ResponseEntity<>(Message.success(feedResponseDtoList), HttpStatus.OK);
+        return makeFeedList(feedList, member);
     }
 
     //n:1
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getMyFeed(HttpServletRequest request) {
+    public List<FeedResponseDto> getMyFeed(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<Feed> feedList = feedRepository.findAllByMemberFetchJoin(member);
-        List<FeedResponseDto> feedResponseDtoList = makeFeedList(feedList, member);
-        return new ResponseEntity<>(Message.success(feedResponseDtoList),HttpStatus.OK);
+        return makeFeedList(feedList, member);
     }
 
     //n:1 n+1 문제 원인이 되는 메소드
@@ -112,7 +108,7 @@ public class FeedService {
     }
 
     //n+1문제 없음
-    public ResponseEntity<?> deleteFeeds(Long[] feedIdList, HttpServletRequest request) {
+    public void deleteFeeds(Long[] feedIdList, HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         for(Long feedId : feedIdList) {
             Feed feed = feedRepository.findById(feedId).orElseThrow(
@@ -121,19 +117,17 @@ public class FeedService {
             check.checkMember(feed, member);
             feedRepository.delete(feed);
         }
-        return new ResponseEntity<>(Message.success("삭제되었습니다."),HttpStatus.OK);
     }
 
     //n+1문제 없음
-    public ResponseEntity<?> updateFeed(Long feedId, String content, HttpServletRequest request) {
+    public FeedResponseDto updateFeed(Long feedId, String content, HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
         Feed feed =feedRepository.findById(feedId).orElseThrow(
                 () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
         );
         check.checkMember(feed, member);
         feed.update(content);
-        FeedResponseDto feedResponseDto = new FeedResponseDto(feed);
-        return new ResponseEntity<>(Message.success(feedResponseDto),HttpStatus.OK);
+        return new FeedResponseDto(feed);
     }
 
 }

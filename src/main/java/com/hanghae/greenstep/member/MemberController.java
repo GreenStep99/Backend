@@ -20,17 +20,20 @@ public class MemberController {
 
     @PatchMapping("/info")
     public ResponseEntity<?> updateMemberInfo(@RequestBody MemberRequestDto memberRequestDto,HttpServletRequest request){
-        return memberService.updateMemberInfo(memberRequestDto,request);
+        MemberResponseDto memberResponseDto = memberService.updateMemberInfo(memberRequestDto,request);
+        return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
     }
 
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refreshTokenCheck(HttpServletRequest request, HttpServletResponse response){
-        return memberService.refreshToken(request, response);
+        memberService.refreshToken(request, response);
+        return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
     }
 
     @GetMapping("/info")
     public ResponseEntity<?> getProfileInfo(HttpServletRequest request){
-        return memberService.getMemberInfo(request);
+        MemberResponseDto memberResponseDto = memberService.getMemberInfo(request);
+        return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
     }
 
     @GetMapping("/kakaoProfilePhoto")

@@ -16,9 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +32,7 @@ public class MemberService {
 
     private final KakaoSocialService kakaoSocialService;
 
-    public ResponseEntity<?> refreshToken( HttpServletRequest request, HttpServletResponse response) {
+    public void refreshToken( HttpServletRequest request, HttpServletResponse response) {
         tokenProvider.validateToken(request.getHeader("Refresh_Token"));
         Member requestingMember = validateMember(request);
         long accessTokenExpire = Long.parseLong(request.getHeader("Access_Token_Expire_Time"));
@@ -48,9 +45,7 @@ public class MemberService {
                 ()-> new CustomException(ErrorCode.REFRESH_TOKEN_IS_EXPIRED));
         if (Objects.equals(refreshTokenConfirm.getValue(), request.getHeader("Refresh_Token"))) {
             TokenDto tokenDto = tokenProvider.generateAccessTokenDto(requestingMember);
-            accessTokenToHeaders(tokenDto, response);
-            return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
-        }
+            accessTokenToHeaders(tokenDto, response);}
         tokenProvider.deleteRefreshToken(requestingMember);
         throw new CustomException(ErrorCode.INVALID_TOKEN);
 
@@ -61,13 +56,12 @@ public class MemberService {
     }
 
     @Transactional
-    public ResponseEntity<?> updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
+    public MemberResponseDto updateMemberInfo(MemberRequestDto memberRequestDto, HttpServletRequest request) {
         Member member = memberRepository.findByEmail(check.accessTokenCheck(request).getEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
         member.update(memberRequestDto);
-        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
-    return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
+        return new MemberResponseDto(member);
     }
 
     public Member validateMember(HttpServletRequest request) {
@@ -78,17 +72,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly=true)
-    public ResponseEntity<?> getMemberInfo(HttpServletRequest request) {
+    public MemberResponseDto getMemberInfo(HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
-        MemberResponseDto memberResponseDto = new MemberResponseDto(member);
-        return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
-    }
+        return new MemberResponseDto(member);}
 
 
     public KakaoPhotoDto getKakaoPhoto(HttpServletRequest request) throws JsonProcessingException {
         String accessToken = request.getHeader("Kakao_Authorization");
         KakaoMemberInfoDto kakaoMemberInfoDto = kakaoSocialService.getKakaoUserInfo(accessToken);
-        KakaoPhotoDto kakaoPhotoDto = new KakaoPhotoDto(kakaoMemberInfoDto.getProfilePhoto());
-        return kakaoPhotoDto;
+        return new KakaoPhotoDto(kakaoMemberInfoDto.getProfilePhoto());
     }
 }

@@ -26,7 +26,7 @@ public class ClapService {
     private final NotificationService notificationService;
     //n+1 문제 없음
     @Transactional
-    public ResponseEntity<?> toggleClap(Long feedId, HttpServletRequest request) {
+    public boolean toggleClap(Long feedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         Feed feed = feedRepository.findById(feedId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND));
@@ -43,11 +43,11 @@ public class ClapService {
 //            //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송
 //            String content = clap.getFeed().getMember().getNickname()+"님! 박수를 받으셨습니다.";
 //            notificationService.send(clap.getFeed().getMember(), NotificationType.PRAISE, content, Url);
-            return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
+            return true;
         }
             clapRepository.deleteById(foundClap.getId());
             Integer clapCount = clapRepository.countByFeed(feed);
             feed.update(clapCount);
-            return new ResponseEntity<>(Message.success(false), HttpStatus.OK);
+            return false;
     }
 }
