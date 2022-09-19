@@ -4,6 +4,8 @@ import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.UserDetailsImpl;
 import com.hanghae.greenstep.member.Member;
+import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
+import com.hanghae.greenstep.notice.Dto.NotificationResponseDto;
 import com.hanghae.greenstep.shared.notice.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -38,7 +40,6 @@ public class NotificationService {
         if (hasLostData(lastEventId)) {
             sendLostData(lastEventId, userId, emitterId, emitter);
         }
-
         return emitter;
     }
 

@@ -4,9 +4,11 @@ package com.hanghae.greenstep.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.jwt.RefreshToken;
-import com.hanghae.greenstep.missionStatus.MissionStatus;
+import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Timestamped;
+import com.hanghae.greenstep.kakaoAPI.PushStatus;
+import com.hanghae.greenstep.submitMission.MissionStatus;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +22,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static com.hanghae.greenstep.member.PushStatus.ALL;
-import static com.hanghae.greenstep.member.PushStatus.APNS;
+import static com.hanghae.greenstep.kakaoAPI.PushStatus.ALL;
+import static com.hanghae.greenstep.kakaoAPI.PushStatus.APNS;
 
 @Entity
 @AllArgsConstructor
@@ -68,7 +70,7 @@ public class Member extends Timestamped {
     private Boolean acceptMail;
 
     @Column
-    private PushStatus pushAlert;
+    private PushStatus pushStatus;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
@@ -95,9 +97,9 @@ public class Member extends Timestamped {
         this.profilePhoto = profilePhoto;
         this.type = type;
         this.acceptMail = acceptMail;
+        this.pushStatus = ALL;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
-        this.pushAlert = ALL;
     }
 
     public Member(long l) {
@@ -119,10 +121,12 @@ public class Member extends Timestamped {
 
 
     public void update(MemberRequestDto memberRequestDto){
-        if (memberRequestDto.getName() != null) this.name = memberRequestDto.getName();
+        if (memberRequestDto.getName() == null) this.name = "이름을 입력해주세요";
+        else this.name = memberRequestDto.getName();
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
         if (memberRequestDto.getAcceptMail() != null) this.acceptMail = memberRequestDto.getAcceptMail();
+        if (memberRequestDto.getPushStatus()!=getPushStatus())this.pushStatus = memberRequestDto.getPushStatus();
     }
 
     public void resetDailyPoint(){
@@ -147,6 +151,6 @@ public class Member extends Timestamped {
     }
 
     public void deprecatePushSystem() {
-        this.pushAlert = APNS;
+        this.pushStatus = APNS;
     }
 }

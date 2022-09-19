@@ -1,4 +1,5 @@
 ### GREEN STEP
+![003](https://user-images.githubusercontent.com/108536712/190843747-b6555f56-30e2-452d-9279-c25f704570bc.png)
 우리가 그리는 푸른 발자국이 지구를 구하도록 
 하루하루 일상 속에서 지구를 지키는 한 발, 그린 스탭. 
 
@@ -17,6 +18,7 @@
 - **프론트엔드**
 
 ## 핵심기능
+![004](https://user-images.githubusercontent.com/108536712/190843752-6c950e4e-0f9c-49b0-8795-d70d40abcb5e.png)
 
 ```
 1. 마이 페이지 기능

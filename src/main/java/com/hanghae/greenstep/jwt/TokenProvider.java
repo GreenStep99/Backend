@@ -1,8 +1,9 @@
 package com.hanghae.greenstep.jwt;
 
-import com.hanghae.greenstep.admin.AdminTokenDto;
+import com.hanghae.greenstep.admin.Dto.AdminTokenDto;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+import com.hanghae.greenstep.jwt.Dto.TokenDto;
 import com.hanghae.greenstep.member.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -28,7 +29,7 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
-    public static final long ACCESS_TOKEN_EXPIRE_TIME = 304800000;
+    public static final long ACCESS_TOKEN_EXPIRE_TIME = 104800000;
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 604800000;
 
     private final Key key;
