@@ -1,7 +1,6 @@
 package com.hanghae.greenstep.clap;
 
 import com.hanghae.greenstep.feed.Feed;
-import com.hanghae.greenstep.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

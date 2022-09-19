@@ -2,7 +2,6 @@ package com.hanghae.greenstep.member;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.missionStatus.MissionStatus;
@@ -20,6 +19,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
+import static com.hanghae.greenstep.member.PushStatus.ALL;
+import static com.hanghae.greenstep.member.PushStatus.APNS;
 
 @Entity
 @AllArgsConstructor
@@ -62,13 +64,14 @@ public class Member extends Timestamped {
     @Column
     private Long dailyMissionPoint;
 
-
     @Column
     private Boolean acceptMail;
 
+    @Column
+    private PushStatus pushAlert;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
-
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<MissionStatus> missionStatusSet;
@@ -94,6 +97,7 @@ public class Member extends Timestamped {
         this.acceptMail = acceptMail;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
+        this.pushAlert = ALL;
     }
 
     public Member(long l) {
@@ -142,4 +146,7 @@ public class Member extends Timestamped {
         return passwordEncoder.matches(password,this.password);
     }
 
+    public void deprecatePushSystem() {
+        this.pushAlert = APNS;
+    }
 }

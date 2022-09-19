@@ -1,43 +1,40 @@
 package com.hanghae.greenstep.configuration;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
-import javax.annotation.PostConstruct;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.IOException;
 
 @Configuration
 public class FirebaseConfiguration {
     private final Logger logger = LoggerFactory.getLogger(FirebaseConfiguration.class);
 
-    @Value("${firebase-sdk-path}") // your firebase sdk path
-    private String firebaseSdkPath;
+    FirebaseOptions options = FirebaseOptions.builder()
+            .setCredentials(GoogleCredentials.getApplicationDefault())
+            .setDatabaseUrl("firebase-adminsdk-utsuy@greenstep-6c162.iam.gserviceaccount.com/")
+            .build();
 
-    @PostConstruct
-    public void initialize() {
-        try {
 
-            ClassPathResource resource = new ClassPathResource(firebaseSdkPath);
-            InputStream serviceAccount = resource.getInputStream();
-            // 2021.06.23 FirebaseOptions 생성자가 Deprecated 되었기 때문에 builder 수정.
-            // 2022.01.04 공식홈페이지에서 제대로 수정됨
-            FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .build();
-            FirebaseApp.initializeApp(options);
+    // This registration token comes from the client FCM SDKs.
+    String registrationToken = "YOUR_REGISTRATION_TOKEN";
 
-        } catch (FileNotFoundException e) {
-            logger.error("Firebase ServiceAccountKey FileNotFoundException" + e.getMessage());
-        } catch (IOException e) {
-            logger.error("FirebaseOptions IOException" + e.getMessage());
-        }
+    // See documentation on defining a message payload.
+    Message message = Message.builder()
+            .putData("score", "850")
+            .putData("time", "2:45")
+            .setToken(registrationToken)
+            .build();
 
+    // Send a message to the device corresponding to the provided
+// registration token.
+    String response = FirebaseMessaging.getInstance().send(message);
+
+    public FirebaseConfiguration() throws FirebaseMessagingException, IOException {
     }
 }
