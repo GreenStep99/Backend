@@ -2,6 +2,7 @@ package com.hanghae.greenstep.submitMission;
 
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+import com.hanghae.greenstep.feed.FeedRepository;
 import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Dto.MissionRequestDto;
@@ -30,6 +31,7 @@ public class SubmitMissionService {
     private final MissionRepository missionRepository;
     private final MissionStatusRepository missionStatusRepository;
     private final ImageService imageService;
+    private final FeedRepository feedRepository;
 
     @Transactional(readOnly=true)
     public List<MyMissionsDto> getMyMissions(HttpServletRequest request) {
@@ -64,6 +66,8 @@ public class SubmitMissionService {
             );
             check.checkMember(submitMission, member);
             submitMission.toggleOnHide();
+            if(feedRepository.existsBySubmitMissionId(submitMissionId))
+                feedRepository.findBySubmitMissionId(submitMissionId).toggleFeedOnHide();
             MyMissionsDto myMissionsDto =new MyMissionsDto(submitMission);
             myMissionsDtoList.add(myMissionsDto);
         }
