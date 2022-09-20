@@ -32,7 +32,7 @@ public class MemberController {
         return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
     }
 
-    @GetMapping("/kakaoProfilePhoto")
+    @GetMapping("/kakao-profile-photo")
     public ResponseEntity<?> getKakaoPhoto(HttpServletRequest request) throws JsonProcessingException {
         KakaoPhotoDto kakaoPhotoDto = memberService.getKakaoPhoto(request);
         return new ResponseEntity<>(Message.success(kakaoPhotoDto), HttpStatus.OK);

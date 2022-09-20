@@ -34,14 +34,14 @@ public class KakaoShareService {
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
         log.info("헤더 생성완료");
-        Feed feed = feedRepository.findById(feedId).orElseThrow( () -> new CustomException(ErrorCode.FEED_NOT_FOUND));
-        log.info("곧 된다");
+
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("template_id","82089");
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, Object>> kakaoShareRequest = new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
-                "https://kapi.kakao.com/v2/api/talk/memo/scrap/send" ,
+                "https://kapi.kakao.com/v2/api/talk/memo/send",
                 HttpMethod.POST,
                 kakaoShareRequest,
                 String.class

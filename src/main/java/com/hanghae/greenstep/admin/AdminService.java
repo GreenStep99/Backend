@@ -12,6 +12,7 @@ import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Status;
+import com.hanghae.greenstep.shared.notice.NotificationType;
 import com.hanghae.greenstep.submitMission.Dto.SubmitMissionResponseDto;
 import com.hanghae.greenstep.submitMission.Dto.VerificationInfoDto;
 import com.hanghae.greenstep.submitMission.MissionStatus;
@@ -103,11 +104,11 @@ public class AdminService {
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
 
-//        //마이페이지로 이동하는 url
-//        String Url = "https://www.greenstepapp.com/mypage";
-//        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
-//        String content = submitMission.getMember().getNickname()+"님! 미션 인증이 완료되었습니다!";
-//        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url);
+        //마이페이지로 이동하는 url
+        String Url = "https://www.greenstepapp.com/mypage";
+        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
+        String content = submitMission.getMember().getNickname()+"님! 미션 인증이 완료되었습니다!";
+        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url);
 
         return new SubmitMissionResponseDto(submitMission);
     }

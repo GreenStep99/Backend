@@ -18,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.hanghae.greenstep.shared.Status.DONE;
+import static com.hanghae.greenstep.shared.Status.WAITING;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -39,8 +42,9 @@ public class MemberService {
     @Transactional(readOnly=true)
     public MemberResponseDto getMemberInfo(HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
-        int missionCount = submitMissionRepository.countByMember(member);
-        return new MemberResponseDto(member, missionCount);}
+        int missionCount = submitMissionRepository.countByMemberAndStatus(member, DONE);
+        int waitingMissionCount = submitMissionRepository.countByMemberAndStatus(member, WAITING);
+        return new MemberResponseDto(member, missionCount, waitingMissionCount);}
 
 
     public KakaoPhotoDto getKakaoPhoto(HttpServletRequest request) throws JsonProcessingException {

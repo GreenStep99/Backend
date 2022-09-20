@@ -5,10 +5,7 @@ import com.hanghae.greenstep.shared.Timestamped;
 import com.hanghae.greenstep.shared.notice.NotificationContent;
 import com.hanghae.greenstep.shared.notice.NotificationType;
 import com.hanghae.greenstep.shared.notice.RelatedURL;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,7 +14,6 @@ import javax.persistence.*;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@EqualsAndHashCode(of = "id")
 public class Notification extends Timestamped {
 
     @Id
