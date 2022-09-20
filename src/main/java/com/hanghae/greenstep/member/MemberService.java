@@ -11,6 +11,7 @@ import com.hanghae.greenstep.kakaoAPI.KakaoSocialService;
 import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.member.Dto.MemberResponseDto;
 import com.hanghae.greenstep.shared.Check;
+import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class MemberService {
     private final TokenProvider tokenProvider;
     private final Check check;
     private final MemberRepository memberRepository;
+    private final SubmitMissionRepository submitMissionRepository;
     private final KakaoSocialService kakaoSocialService;
 
     @Transactional
@@ -37,7 +39,8 @@ public class MemberService {
     @Transactional(readOnly=true)
     public MemberResponseDto getMemberInfo(HttpServletRequest request) {
         Member member =check.accessTokenCheck(request);
-        return new MemberResponseDto(member);}
+        int missionCount = submitMissionRepository.countByMember(member);
+        return new MemberResponseDto(member, missionCount);}
 
 
     public KakaoPhotoDto getKakaoPhoto(HttpServletRequest request) throws JsonProcessingException {
