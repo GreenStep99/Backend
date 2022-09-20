@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
-import com.hanghae.greenstep.jwt.RefreshTokenRepository;
 import com.hanghae.greenstep.jwt.Dto.TokenDto;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.jwt.UserDetailsImpl;
@@ -52,7 +51,6 @@ public class KakaoSocialService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final Check check;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     public TokenDto kakaoLogin(String code) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -176,8 +174,7 @@ public class KakaoSocialService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
-        if(Objects.equals(member.getKakaoId(), id)) refreshTokenRepository.deleteByMember(member);
-    }
+     }
 
 
     @Transactional
@@ -196,10 +193,8 @@ public class KakaoSocialService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        Long kakaoId = jsonNode.get("id").asLong();
-        if (Objects.equals(member.getKakaoId(), kakaoId)) {
-            refreshTokenRepository.deleteByMember(member);
-        } else throw new CustomException(ErrorCode.INVALID_TOKEN);
+        long id = jsonNode.get("id").asLong();
+        log.info(id+"번 회원 탈퇴 완료");
     }
 
     public HttpEntity<MultiValueMap<String, String>> kakaoTokenHeaderMaker(HttpServletRequest request){

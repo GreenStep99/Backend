@@ -85,7 +85,6 @@ public class AdminService {
 
     public void tokenToHeaders(AdminTokenDto tokenDto, HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + tokenDto.getAccessToken());
-        response.addHeader("Refresh_Token", tokenDto.getRefreshToken());
         response.addHeader("Access_Token_Expire_Time", tokenDto.getAccessTokenExpiresIn().toString());
     }
 
