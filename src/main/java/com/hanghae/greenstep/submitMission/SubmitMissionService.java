@@ -4,6 +4,9 @@ import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.feed.FeedRepository;
 import com.hanghae.greenstep.image.ImageService;
+import com.hanghae.greenstep.kakaoAPI.Dto.CustomFieldDto;
+import com.hanghae.greenstep.kakaoAPI.Dto.PushContentDto;
+import com.hanghae.greenstep.kakaoAPI.KakaoPushAlertService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Dto.MissionRequestDto;
 import com.hanghae.greenstep.mission.Mission;
@@ -32,6 +35,7 @@ public class SubmitMissionService {
     private final MissionStatusRepository missionStatusRepository;
     private final ImageService imageService;
     private final FeedRepository feedRepository;
+    private final KakaoPushAlertService pushAlertService;
 
     @Transactional(readOnly=true)
     public List<MyMissionsDto> getMyMissions(HttpServletRequest request) {
@@ -100,5 +104,8 @@ public class SubmitMissionService {
                 .mission(mission)
                 .build();
         submitMissionRepository.save(submitMission);
+        PushContentDto pushContentDto = new PushContentDto("테스트","test");
+        CustomFieldDto customFieldDto = new CustomFieldDto(1,2);
+        pushAlertService.sendPushAlert(member, customFieldDto, pushContentDto);
         }
 }

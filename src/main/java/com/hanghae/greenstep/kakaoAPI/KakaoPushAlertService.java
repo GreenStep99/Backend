@@ -21,6 +21,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,46 +31,46 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class KakaoPushAlertService {
+    private final FcmService fcmService;
 
     @Value("${kakao_admin_key}")
     String adminKey;
 
 
-    public void requestPushToken(Member member) throws JsonProcessingException {
-        String accessToken = "KakaoAK " + adminKey;
+    public void requestPushToken(Member member) throws IOException {
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-
-        String deviceId = member.getId() + UUID.randomUUID().toString();
-
+        headers.add("Authorization","KakaoAK "+ adminKey);
+        headers.add("Content-type", "application/x-www-form-urlencoded");
+        log.info("달리다");
+        String pushToken = FcmService.getAccessToken();
+        log.info(pushToken);
+        String deviceId = UUID.randomUUID().toString();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("uuid", member.getKakaoId());
+        body.add("uuid", member.getKakaoId().toString());
         body.add("device_id", deviceId);
-
+        body.add("push_type", "fcm");
+        body.add("push_token", pushToken);
+        log.info("통과");
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, Object>> kakaoPushTokenRequest =
                 new HttpEntity<>(body, headers);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
-                "https://kapi.kakao.com/v2/push/tokens",
+                "https://kapi.kakao.com/v2/push/register",
                 HttpMethod.POST,
                 kakaoPushTokenRequest,
                 String.class
         );
         String responseBody = response.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(responseBody);
-        String pushType = jsonNode.get("push_type").asText();
-        if (Objects.equals(pushType, "apns")) member.deprecatePushSystem();
+        log.info(responseBody);
         log.info("푸시토큰 발급 완료");
     }
 
     @Transactional
     public void sendPushAlert(Member member, CustomFieldDto customFieldDto, PushContentDto pushContentDto) throws JsonProcessingException {
-        String accessToken = "KakaoAK " + adminKey;
+
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Authorization","KakaoAK "+ adminKey);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         PushTokenDto pushTokenDto = getPushToken(member, headers);
@@ -99,9 +100,9 @@ public class KakaoPushAlertService {
 
     @Transactional
     public void deletePushToken(Member member) throws JsonProcessingException {
-        String accessToken = "KakaoAK " + adminKey;
+
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Authorization","KakaoAK "+ adminKey);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
         PushTokenDto pushTokenDto = getPushToken(member, headers);
@@ -125,7 +126,7 @@ public class KakaoPushAlertService {
     }
 
     public PushTokenDto getPushToken(Member member, HttpHeaders headers) throws JsonProcessingException {
-
+        log.info("푸시토큰 가져오기");
         MultiValueMap<String, Object> tokenCheckBody = new LinkedMultiValueMap<>();
         tokenCheckBody.add("uuid", member.getKakaoId());
 

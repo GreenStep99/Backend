@@ -84,6 +84,4 @@ public class MemberService {
         return new KakaoPhotoDto(kakaoMemberInfoDto.getProfilePhoto());
     }
 
-
-
 }

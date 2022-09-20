@@ -5,6 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/src/main/resources/application.properties
+**/resources/greenstep-6c162-firebase-adminsdk-utsuy-3ff8afb228.json
 ### STS ###
 .apt_generated
 .classpath

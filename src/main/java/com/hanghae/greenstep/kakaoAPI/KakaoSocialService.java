@@ -34,6 +34,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -53,8 +54,9 @@ public class KakaoSocialService {
     private final TokenProvider tokenProvider;
     private final Check check;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final KakaoPushAlertService pushAlertService;
 
-    public TokenDto kakaoLogin(String code) throws JsonProcessingException {
+    public TokenDto kakaoLogin(String code) throws IOException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
         // 2. 토큰으로 카카오 API 호출
@@ -91,6 +93,7 @@ public class KakaoSocialService {
         Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(
                 () -> new CustomException(ErrorCode.INVALID_MEMBER_INFO)
         );
+        pushAlertService.requestPushToken(member);
         return tokenProvider.generateTokenDto(member, newComer, accessToken);
     }
 

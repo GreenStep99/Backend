@@ -21,4 +21,9 @@ public class PushContentDto {
             this.content = "자시 한번 도전해 주세요!";
         }
     }
+
+    public PushContentDto(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 }
