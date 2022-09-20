@@ -1,6 +1,6 @@
 package com.hanghae.greenstep.mission;
 
-import com.hanghae.greenstep.image.ImageService;
+import com.hanghae.greenstep.submitMission.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Dto.MissionResponseDto;
 import com.hanghae.greenstep.shared.Check;

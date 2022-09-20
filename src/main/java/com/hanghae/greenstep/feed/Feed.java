@@ -42,8 +42,14 @@ public class Feed extends Timestamped {
     @Column
     private String tag;
 
+    @Column(unique = true)
+    private Long submitMissionId;
+
+    @Column
+    private Boolean onHide;
+
     @Builder
-    public Feed(Member member, String missionName, String imgUrl, String content, String tag){
+    public Feed(Member member, String missionName, String imgUrl, String content, String tag, Long submitMissionId){
         this.id = getId();
         this.member = member;
         this.missionName = missionName;
@@ -51,6 +57,8 @@ public class Feed extends Timestamped {
         this.content = content;
         this.clapCount = 0;
         this.tag = tag;
+        this.submitMissionId = submitMissionId;
+        this.onHide = false;
     }
 
     public void update(Integer clapCount){
@@ -59,5 +67,9 @@ public class Feed extends Timestamped {
 
     public void update(String content){
         if(content != null) this.content = content;
+    }
+
+    public void toggleFeedOnHide() {
+        this.onHide = !getOnHide();
     }
 }

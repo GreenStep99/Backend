@@ -3,7 +3,6 @@ package com.hanghae.greenstep.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.greenstep.feed.Feed;
-import com.hanghae.greenstep.jwt.RefreshToken;
 import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Timestamped;
@@ -74,10 +73,6 @@ public class Member extends Timestamped {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<SubmitMission> submitMissionList;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
-    private RefreshToken refreshToken;
-
     @Builder
     public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type, Boolean acceptMail) {
         this.id =getId();
@@ -114,7 +109,7 @@ public class Member extends Timestamped {
 
     public void update(MemberRequestDto memberRequestDto){
         if (memberRequestDto.getName() == null) this.name = "이름을 입력해주세요";
-        if (memberRequestDto.getName() != null) this.name = memberRequestDto.getName();
+        else this.name = memberRequestDto.getName();
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
         if (memberRequestDto.getAcceptMail() != null) this.acceptMail = memberRequestDto.getAcceptMail();

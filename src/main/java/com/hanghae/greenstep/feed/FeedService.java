@@ -41,9 +41,10 @@ public class FeedService {
                 .content(content)
                 .imgUrl(submitMission.getImgUrl())
                 .tag(submitMission.getMission().getTag())
+                .submitMissionId(submitMission.getId())
                 .build();
         feedRepository.save(feed);
-        submitMission.makeOnFeed();
+        submitMission.toggleOnFeed();
         return new FeedResponseDto(feed);
     }
 
@@ -52,7 +53,7 @@ public class FeedService {
     public List<FeedResponseDto> getFeed(Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
-        List<Feed> feedList = feedRepository.findByIdLessThanOrderByIdDesc(lastFeedId, pageRequest);
+        List<Feed> feedList = feedRepository.findByIdLessThanAndOnHideOrderByIdDesc(lastFeedId,false, pageRequest);
         return makeFeedList(feedList, member);
     }
 
@@ -70,7 +71,7 @@ public class FeedService {
             case "etc" -> "#기타";
             default -> throw new CustomException(ErrorCode.INVALID_VALUE);
         };
-        List<Feed> feedList = feedRepository.findByIdLessThanAndTagOrderByIdDesc(lastFeedId, tagName, pageRequest);
+        List<Feed> feedList = feedRepository.findByIdLessThanAndOnHideAndTagOrderByIdDesc(lastFeedId, false, tagName, pageRequest);
         return makeFeedList(feedList, member);
     }
 
@@ -78,7 +79,7 @@ public class FeedService {
     @Transactional(readOnly=true)
     public List<FeedResponseDto> getMyFeed(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
-        List<Feed> feedList = feedRepository.findAllByMemberFetchJoin(member);
+        List<Feed> feedList = feedRepository.findAllByMemberFetchJoin(member, false);
         return makeFeedList(feedList, member);
     }
 
@@ -113,6 +114,10 @@ public class FeedService {
                     () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
             );
             check.checkMember(feed, member);
+            SubmitMission submitMission = submitMissionRepository.findById(feed.getSubmitMissionId()).orElseThrow(
+                    () -> new CustomException(ErrorCode.POST_NOT_FOUND)
+            );
+            submitMission.toggleOnFeed();
             feedRepository.delete(feed);
         }
     }

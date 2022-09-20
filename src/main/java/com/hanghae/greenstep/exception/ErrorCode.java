@@ -10,7 +10,6 @@ public enum ErrorCode {
     //MEMBER
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "M001", "해당 유저를 찾을 수 없습니다."),
     TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST.value(), "M002", "만료된 액세스 토큰 입니다."),
-    REFRESH_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST.value(), "M003", "만료된 리프레시 토큰 입니다."),
     INVALID_TOKEN(HttpStatus.BAD_REQUEST.value(), "M004", "유효하지 않은 토큰 입니다."),
     INVALID_MEMBER_INFO(HttpStatus.BAD_REQUEST.value(), "M005", "잘못된 사용자 정보입니다."),
     MEMBER_NOT_ALLOWED(HttpStatus.BAD_REQUEST.value(), "M006", "접근 할 수 없는 페이지 입니다."),

@@ -18,4 +18,6 @@ public interface SubmitMissionRepository extends JpaRepository<SubmitMission,Lon
 
     @Query("select s from SubmitMission s where s.status = 'DONE' AND s.member = :member And s.onHide = :onHide order by s.createdAt desc ")
     List<SubmitMission> findAllByMemberAndOnHide(@Param("member") Member member, @Param("onHide") boolean onHide);
+
+    int countByMember(Member member);
 }
