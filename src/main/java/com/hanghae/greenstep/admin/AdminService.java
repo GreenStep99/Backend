@@ -13,6 +13,7 @@ import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.submitMission.Dto.SubmitMissionResponseDto;
+import com.hanghae.greenstep.submitMission.Dto.VerificationInfoDto;
 import com.hanghae.greenstep.submitMission.MissionStatus;
 import com.hanghae.greenstep.submitMission.MissionStatusRepository;
 import com.hanghae.greenstep.submitMission.SubmitMission;
@@ -91,12 +92,14 @@ public class AdminService {
 
     //n:1
     @Transactional
-    public SubmitMissionResponseDto verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request,@Nullable String info) {
+    public SubmitMissionResponseDto verifySubmitMission(Status verification, Long submitMissionId, HttpServletRequest request, VerificationInfoDto verificationInfoDto) {
         Member admin = check.accessTokenCheck(request);
         check.checkAdmin(admin);
         SubmitMission submitMission = submitMissionRepository.findByIdFetchJoin(submitMissionId).orElseThrow(
                         () -> new CustomException(ErrorCode.MISSION_NOT_FOUND)
                 );
+        String info = "";
+        if(verificationInfoDto != null) info = verificationInfoDto.getInfo();
         if(Boolean.TRUE.equals(submitMission.getMember().getAcceptMail())) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
         earnMissionPoints(submitMission);
