@@ -3,7 +3,6 @@ package com.hanghae.greenstep.submitMission;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.feed.FeedRepository;
-import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Dto.MissionRequestDto;
 import com.hanghae.greenstep.mission.Mission;
