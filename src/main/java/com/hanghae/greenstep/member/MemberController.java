@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,12 +24,6 @@ public class MemberController {
     public ResponseEntity<?> updateMemberInfo(@RequestBody MemberRequestDto memberRequestDto, HttpServletRequest request){
         MemberResponseDto memberResponseDto = memberService.updateMemberInfo(memberRequestDto,request);
         return new ResponseEntity<>(Message.success(memberResponseDto),HttpStatus.OK);
-    }
-
-    @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshTokenCheck(HttpServletRequest request, HttpServletResponse response){
-        memberService.refreshToken(request, response);
-        return new ResponseEntity<>(Message.success("ACCESS_TOKEN_REISSUE"), HttpStatus.OK);
     }
 
     @GetMapping("/info")

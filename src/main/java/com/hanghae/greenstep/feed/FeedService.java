@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ public class FeedService {
     public List<FeedResponseDto> getFeed(Long lastFeedId, HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         PageRequest pageRequest = PageRequest.of(0, 3);
-        List<Feed> feedList = feedRepository.findByIdAndOnHideLessThanOrderByIdDesc(lastFeedId,false, pageRequest);
+        List<Feed> feedList = feedRepository.findByIdLessThanAndOnHideOrderByIdDesc(lastFeedId,false, pageRequest);
         return makeFeedList(feedList, member);
     }
 
@@ -72,7 +71,7 @@ public class FeedService {
             case "etc" -> "#기타";
             default -> throw new CustomException(ErrorCode.INVALID_VALUE);
         };
-        List<Feed> feedList = feedRepository.findByIdAndOnHideLessThanAndTagOrderByIdDesc(lastFeedId, false, tagName, pageRequest);
+        List<Feed> feedList = feedRepository.findByIdLessThanAndOnHideAndTagOrderByIdDesc(lastFeedId, false, tagName, pageRequest);
         return makeFeedList(feedList, member);
     }
 

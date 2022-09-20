@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 public class TokenDto {
     private String grantType;
     private String accessToken;
-    private String refreshToken;
     private Long accessTokenExpiresIn;
     private Member member;
     private Boolean newComer;
@@ -23,7 +22,6 @@ public class TokenDto {
 
     public void tokenToHeaders(HttpServletResponse response) {
         response.addHeader("Authorization", "Bearer " + getAccessToken());
-        response.addHeader("Refresh_Token", getRefreshToken());
         response.addHeader("Access_Token_Expire_Time", getAccessTokenExpiresIn().toString());
         response.addHeader("Kakao_Authorization", getKakaoAccessToken());
     }
