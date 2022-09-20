@@ -19,8 +19,9 @@ public class MemberResponseDto {
     private Long missionPoint;
     private Long dailyMissionPoint;
     private int missionCount;
+    private int waitingMissionCount;
 
-    public MemberResponseDto(Member member, int missionCount) {
+    public MemberResponseDto(Member member, int missionCount, int waitingMissionCount) {
         this.memberId = member.getId();
         this.nickname = member.getNickname();
         this.name = member.getName();
@@ -29,6 +30,7 @@ public class MemberResponseDto {
         this.missionPoint = member.getMissionPoint();
         this.dailyMissionPoint = member.getDailyMissionPoint();
         this.missionCount = missionCount;
+        this.waitingMissionCount = waitingMissionCount;
     }
     public MemberResponseDto(Member member) {
         this.memberId = member.getId();

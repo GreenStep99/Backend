@@ -39,6 +39,13 @@ public class SubmitMissionService {
         return getMyMissionDtoList(submitMissionList);
     }
 
+    @Transactional
+    public List<MyMissionsDto> getWaitingMissions(HttpServletRequest request) {
+        Member member = check.accessTokenCheck(request);
+        List<SubmitMission> submitMissionList = submitMissionRepository.findAllByMemberAndStatus(member, WAITING);
+        return getMyMissionDtoList(submitMissionList);
+    }
+
     @Transactional(readOnly=true)
     public List<MyMissionsDto> getHiddenMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
@@ -82,7 +89,8 @@ public class SubmitMissionService {
             if(missionStatus.get().getMissionStatus() == REJECTED) missionStatus.get().update(WAITING);
             else throw new CustomException(ErrorCode.BAD_REQUEST);
         } else {
-            MissionStatus newMissionStatus = MissionStatus.builder()
+            MissionStatus newMissionStatus =
+                    MissionStatus.builder()
                     .member(member)
                     .mission(mission)
                     .missionStatus(WAITING)
@@ -100,4 +108,5 @@ public class SubmitMissionService {
                 .build();
         submitMissionRepository.save(submitMission);
         }
+
 }
