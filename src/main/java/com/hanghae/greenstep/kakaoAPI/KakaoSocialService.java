@@ -78,7 +78,7 @@ public class KakaoSocialService {
             kakaoUser = new Member(kakaoId, email, nickname, ROLE_MEMBER,  encodedPassword, profileImage, "kakao", true);
             memberRepository.save(kakaoUser);
         }
-        if(Objects.equals(kakaoUser.getName(),"이름을 입력해주세요")){
+        if(Objects.equals(kakaoUser.getNickname(),"")){
             newComer =true;
         }
 
