@@ -74,13 +74,13 @@ public class Member extends Timestamped {
     private List<SubmitMission> submitMissionList;
 
     @Builder
-    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type, Boolean acceptMail) {
+    public Member(Long id, String email,String kakaoNickname, Authority role, String password, String profilePhoto, String type, Boolean acceptMail) {
         this.id =getId();
         this.kakaoId = id;
         this.email = email;
-        this.name = name;
+        this.name = kakaoNickname;
         this.role = role;
-        this.nickname = nickname;
+        this.nickname = "";
         this.password = password;
         this.profilePhoto = profilePhoto;
         this.type = type;
@@ -108,8 +108,7 @@ public class Member extends Timestamped {
 
 
     public void update(MemberRequestDto memberRequestDto){
-        if (memberRequestDto.getName() == null) this.name = "이름을 입력해주세요";
-        else this.name = memberRequestDto.getName();
+        if (memberRequestDto.getName() != null) this.name = memberRequestDto.getName();
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
         if (memberRequestDto.getAcceptMail() != null) this.acceptMail = memberRequestDto.getAcceptMail();

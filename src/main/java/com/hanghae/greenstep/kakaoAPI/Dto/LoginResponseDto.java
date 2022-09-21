@@ -9,16 +9,16 @@ import lombok.NoArgsConstructor;
 public class LoginResponseDto {
     private Long memberId;
 
-    private String nickname;
+    private String name;
 
     private String profilePhoto;
 
     private Boolean newComer;
 
     @Builder
-    public LoginResponseDto(Long memberId, String nickname, String profilePhoto, Boolean newComer) {
+    public LoginResponseDto(Long memberId, String name, String profilePhoto, Boolean newComer) {
         this.memberId = memberId;
-        this.nickname = nickname;
+        this.name = name;
         this.profilePhoto = profilePhoto;
         this.newComer = newComer;
     }
