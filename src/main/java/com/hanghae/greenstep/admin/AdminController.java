@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
+    private final PasswordEncoder encoder;
     @PostMapping("/login")
     public ResponseEntity<?> adminLogin(@RequestBody AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         AdminLoginResponseDto adminLoginResponseDto = adminService.login(adminLoginRequestDto, response);
@@ -41,5 +43,7 @@ public class AdminController {
         SubmitMissionResponseDto submitMissionResponseDto = adminService.verifySubmitMission(verification, submitMissionId, request, verificationInfoDto);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
     }
+
+
 
 }

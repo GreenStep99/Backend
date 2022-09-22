@@ -112,6 +112,6 @@ public class SubmitMissionService {
         submitMissionRepository.save(submitMission);
         PushContentDto pushContentDto = new PushContentDto("테스트","test");
         CustomFieldDto customFieldDto = new CustomFieldDto(1,2);
-        pushAlertService.sendPushAlert(member, customFieldDto, pushContentDto);
+        pushAlertService.sendPushAlert(member, pushContentDto);
         }
 }

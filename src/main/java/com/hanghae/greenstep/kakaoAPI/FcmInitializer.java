@@ -3,6 +3,7 @@ package com.hanghae.greenstep.kakaoAPI;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.FirebaseOptions.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class FcmInitializer {
     @PostConstruct
     public void initialize() {
         try {
-            FirebaseOptions options = new FirebaseOptions.Builder()
+            FirebaseOptions options = new Builder()
                     .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(json).getInputStream())).build();
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);

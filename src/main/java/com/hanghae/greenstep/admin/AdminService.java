@@ -12,7 +12,6 @@ import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.notice.NotificationType;
 import com.hanghae.greenstep.submitMission.Dto.SubmitMissionResponseDto;
 import com.hanghae.greenstep.submitMission.Dto.VerificationInfoDto;
 import com.hanghae.greenstep.submitMission.MissionStatus;

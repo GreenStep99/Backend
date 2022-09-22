@@ -48,6 +48,9 @@ public class KakaoSocialService {
     @Value("${kakao.redirect_uri}")
     String RedirectURI;
 
+    @Value("${kakao.logout_redirect_uri}")
+    String RedirectLogoutURI;
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
@@ -168,7 +171,7 @@ public class KakaoSocialService {
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
-                "https://kauth.kakao.com/oauth/authorize?client_id="+kakaoClientId+"&redirect_uri="+RedirectURI+"&response_type=code",
+                "https://kauth.kakao.com/oauth/authorize?client_id="+kakaoClientId+"&redirect_uri="+RedirectLogoutURI+"&response_type=code",
                 HttpMethod.GET,
                 kakaoTokenRequest,
                 String.class
@@ -177,6 +180,7 @@ public class KakaoSocialService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
+        log.info(id+"번 회원이 로그아웃 하였습니다.");
      }
 
 

@@ -3,10 +3,10 @@ package com.hanghae.greenstep.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.greenstep.feed.Feed;
+import com.hanghae.greenstep.kakaoAPI.PushStatus;
 import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Timestamped;
-import com.hanghae.greenstep.kakaoAPI.PushStatus;
 import com.hanghae.greenstep.submitMission.MissionStatus;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
@@ -146,5 +146,9 @@ public class Member extends Timestamped {
 
     public void deprecatePushSystem() {
         this.pushStatus = APNS;
+    }
+
+    public void updatePushStatus(PushStatus pushStatus) {
+        this.pushStatus = pushStatus;
     }
 }
