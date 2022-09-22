@@ -7,10 +7,14 @@ import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Check {
@@ -25,7 +29,7 @@ public class Check {
     }
 
     public void checkAdmin(Member member) {
-        if(member.getRole()!= Authority.ROLE_ADMIN) throw new CustomException(ErrorCode.MEMBER_NOT_ALLOWED);
+        if(member.getRole()!= ROLE_ADMIN) throw new CustomException(ErrorCode.MEMBER_NOT_ALLOWED);
     }
 
     public void checkMember(SubmitMission submitMission, Member member) {

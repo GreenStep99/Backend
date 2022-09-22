@@ -3,6 +3,6 @@
 REPOSITORY=/home/ubuntu/
 
 if [ -d $REPOSITORY/myapp ]; then
-    rm -rf $REPOSITORY/myapp
+    rm -rf $REPOSITORY/app
 fi
-mkdir -vp $REPOSITORY/myapp
+mkdir -vp $REPOSITORY/app

@@ -2,10 +2,7 @@ package com.hanghae.greenstep.notice;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.shared.Timestamped;
-import com.hanghae.greenstep.shared.notice.NotificationContent;
-import com.hanghae.greenstep.shared.notice.NotificationType;
-import com.hanghae.greenstep.shared.notice.RelatedURL;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,9 +11,10 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Notification extends Timestamped {
 
     @Id
@@ -25,41 +23,53 @@ public class Notification extends Timestamped {
     private Long id;
 
     @Embedded
-    private NotificationContent content;
+    private NotificationContent notificationContent;
+    //알림내용 - 50자 이내
 
     @Embedded
     private RelatedURL url;
+    //관련 url - 클릭시 이동해야할 링크
 
     @Column(nullable = false)
     private Boolean isRead;
+    //읽었는지에 대한 여부
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationType notificationType;
+    // 알림 종류 [신청 / 수락 / 거절 등등 ]
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action= OnDeleteAction.CASCADE)
     @JoinColumn(name = "member_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member receiver;
-
+    //회원정보
     @Builder
-    public Notification(Member receiver, NotificationType notificationType, String content, String url, Boolean isRead) {
+    public Notification(Member receiver, NotificationType notificationType, String notificationContent, String url, Boolean isRead) {
         this.receiver = receiver;
         this.notificationType = notificationType;
-        this.content = new NotificationContent(content);
+        this.notificationContent = new NotificationContent(notificationContent);
         this.url = new RelatedURL(url);
         this.isRead = isRead;
     }
 
-    public String getContent() {
-        return content.getContent();
+    public void read() {
+        isRead = true;
+    }
+
+    public String getNotificationContent() {
+        return notificationContent.getNotificationContent();
     }
 
     public String getUrl() {
         return url.getUrl();
     }
 
-    public void read() {
-        isRead = true;
-    }
 }
+
+/*
+ 알림 기능 처리 요소
+  - 누구 : ~ 에 대한 알림이 도착했다. 형식의 알림을 클릭하면 관련 페이지로 이동하는 방식.
+  - 알림을 읽으면 '읽음' 처리가 되어야한다.
+
+ */

@@ -27,10 +27,6 @@ public class MissionService {
 
     private final MissionStatusRepository missionStatusRepository;
 
-    private final SubmitMissionRepository submitMissionRepository;
-
-    private final ImageService imageService;
-
     private final Check check;
 
     //n+1문제 없음

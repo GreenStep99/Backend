@@ -10,6 +10,7 @@ import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.notice.NotificationService;
+import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.submitMission.Dto.SubmitMissionResponseDto;
@@ -32,7 +33,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 
 @Service
 @RequiredArgsConstructor
@@ -74,7 +74,7 @@ public class AdminService {
     //n+1 문제 없음
     public AdminLoginResponseDto login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         blockSqlSentence(adminLoginRequestDto);
-        Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
+        Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), Authority.ROLE_ADMIN).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
         if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
@@ -124,7 +124,8 @@ public class AdminService {
             submitMission.getMember().earnDailyPoint();
         if (Objects.equals(submitMission.getMission().getMissionType(), "weekly"))
             submitMission.getMember().earnWeeklyPoint();
-        submitMission.getMember().earnChallengePoint();
+        if (Objects.equals(submitMission.getMission().getMissionType(), "challenge"))
+            submitMission.getMember().earnChallengePoint();
     }
 
     public void blockSqlSentence(AdminLoginRequestDto requestDto) {
