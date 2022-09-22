@@ -23,6 +23,9 @@ public class Mission {
     private String missionContent;
 
     @Column
+    private String missionIconUrl;
+
+    @Column
     private String missionImageUrl;
 
     @Column(length = 80)
