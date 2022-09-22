@@ -3,7 +3,6 @@ package com.hanghae.greenstep.submitMission;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.feed.FeedRepository;
-import com.hanghae.greenstep.image.ImageService;
 import com.hanghae.greenstep.kakaoAPI.Dto.CustomFieldDto;
 import com.hanghae.greenstep.kakaoAPI.Dto.PushContentDto;
 import com.hanghae.greenstep.kakaoAPI.KakaoPushAlertService;
@@ -41,6 +40,13 @@ public class SubmitMissionService {
     public List<MyMissionsDto> getMyMissions(HttpServletRequest request) {
         Member member = check.accessTokenCheck(request);
         List<SubmitMission> submitMissionList = submitMissionRepository.findAllByMemberAndOnHide(member, false);
+        return getMyMissionDtoList(submitMissionList);
+    }
+
+    @Transactional
+    public List<MyMissionsDto> getWaitingMissions(HttpServletRequest request) {
+        Member member = check.accessTokenCheck(request);
+        List<SubmitMission> submitMissionList = submitMissionRepository.findAllByMemberAndStatus(member, WAITING);
         return getMyMissionDtoList(submitMissionList);
     }
 

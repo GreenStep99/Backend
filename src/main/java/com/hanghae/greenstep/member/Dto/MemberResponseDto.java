@@ -18,7 +18,20 @@ public class MemberResponseDto {
     private String profilePhoto;
     private Long missionPoint;
     private Long dailyMissionPoint;
+    private int missionCount;
+    private int waitingMissionCount;
 
+    public MemberResponseDto(Member member, int missionCount, int waitingMissionCount) {
+        this.memberId = member.getId();
+        this.nickname = member.getNickname();
+        this.name = member.getName();
+        this.email = member.getEmail();
+        this.profilePhoto = member.getProfilePhoto();
+        this.missionPoint = member.getMissionPoint();
+        this.dailyMissionPoint = member.getDailyMissionPoint();
+        this.missionCount = missionCount;
+        this.waitingMissionCount = waitingMissionCount;
+    }
     public MemberResponseDto(Member member) {
         this.memberId = member.getId();
         this.nickname = member.getNickname();

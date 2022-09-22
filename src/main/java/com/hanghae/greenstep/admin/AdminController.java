@@ -37,8 +37,8 @@ public class AdminController {
     }
 
     @PostMapping("/verification/{submitMissionId}")
-    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId, @RequestBody @Nullable VerificationInfoDto verificationInfoDto, @RequestParam Status verification, HttpServletRequest request){
-        SubmitMissionResponseDto submitMissionResponseDto = adminService.verifySubmitMission(verification, submitMissionId, request, verificationInfoDto.getInfo());
+    public ResponseEntity<?> verifySubmitMission(@PathVariable Long submitMissionId, @Nullable @RequestBody VerificationInfoDto verificationInfoDto, @RequestParam Status verification, HttpServletRequest request){
+        SubmitMissionResponseDto submitMissionResponseDto = adminService.verifySubmitMission(verification, submitMissionId, request, verificationInfoDto);
         return new ResponseEntity<>(Message.success(submitMissionResponseDto),HttpStatus.OK);
     }
 

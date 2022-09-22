@@ -17,6 +17,12 @@ public class SubmitMissionController {
 
     private final SubmitMissionService submitMissionService;
 
+    @GetMapping("/profiles/missions/waiting-status")
+    public ResponseEntity<?> getWaitingMissions(HttpServletRequest request){
+        List<MyMissionsDto> myMissionsDtoList = submitMissionService.getWaitingMissions(request);
+        return new ResponseEntity<>(Message.success(myMissionsDtoList), HttpStatus.OK);
+    }
+
     @GetMapping("/profiles/missions")
     public ResponseEntity<?> getMyMissions(HttpServletRequest request){
         List<MyMissionsDto> myMissionsDtoList = submitMissionService.getMyMissions(request);

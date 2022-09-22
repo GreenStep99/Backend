@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.jwt.Dto.TokenDto;
-import com.hanghae.greenstep.jwt.RefreshTokenRepository;
 import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.jwt.UserDetailsImpl;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoMemberInfoDto;
@@ -34,7 +33,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -53,10 +51,8 @@ public class KakaoSocialService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final Check check;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final KakaoPushAlertService pushAlertService;
 
-    public TokenDto kakaoLogin(String code) throws IOException {
+    public TokenDto kakaoLogin(String code) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
         // 2. 토큰으로 카카오 API 호출
@@ -79,10 +75,10 @@ public class KakaoSocialService {
             String email = kakaoMemberInfo.getEmail();
             String profileImage = kakaoMemberInfo.getProfilePhoto();
             // role: 일반 사용자
-            kakaoUser = new Member(kakaoId, email, "이름을 입력해주세요", ROLE_MEMBER, nickname,  encodedPassword, profileImage, "kakao", true);
+            kakaoUser = new Member(kakaoId, email, nickname, ROLE_MEMBER,  encodedPassword, profileImage, "kakao", true);
             memberRepository.save(kakaoUser);
         }
-        if(Objects.equals(kakaoUser.getName(),"이름을 입력해주세요")){
+        if(Objects.equals(kakaoUser.getNickname(),"")){
             newComer =true;
         }
 
@@ -93,7 +89,6 @@ public class KakaoSocialService {
         Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(
                 () -> new CustomException(ErrorCode.INVALID_MEMBER_INFO)
         );
-        pushAlertService.requestPushToken(member);
         return tokenProvider.generateTokenDto(member, newComer, accessToken);
     }
 
@@ -157,7 +152,7 @@ public class KakaoSocialService {
     public LoginResponseDto loginInfo(TokenDto tokenDto) {
         return LoginResponseDto.builder()
                 .memberId(tokenDto.getMember().getId())
-                .nickname(tokenDto.getMember().getNickname())
+                .name(tokenDto.getMember().getName())
                 .profilePhoto(tokenDto.getMember().getProfilePhoto())
                 .newComer(tokenDto.getNewComer())
                 .build();
@@ -179,8 +174,7 @@ public class KakaoSocialService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
-        if(Objects.equals(member.getKakaoId(), id)) refreshTokenRepository.deleteByMember(member);
-    }
+     }
 
 
     @Transactional
@@ -199,10 +193,8 @@ public class KakaoSocialService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        Long kakaoId = jsonNode.get("id").asLong();
-        if (Objects.equals(member.getKakaoId(), kakaoId)) {
-            refreshTokenRepository.deleteByMember(member);
-        } else throw new CustomException(ErrorCode.INVALID_TOKEN);
+        long id = jsonNode.get("id").asLong();
+        log.info(id+"번 회원 탈퇴 완료");
     }
 
     public HttpEntity<MultiValueMap<String, String>> kakaoTokenHeaderMaker(HttpServletRequest request){

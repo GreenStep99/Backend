@@ -8,6 +8,7 @@ import com.hanghae.greenstep.feed.FeedRepository;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.NotificationService;
 import com.hanghae.greenstep.shared.Check;
+import com.hanghae.greenstep.shared.notice.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
