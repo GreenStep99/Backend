@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 @RestController
@@ -27,7 +26,7 @@ public class KakaoSocialController {
 
     @Transactional
     @GetMapping("/users/kakao/callback")
-    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         TokenDto tokenDto= kakaoSocialService.kakaoLogin(code);
         tokenDto.tokenToHeaders(response);
         LoginResponseDto loginResponseDto = kakaoSocialService.loginInfo(tokenDto);
