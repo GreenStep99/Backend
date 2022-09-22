@@ -3,6 +3,7 @@ package com.hanghae.greenstep.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hanghae.greenstep.feed.Feed;
+import com.hanghae.greenstep.kakaoAPI.PushStatus;
 import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Timestamped;
@@ -19,6 +20,9 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+
+import static com.hanghae.greenstep.kakaoAPI.PushStatus.ALL;
+import static com.hanghae.greenstep.kakaoAPI.PushStatus.APNS;
 
 @Entity
 @AllArgsConstructor
@@ -64,6 +68,9 @@ public class Member extends Timestamped {
     @Column
     private Boolean acceptMail;
 
+    @Column
+    private PushStatus pushStatus;
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<Feed> feedList;
 
@@ -85,6 +92,7 @@ public class Member extends Timestamped {
         this.profilePhoto = profilePhoto;
         this.type = type;
         this.acceptMail = acceptMail;
+        this.pushStatus = ALL;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
     }
@@ -112,6 +120,7 @@ public class Member extends Timestamped {
         if (memberRequestDto.getNickname() != null) this.nickname = memberRequestDto.getNickname();
         if (memberRequestDto.getProfilePhoto() != null) this.profilePhoto = memberRequestDto.getProfilePhoto();
         if (memberRequestDto.getAcceptMail() != null) this.acceptMail = memberRequestDto.getAcceptMail();
+        if (memberRequestDto.getPushStatus()!=getPushStatus())this.pushStatus = memberRequestDto.getPushStatus();
     }
 
     public void resetDailyPoint(){
@@ -135,4 +144,11 @@ public class Member extends Timestamped {
         return passwordEncoder.matches(password,this.password);
     }
 
+    public void deprecatePushSystem() {
+        this.pushStatus = APNS;
+    }
+
+    public void updatePushStatus(PushStatus pushStatus) {
+        this.pushStatus = pushStatus;
+    }
 }

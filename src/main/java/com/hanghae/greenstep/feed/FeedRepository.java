@@ -8,14 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface FeedRepository extends JpaRepository<Feed,Long> {
     List<Feed> findByIdLessThanAndOnHideOrderByIdDesc(Long lastFeedId,Boolean onHide, PageRequest pageRequest);
     List<Feed> findByIdLessThanAndOnHideAndTagOrderByIdDesc(Long lastFeedId,Boolean onHide, String tag, PageRequest pageRequest);
     @Query("select f from Feed f join fetch f.member where f.member = :member and f.onHide = :onHide order by f.createdAt desc ")
     List<Feed> findAllByMemberFetchJoin(@Param("member") Member member, @Param("onHide") Boolean onHide);
-    Optional<Feed> findById(Long aLong);
+
     Feed findBySubmitMissionId(Long submitMissionId);
 
     Boolean existsBySubmitMissionId(Long submitMissionId);

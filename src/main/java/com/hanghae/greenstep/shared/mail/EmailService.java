@@ -30,7 +30,7 @@ public class EmailService {
             title += "실패하였습니다.";
             content += "[" + verifiedEvent.getSubmitMission().getMission().getMissionName() +
                     "]가(이) 인증에 실패하였습니다.\n 인증 실패 사유: " + verifiedEvent.getInfo() + "\n 다시 인증해주세요!" +
-                    "인증 날짜 :" + verifiedEvent.getSubmitMission().getCreatedAt().toLocalDate();
+                    "\n인증 날짜 :" + verifiedEvent.getSubmitMission().getCreatedAt().toLocalDate();
         }
         MailDto mailDto = new MailDto(verifiedEvent.getSubmitMission().getMember().getEmail(), title, content);
         emailUtil.sendEmail(mailDto);

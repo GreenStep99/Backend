@@ -1,0 +1,11 @@
+{
+  "for_fcm": {
+    "collapse": "articleId123",
+    "delay_while_idle": false,
+    "custom_field": {
+      "article_id": 111,
+      "comment_id": 222,
+      "comment_preview": "나의 댓글을 받아랏!...(생략)"
+    }
+  }
+}
