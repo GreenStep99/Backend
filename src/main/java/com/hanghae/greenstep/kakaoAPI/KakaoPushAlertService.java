@@ -41,16 +41,13 @@ public class KakaoPushAlertService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization","KakaoAK "+ adminKey);
         headers.add("Content-type", "application/x-www-form-urlencoded");
-        log.info("달리다");
-        String pushToken = FcmService.getAccessToken();
-        log.info(pushToken);
+        String pushToken = FcmService.getAccessToken().substring(0,235);
         String deviceId = UUID.randomUUID().toString();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("uuid", member.getKakaoId().toString());
         body.add("device_id", deviceId);
         body.add("push_type", "fcm");
         body.add("push_token", pushToken);
-        log.info("통과");
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, Object>> kakaoPushTokenRequest =
                 new HttpEntity<>(body, headers);
@@ -128,7 +125,7 @@ public class KakaoPushAlertService {
     public PushTokenDto getPushToken(Member member, HttpHeaders headers) throws JsonProcessingException {
         log.info("푸시토큰 가져오기");
         MultiValueMap<String, Object> tokenCheckBody = new LinkedMultiValueMap<>();
-        tokenCheckBody.add("uuid", member.getKakaoId());
+        tokenCheckBody.add("uuid", member.getKakaoId().toString());
 
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, Object>> kakaoPushTokenRequest =
