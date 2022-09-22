@@ -6,7 +6,6 @@ import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
 import com.hanghae.greenstep.notice.Dto.NotificationDto;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.CommonService;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,6 @@ public class NotificationService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
 
     private final NotificationRepository notificationRepository;
-    private final CommonService commonService;
     private final Check check;
 
     public SseEmitter subscribe(HttpServletRequest request, String lastEventId) {

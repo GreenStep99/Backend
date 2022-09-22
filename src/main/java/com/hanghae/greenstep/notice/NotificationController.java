@@ -1,20 +1,15 @@
 package com.hanghae.greenstep.notice;
 
-import com.hanghae.greenstep.jwt.UserDetailsImpl;
-import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
 import com.hanghae.greenstep.notice.Dto.NotificationDto;
-import com.hanghae.greenstep.shared.CommonService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Slf4j
@@ -24,8 +19,6 @@ public class NotificationController {
 
 
     private final NotificationService notificationService;
-
-    private final CommonService commonService;
 
     // MIME TYPE - text/event-stream 형태로 받아야함. EventStream의 생성은 최초 클라이언트 요청으로 발생한다. EventStream이 생성되면 서버는 원하는 시점에 n개의 EventStream에 Event 데이터를 전송할 수 있다.
     // 클라이어트로부터 오는 알림 구독 요청을 받는다.
