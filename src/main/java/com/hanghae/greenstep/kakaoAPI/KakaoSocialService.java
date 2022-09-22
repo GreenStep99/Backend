@@ -174,6 +174,7 @@ public class KakaoSocialService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         Long id = jsonNode.get("id").asLong();
+        log.info(member.getNickname() + "logout");
      }
 
 
