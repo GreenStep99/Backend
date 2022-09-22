@@ -6,24 +6,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
-public class NotificationResponseDto {
-
-
+public class NotificationDto {
     private Long id;
-
-    private String content;
-
+    private String notificationContent;
     private String url;
-
     private Boolean status;
 
-
-    public static NotificationResponseDto create(Notification notification) {
-        return new NotificationResponseDto(notification.getId(), notification.getContent(),
+    public static NotificationDto create(Notification notification) {
+        return new NotificationDto(notification.getId(), notification.getNotificationContent(),
                 notification.getUrl(), notification.getIsRead());
     }
+
 }

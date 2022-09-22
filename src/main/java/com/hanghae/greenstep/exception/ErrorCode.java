@@ -35,7 +35,14 @@ public enum ErrorCode {
     SHARE_FAILURE(HttpStatus.BAD_REQUEST.value(), "K001", "카카오톡 메세지 보내기에 실패했습니다."),
     
     //NOTIFICATION
-    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "N001", "해당 알림을 찾을 수 없습니다.");
+    NOTIFICATION_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "N001", "해당 알림을 찾을 수 없습니다."),
+    VALID_NOT_CONTENT(HttpStatus.BAD_REQUEST.value(), "N002", "유효하지 않는 내용 입니다."),
+    FAIL_SUBSCRIBE(HttpStatus.NOT_FOUND.value(), "N003", "구독에 실패했습니다."),
+    FAIL_LOAD_NOTIFICATION(HttpStatus.BAD_REQUEST.value(), "N004", "알림을 불러올 수 없습니다."),
+    NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND.value(), "N005", "존재하지 않는 알림입니다."),
+    FAIL_DELETE_All_NOTIFICATION(HttpStatus.BAD_REQUEST.value(), "N006", "전체 알림 삭제를 실패했습니다."),
+    FAIL_DELETE_NOTIFICATION(HttpStatus.BAD_REQUEST.value(), "N007", "알림 삭제를 실패했습니다."),
+    VALID_NOT_URL(HttpStatus.BAD_REQUEST.value(), "N008", "유효하지 않는 URL 입니다.");
 
 
     private final int httpStatus;

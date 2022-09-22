@@ -7,18 +7,21 @@ import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Check {
     private final TokenProvider tokenProvider;
 
     public Member accessTokenCheck(HttpServletRequest request) {
+        log.info("가가가가가가가가가가가가가가가가가가가가"+(request.getHeader("Authorization")));
         if (null == request.getHeader("Authorization")|| request.getHeader("Authorization").length() < 7) throw new CustomException(ErrorCode.INVALID_TOKEN);
         if (tokenProvider.validateToken(request.getHeader("Authorization").substring(7))) {
             return tokenProvider.getMemberFromAuthentication();
