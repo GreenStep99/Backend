@@ -1,6 +1,5 @@
 package com.hanghae.greenstep.mission;
 
-import com.hanghae.greenstep.submitMission.ImageService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Dto.MissionResponseDto;
 import com.hanghae.greenstep.shared.Check;
@@ -26,10 +25,6 @@ public class MissionService {
     private final MissionRepository missionRepository;
 
     private final MissionStatusRepository missionStatusRepository;
-
-    private final SubmitMissionRepository submitMissionRepository;
-
-    private final ImageService imageService;
 
     private final Check check;
 

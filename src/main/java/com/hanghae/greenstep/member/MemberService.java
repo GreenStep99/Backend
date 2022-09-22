@@ -35,7 +35,10 @@ public class MemberService {
         Member member = memberRepository.findByEmail(check.accessTokenCheck(request).getEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
-        member.update(memberRequestDto);
+        if(!memberRequestDto.getNickname().matches("^[a-zA-Z\\d]{1,8}$")&&
+                !memberRequestDto.getName().matches("^(?=./*[가-힣]){2,6}$")) throw new CustomException(ErrorCode.INVALID_INPUT);
+
+            member.update(memberRequestDto);
         return new MemberResponseDto(member);
     }
 

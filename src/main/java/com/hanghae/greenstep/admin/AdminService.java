@@ -124,7 +124,8 @@ public class AdminService {
             submitMission.getMember().earnDailyPoint();
         if (Objects.equals(submitMission.getMission().getMissionType(), "weekly"))
             submitMission.getMember().earnWeeklyPoint();
-        submitMission.getMember().earnChallengePoint();
+        if (Objects.equals(submitMission.getMission().getMissionType(), "challenge"))
+            submitMission.getMember().earnChallengePoint();
     }
 
     public void blockSqlSentence(AdminLoginRequestDto requestDto) {
