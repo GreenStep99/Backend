@@ -1,62 +1,91 @@
 package com.hanghae.greenstep.notice;
 
-
 import com.hanghae.greenstep.jwt.UserDetailsImpl;
+import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
-import com.hanghae.greenstep.notice.Dto.NotificationResponseDto;
-import com.hanghae.greenstep.shared.Message;
+import com.hanghae.greenstep.notice.Dto.NotificationDto;
+import com.hanghae.greenstep.shared.CommonService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class NotificationController {
+
+
     private final NotificationService notificationService;
 
-    //참고한 블로그에 있던 swager 사용방식. 추후 이 방식으로 리팩토링 해보자. @ApiOperation(value = "알림 구독", notes = "알림을 구독한다.")
-    @GetMapping(value = "/subscribe", produces = "text/event-stream")
-    @ResponseStatus(HttpStatus.OK)
-    public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
-        return notificationService.subscribe(userDetails.getMember().getId(), lastEventId);
+    private final CommonService commonService;
+
+    // MIME TYPE - text/event-stream 형태로 받아야함. EventStream의 생성은 최초 클라이언트 요청으로 발생한다. EventStream이 생성되면 서버는 원하는 시점에 n개의 EventStream에 Event 데이터를 전송할 수 있다.
+    // 클라이어트로부터 오는 알림 구독 요청을 받는다.
+    // 로그인한 유저는 SSE 연결
+    // lAST_EVENT_ID = 이전에 받지 못한 이벤트가 존재하는 경우 [ SSE 시간 만료 혹은 종료 ]
+    // 전달받은 마지막 ID 값을 넘겨 그 이후의 데이터[ 받지 못한 데이터 ]부터 받을 수 있게 한다
+    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(HttpServletRequest request,
+                                @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
+                                String lastEventId) {
+        log.info("찍혀라"+request);
+
+
+        return notificationService.subscribe(request, lastEventId);
+
     }
 
-    //알림 조회
+    //알림조회
     @GetMapping(value = "/notifications")
-    public List<NotificationResponseDto> findAllNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return notificationService.findAllNotifications(userDetails.getMember().getId());
+    public List<NotificationDto> findAllNotifications(HttpServletRequest request) {
+        return notificationService.findAllNotifications(request);
     }
 
-    //알림 목록에서 해당 목록 클릭 시 읽음처리 ,
+    //전체목록 알림 조회에서 해당 목록 클릭 시 읽음처리 ,
     @PostMapping("/notification/read/{notificationId}")
-    public void readNotification(@PathVariable Long notificationId){
-        notificationService.readNotification(notificationId);
+    public void readNotification(@PathVariable Long notificationId, HttpServletRequest request) {
+        notificationService.readNotification(notificationId, request);
+
     }
 
-    //읽지않은 알림 갯수 조회
+    //알림 조회 - 구독자가 현재 읽지않은 알림 갯수
     @GetMapping(value = "/notifications/count")
-    public NotificationCountDto countUnReadNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return notificationService.countUnReadNotifications(userDetails.getMember().getId());
+    public NotificationCountDto countUnReadNotifications(HttpServletRequest request) {
+        return notificationService.countUnReadNotifications(request);
     }
 
     //알림 전체 삭제
     @DeleteMapping(value = "/notifications/delete")
-    public ResponseEntity<Object> deleteNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<Object> deleteNotifications(HttpServletRequest request) {
 
-        notificationService.deleteAllByNotifications(userDetails);
-        return new ResponseEntity<>(Message.success("알림 목록 전체 삭제 성공"), HttpStatus.OK);
+        return notificationService.deleteAllByNotifications(request);
+
     }
+
     //단일 알림 삭제
     @DeleteMapping(value = "/notifications/delete/{notificationId}")
-    public ResponseEntity<Object> deleteNotification(@PathVariable Long notificationId){
+    public ResponseEntity<Object> deleteNotification(@PathVariable Long notificationId) {
 
-        notificationService.deleteByNotifications(notificationId);
-        return new ResponseEntity<>(Message.success("알림 목록 삭제 성공"), HttpStatus.OK);
+        return notificationService.deleteByNotifications(notificationId);
     }
+
 }
+    /*
+        1. count -> 안 읽은 카운트
+        2. reset -> 전체목록은 전체목록만 , 읽음처리를 할 수 있는 api가 필요함
+
+
+        0. 구독 -> 서버로부터 오는 알람 받음
+
+        2.notifications -> 내가 가지고있는 알림 목록을 다불러옴 [불러올 때 애들의 스테이터스 상태는 true가 됨]
+
+        1.notifications/count -> notifications 알람에서 상태가 false 인 친구들을 가져옴
+     */
