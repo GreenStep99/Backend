@@ -13,6 +13,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.BAD_REQUEST.value(), "M004", "유효하지 않은 토큰 입니다."),
     INVALID_MEMBER_INFO(HttpStatus.BAD_REQUEST.value(), "M005", "잘못된 사용자 정보입니다."),
     MEMBER_NOT_ALLOWED(HttpStatus.BAD_REQUEST.value(), "M006", "접근 할 수 없는 페이지 입니다."),
+    INVALID_INPUT(HttpStatus.BAD_REQUEST.value(), "M007", "잘못된 입력입니다."),
 
 
     // FEEDS & MY FEED
