@@ -33,6 +33,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -46,6 +47,9 @@ public class KakaoSocialService {
     String kakaoClientId;
     @Value("${kakao.redirect_uri}")
     String RedirectURI;
+
+    @Value("${kakao.logout_redirect_uri}")
+    String RedirectLogoutURI;
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -160,21 +164,17 @@ public class KakaoSocialService {
 
 
     @Transactional
-    public void kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
+    public URI kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
         Member member = check.accessTokenCheck(request);
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
-                "https://kauth.kakao.com/oauth/authorize?client_id="+kakaoClientId+"&redirect_uri="+RedirectURI+"&response_type=code",
+                "https://kauth.kakao.com/oauth/logout?client_id="+kakaoClientId+"&logout_redirect_uri="+RedirectLogoutURI,
                 HttpMethod.GET,
                 kakaoTokenRequest,
                 String.class
         );
-        String responseBody = response.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(responseBody);
-        Long id = jsonNode.get("id").asLong();
-        log.info(member.getNickname() + "logout");
+        return response.getHeaders().getLocation();
      }
 
 

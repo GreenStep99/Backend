@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
 
 
 @RestController
@@ -35,8 +36,8 @@ public class KakaoSocialController {
 
     @GetMapping("/kakao/logout")
     public ResponseEntity<?> kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
-        kakaoSocialService.kakaoLogout(request);
-        return new ResponseEntity<>(Message.success(true), HttpStatus.OK);
+        URI location = kakaoSocialService.kakaoLogout(request);
+        return new ResponseEntity<>(Message.success(location), HttpStatus.OK);
     }
     @PostMapping("/kakao/unregister")
     public ResponseEntity<?> deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
