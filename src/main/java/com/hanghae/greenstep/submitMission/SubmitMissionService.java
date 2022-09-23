@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hanghae.greenstep.kakaoAPI.PushStatus.ALL;
 import static com.hanghae.greenstep.shared.Status.REJECTED;
 import static com.hanghae.greenstep.shared.Status.WAITING;
 
@@ -112,6 +113,6 @@ public class SubmitMissionService {
         submitMissionRepository.save(submitMission);
         PushContentDto pushContentDto = new PushContentDto("테스트","test");
         CustomFieldDto customFieldDto = new CustomFieldDto(1,2);
-        pushAlertService.sendPushAlert(member, pushContentDto);
+        if(member.getPushStatus()==ALL)pushAlertService.sendPushAlert(member, pushContentDto);
         }
 }

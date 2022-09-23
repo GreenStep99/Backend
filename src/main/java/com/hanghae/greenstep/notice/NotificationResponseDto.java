@@ -22,7 +22,7 @@ public class NotificationResponseDto {
 
 
     public static NotificationResponseDto create(Notification notification) {
-        return new NotificationResponseDto(notification.getId(), notification.getContent(),
+        return new NotificationResponseDto(notification.getId(), notification.getNotificationContent(),
                 notification.getUrl(), notification.getIsRead());
     }
 }

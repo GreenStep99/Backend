@@ -48,6 +48,9 @@ public class KakaoSocialService {
     @Value("${kakao.redirect_uri}")
     String RedirectURI;
 
+    @Value("${kakao.logout_redirect_uri}")
+    String RedirectLogoutURI;
+
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;

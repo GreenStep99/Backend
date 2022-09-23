@@ -68,7 +68,7 @@ public class Member extends Timestamped {
     @Column
     private Boolean acceptMail;
 
-    @Column
+    @Enumerated(value = EnumType.STRING)
     private PushStatus pushStatus;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
