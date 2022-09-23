@@ -50,6 +50,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
           
+          
+      - name: make greenstep-6c162-firebase-adminsdk-utsuy-22bdb126de.json
+        run:
+          mkdir ./firebase
+          touch ./firebase/greenstep-6c162-firebase-adminsdk-utsuy-22bdb126de.json
+        shell: bash
+        
+      - name: deliver greenstep-6c162-firebase-adminsdk-utsuy-22bdb126de.json
+        run: echo "${{ secrets.ADMINSDK }}" > ./firebase/greenstep-6c162-firebase-adminsdk-utsuy-22bdb126de.json
+        shell: bash
+          
 
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://sim-deploy/$PROJECT_NAME/$GITHUB_SHA.zip
