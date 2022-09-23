@@ -36,7 +36,7 @@ public class MemberService {
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
         if(!memberRequestDto.getNickname().matches("^[a-zA-Z\\d]{1,8}$")&&
-                !memberRequestDto.getName().matches("^[가-힣]){2,6}$")) throw new CustomException(ErrorCode.INVALID_INPUT);
+                !memberRequestDto.getName().matches("^[가-힣]{2,6}$")) throw new CustomException(ErrorCode.INVALID_INPUT);
 
             member.update(memberRequestDto);
         return new MemberResponseDto(member);
