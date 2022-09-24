@@ -3,9 +3,6 @@ package com.hanghae.greenstep.submitMission;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
 import com.hanghae.greenstep.feed.FeedRepository;
-import com.hanghae.greenstep.kakaoAPI.Dto.CustomFieldDto;
-import com.hanghae.greenstep.kakaoAPI.Dto.PushContentDto;
-import com.hanghae.greenstep.kakaoAPI.KakaoPushAlertService;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.mission.Dto.MissionRequestDto;
 import com.hanghae.greenstep.mission.Mission;
@@ -21,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.hanghae.greenstep.kakaoAPI.PushStatus.ALL;
 import static com.hanghae.greenstep.shared.Status.REJECTED;
 import static com.hanghae.greenstep.shared.Status.WAITING;
 
@@ -35,7 +31,6 @@ public class SubmitMissionService {
     private final MissionStatusRepository missionStatusRepository;
     private final ImageService imageService;
     private final FeedRepository feedRepository;
-    private final KakaoPushAlertService pushAlertService;
 
     @Transactional(readOnly=true)
     public List<MyMissionsDto> getMyMissions(HttpServletRequest request) {
@@ -94,7 +89,8 @@ public class SubmitMissionService {
             if(missionStatus.get().getMissionStatus() == REJECTED) missionStatus.get().update(WAITING);
             else throw new CustomException(ErrorCode.BAD_REQUEST);
         } else {
-            MissionStatus newMissionStatus = MissionStatus.builder()
+            MissionStatus newMissionStatus =
+                    MissionStatus.builder()
                     .member(member)
                     .mission(mission)
                     .missionStatus(WAITING)
@@ -111,8 +107,6 @@ public class SubmitMissionService {
                 .mission(mission)
                 .build();
         submitMissionRepository.save(submitMission);
-        PushContentDto pushContentDto = new PushContentDto("테스트","test");
-        CustomFieldDto customFieldDto = new CustomFieldDto(1,2);
-        if(member.getPushStatus()==ALL)pushAlertService.sendPushAlert(member, pushContentDto);
         }
+
 }
