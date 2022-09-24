@@ -37,7 +37,7 @@ public class ImageService {
         // convert base64 string to binary data
         byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
         long now = new Date().getTime();
-        String fileName = UUID.randomUUID().toString() + now + extension;
+        String fileName = now + "_" + UUID.randomUUID().toString() + extension;
         InputStream img = new ByteArrayInputStream(data);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(data.length);
