@@ -75,7 +75,7 @@ public class AdminService {
     public AdminLoginResponseDto login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         blockSqlSentence(adminLoginRequestDto);
         Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), Authority.ROLE_ADMIN).orElseThrow(
-                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                () -> new CustomException(ErrorCode.MEMBER_NOT_ALLOWED));
         if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
         }

@@ -63,6 +63,7 @@ public class MissionService {
                             .missionId(mission.getId())
                             .missionName(mission.getMissionName())
                             .missionContent(mission.getMissionContent())
+                            .missionIconUrl(mission.getMissionIconUrl())
                             .missionImageUrl(mission.getMissionImageUrl())
                             .missionType(mission.getMissionType())
                             .onShow(mission.getOnShow())
