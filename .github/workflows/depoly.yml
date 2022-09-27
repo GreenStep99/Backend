@@ -43,7 +43,7 @@ jobs:
         
       - name: deliver logback.xml
         run: 
-          echo "${{ secrets.LOG_BACK }}" > ./src/main/resources/logback.xml
+          echo "${{ secrets.XML }}" > ./src/main/resources/logback.xml
         shell: bash
 
       - name: Build with Gradle
