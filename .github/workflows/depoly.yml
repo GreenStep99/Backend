@@ -29,19 +29,13 @@ jobs:
         run:
           mkdir ./src/main/resources | 
           touch ./src/main/resources/application.properties 
+          touch ./src/main/resources/logback.xml 
         shell: bash
         
       - name: deliver application.properties
-        run: echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
-        shell: bash
-        
-      - name: make logback.xml
-        run:
-          touch ./src/main/resources/logback.xml 
-        shell: bash
-
-      - name: deliver logback.xml
-        run: echo "${{ secrets.LOG_BACK }}" > ./src/main/resources/logback.xml
+        run: 
+          echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
+          echo "${{ secrets.LOG_BACK }}" > ./src/main/resources/logback.xml
         shell: bash
 
       - name: Build with Gradle
