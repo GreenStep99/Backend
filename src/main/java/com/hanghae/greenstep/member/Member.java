@@ -2,11 +2,11 @@ package com.hanghae.greenstep.member;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hanghae.greenstep.clap.Clap;
 import com.hanghae.greenstep.feed.Feed;
-import com.hanghae.greenstep.jwt.RefreshToken;
-import com.hanghae.greenstep.missionStatus.MissionStatus;
+import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.shared.Authority;
+import com.hanghae.greenstep.shared.Timestamped;
+import com.hanghae.greenstep.submitMission.MissionStatus;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Member {
+public class Member extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,7 +61,6 @@ public class Member {
     @Column
     private Long dailyMissionPoint;
 
-
     @Column
     private Boolean acceptMail;
 
@@ -69,32 +68,29 @@ public class Member {
     private List<Feed> feedList;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
-    private Set<Clap> clapSet;
-
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<MissionStatus> missionStatusSet;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<SubmitMission> submitMissionList;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
-    private RefreshToken refreshToken;
-
     @Builder
-    public Member(Long id, String email,String name, Authority role, String nickname, String password, String profilePhoto, String type, Boolean acceptMail) {
+    public Member(Long id, String email,String kakaoNickname, Authority role, String password, String profilePhoto, String type, Boolean acceptMail) {
         this.id =getId();
         this.kakaoId = id;
         this.email = email;
-        this.name = name;
+        this.name = kakaoNickname;
         this.role = role;
-        this.nickname = nickname;
+        this.nickname = "";
         this.password = password;
         this.profilePhoto = profilePhoto;
         this.type = type;
         this.acceptMail = acceptMail;
         this.missionPoint = 0L;
         this.dailyMissionPoint = 0L;
+    }
+
+    public Member(long l) {
+        this.id = l;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.hanghae.greenstep.clap;
 
+import com.hanghae.greenstep.clap.Dto.ClapRequestDto;
 import com.hanghae.greenstep.feed.Feed;
-import com.hanghae.greenstep.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,14 +17,13 @@ public class Clap {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Feed feed;
 
     public Clap(ClapRequestDto clapRequestDto) {
-        if (clapRequestDto.getMember() != null) this.member = clapRequestDto.getMember();
+        if (clapRequestDto.getMember().getId() != null) this.memberId = clapRequestDto.getMember().getId();
         if (clapRequestDto.getFeed() != null) this.feed = clapRequestDto.getFeed();
     }
 }

@@ -1,8 +1,9 @@
 package com.hanghae.greenstep.jwt;
 
-import com.hanghae.greenstep.admin.AdminTokenDto;
+import com.hanghae.greenstep.admin.Dto.AdminTokenDto;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+import com.hanghae.greenstep.jwt.Dto.TokenDto;
 import com.hanghae.greenstep.member.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -13,11 +14,9 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Optional;
 
 import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
 import static com.hanghae.greenstep.shared.Authority.ROLE_MEMBER;
@@ -29,16 +28,12 @@ public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_PREFIX = "Bearer ";
     public static final long ACCESS_TOKEN_EXPIRE_TIME = 304800000;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 604800000;
 
     private final Key key;
 
-    private final RefreshTokenRepository refreshTokenRepository;
 
-    public TokenProvider(@Value("${jwt.secret}") String secretKey,
-                         RefreshTokenRepository refreshTokenRepository) {
-        this.refreshTokenRepository = refreshTokenRepository;
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+    public TokenProvider(@Value("${jwt.secret}") String secretKey) {
+         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -52,24 +47,10 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-
-        RefreshToken refreshTokenObject = RefreshToken.builder()
-                .id(member.getId())
-                .member(member)
-                .value(refreshToken)
-                .build();
-
-        refreshTokenRepository.save(refreshTokenObject);
-
         return TokenDto.builder()
                 .grantType(BEARER_PREFIX)
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-                .refreshToken(refreshToken)
                 .member(member)
                 .newComer(newComer)
                 .kakaoAccessToken(kakaoAccessToken)
@@ -102,37 +83,6 @@ public class TokenProvider {
         throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
 
-    @Transactional(readOnly = true)
-    public RefreshToken isPresentRefreshToken(Member member) {
-        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByMember(member);
-        return optionalRefreshToken.orElseThrow(
-                () -> new CustomException(ErrorCode.INVALID_TOKEN)
-        );
-    }
-
-    @Transactional
-    public void deleteRefreshToken(Member member) {
-        RefreshToken refreshToken = isPresentRefreshToken(member);
-        refreshTokenRepository.delete(refreshToken);
-    }
-    public TokenDto generateAccessTokenDto(Member member) {
-        long now = (new Date().getTime());
-        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = Jwts.builder()
-                .setSubject(member.getEmail())
-                .claim(AUTHORITIES_KEY, ROLE_MEMBER.toString())
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-        String refreshToken = refreshTokenRepository.findByMember(member).get().getValue();
-        return TokenDto.builder()
-                .grantType(BEARER_PREFIX)
-                .accessToken(accessToken)
-                .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-                .refreshToken(refreshToken)
-                .build();
-    }
-
     public AdminTokenDto generateTokenDto(Member admin) {
         long now = (new Date().getTime());
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
@@ -143,24 +93,10 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-
-        RefreshToken refreshTokenObject = RefreshToken.builder()
-                .id(admin.getId())
-                .member(admin)
-                .value(refreshToken)
-                .build();
-
-        refreshTokenRepository.save(refreshTokenObject);
-
         return AdminTokenDto.builder()
                 .grantType(BEARER_PREFIX)
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
-                .refreshToken(refreshToken)
                 .admin(admin)
                 .build();
     }

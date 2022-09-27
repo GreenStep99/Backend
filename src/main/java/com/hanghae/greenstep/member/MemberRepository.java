@@ -15,4 +15,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     List<Member> findTop3ByOrderByDailyMissionPointDesc();
 
     Optional<Member> findByEmailAndRole(String email, Authority role);
+
+    Optional<Member> findByName(String name);
 }

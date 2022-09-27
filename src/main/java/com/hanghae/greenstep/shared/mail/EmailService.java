@@ -1,7 +1,9 @@
 package com.hanghae.greenstep.shared.mail;
 
 import com.hanghae.greenstep.admin.VerifiedEvent;
+import com.hanghae.greenstep.shared.mail.Dto.MailDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -11,6 +13,7 @@ import static com.hanghae.greenstep.shared.Status.REJECTED;
 
 @RequiredArgsConstructor
 @Service
+@Async
 public class EmailService {
     private final EmailUtilImpl emailUtil;
 
