@@ -31,19 +31,9 @@ jobs:
           touch ./src/main/resources/application.properties 
         shell: bash
         
-      - name: make logback.xml
-        run:
-          touch ./src/main/resources/logback.xml 
-        shell: bash
-        
       - name: deliver application.properties
         run: 
           echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
-        shell: bash
-        
-      - name: deliver logback.xml
-        run: 
-          echo "${{ secrets.XML }}" > ./src/main/resources/logback.xml
         shell: bash
 
       - name: Build with Gradle
