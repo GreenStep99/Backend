@@ -29,6 +29,10 @@ jobs:
         run:
           mkdir ./src/main/resources | 
           touch ./src/main/resources/application.properties 
+        shell: bash
+        
+      - name: make logback.xml
+        run:
           touch ./src/main/resources/logback.xml 
         shell: bash
         
@@ -37,7 +41,7 @@ jobs:
           echo "${{ secrets.PROPERTIES }}" > ./src/main/resources/application.properties
         shell: bash
         
-      - name: deliver application.properties
+      - name: deliver logback.xml
         run: 
           echo "${{ secrets.LOG_BACK }}" > ./src/main/resources/logback.xml
         shell: bash
