@@ -42,6 +42,5 @@ public class MissionStatus {
 
     public void update(Status verification) {
         this.missionStatus = verification;
-        if(verification == REJECTED) this.missionStatus = Status.DEFAULT;
     }
 }
