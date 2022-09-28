@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,11 +17,13 @@ public class NotificationDto {
     private Long id;
     private String notificationContent;
     private String url;
+    private String imgUrl;
     private Boolean status;
+    private String createAt;
 
     public static NotificationDto create(Notification notification) {
         return new NotificationDto(notification.getId(), notification.getNotificationContent(),
-                notification.getUrl(), notification.getIsRead());
+                notification.getUrl(), notification.getImgUrl(), notification.getIsRead(), notification.getCreateAt());
     }
 
 }
