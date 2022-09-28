@@ -109,7 +109,7 @@ public class AdminService {
 
         if(verification == Status.REJECTED){
             //홈으로 이동하는 url
-            String Url = "https://greenstepapp.com/";
+            String Url = "/mission";
             //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
             String content = "["+submitMission.getMission().getMissionName()+"]미션 인증이 거부되었습니다. 다시 시도해 주세요!";
             String imgUrl = "nullImg";
@@ -133,6 +133,7 @@ public class AdminService {
         submitMission.update(verification, info, admin.getName());
         Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
         missionStatus.ifPresent(status -> status.update(verification));
+        if(verification==REJECTED) missionStatusRepository.deleteByMission(submitMission.getMission());
     }
 
     public void earnMissionPoints(SubmitMission submitMission) {
