@@ -37,7 +37,7 @@ public class ClapService {
             clapRepository.save(clap);
             Integer clapCount = clapRepository.countByFeed(feed);
             feed.update(clapCount);
-            String Url = "https://greenstepapp.com/detailposts/"+feed.getId();
+            String Url = "/detailposts/"+feed.getId();
             //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송
             String content = member.getNickname()+"님이 당신의 그린스텝에 박수를 보냈어요!";
             String imgUrl = feed.getImgUrl();
