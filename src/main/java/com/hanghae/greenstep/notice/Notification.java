@@ -30,6 +30,10 @@ public class Notification extends Timestamped {
     private RelatedURL url;
     //관련 url - 클릭시 이동해야할 링크
 
+    @Embedded
+    private RelatedIMGURL imgUrl;
+    //관련 url - 이미지 url
+
     @Column(nullable = false)
     private Boolean isRead;
     //읽었는지에 대한 여부
@@ -45,11 +49,12 @@ public class Notification extends Timestamped {
     private Member receiver;
     //회원정보
     @Builder
-    public Notification(Member receiver, NotificationType notificationType, String notificationContent, String url, Boolean isRead) {
+    public Notification(Member receiver, NotificationType notificationType, String notificationContent, String url, String imgUrl, Boolean isRead) {
         this.receiver = receiver;
         this.notificationType = notificationType;
         this.notificationContent = new NotificationContent(notificationContent);
         this.url = new RelatedURL(url);
+        this.imgUrl = new RelatedIMGURL(imgUrl);
         this.isRead = isRead;
     }
 
@@ -63,6 +68,10 @@ public class Notification extends Timestamped {
 
     public String getUrl() {
         return url.getUrl();
+    }
+
+    public String getImgUrl() {
+        return imgUrl.getImgUrl();
     }
 
 }
