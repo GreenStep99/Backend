@@ -175,6 +175,7 @@ public class KakaoSocialService {
                 String.class
         );
         log.info(response.getHeaders().getLocation().toString());
+        log.info(response.toString());
         return response.getHeaders().getLocation();
      }
 
