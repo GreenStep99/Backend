@@ -74,6 +74,11 @@ public class Notification extends Timestamped {
         return imgUrl.getImgUrl();
     }
 
+    public String getCreateAt(){
+        return String.valueOf(getCreatedAt());
+    }
+
+
 }
 
 /*
