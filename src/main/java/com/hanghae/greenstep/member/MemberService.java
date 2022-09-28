@@ -4,7 +4,6 @@ package com.hanghae.greenstep.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
-import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoMemberInfoDto;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoPhotoDto;
 import com.hanghae.greenstep.kakaoAPI.KakaoSocialService;
