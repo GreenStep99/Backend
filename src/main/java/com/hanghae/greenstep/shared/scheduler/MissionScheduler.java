@@ -2,7 +2,6 @@ package com.hanghae.greenstep.shared.scheduler;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
-import com.hanghae.greenstep.mission.Mission;
 import com.hanghae.greenstep.mission.MissionRepository;
 import com.hanghae.greenstep.submitMission.MissionStatusRepository;
 import lombok.RequiredArgsConstructor;
