@@ -33,7 +33,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.URI;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -47,7 +46,6 @@ public class KakaoSocialService {
     String kakaoClientId;
     @Value("${kakao.redirect_uri}")
     String RedirectURI;
-
     @Value("${kakao.logout_redirect_uri}")
     String RedirectLogoutURI;
 
@@ -161,24 +159,6 @@ public class KakaoSocialService {
                 .newComer(tokenDto.getNewComer())
                 .build();
     }
-
-
-    @Transactional
-    public URI kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
-        Member member = check.accessTokenCheck(request);
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
-        RestTemplate rt = new RestTemplate();
-        ResponseEntity<String> response = rt.exchange(
-                "https://kauth.kakao.com/oauth/logout?client_id="+kakaoClientId+"&logout_redirect_uri="+RedirectLogoutURI,
-                HttpMethod.GET,
-                kakaoTokenRequest,
-                String.class
-        );
-        log.info(response.getHeaders().getLocation().toString());
-        log.info(response.toString());
-        return response.getHeaders().getLocation();
-     }
-
 
     @Transactional
     public void deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
