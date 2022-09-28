@@ -174,6 +174,7 @@ public class KakaoSocialService {
                 kakaoTokenRequest,
                 String.class
         );
+        log.info(response.getHeaders().getLocation().toString());
         return response.getHeaders().getLocation();
      }
 
