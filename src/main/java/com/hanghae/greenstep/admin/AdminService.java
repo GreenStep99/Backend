@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.hanghae.greenstep.shared.Status.DONE;
+
 
 @Service
 @RequiredArgsConstructor
@@ -102,7 +104,7 @@ public class AdminService {
         if(verificationInfoDto != null) info = verificationInfoDto.getInfo();
         if(Boolean.TRUE.equals(submitMission.getMember().getAcceptMail())) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
-        earnMissionPoints(submitMission);
+        if(verification==DONE)earnMissionPoints(submitMission);
 
         //마이페이지로 이동하는 url
         String Url = "https://greenstepapp.com/mypage";
