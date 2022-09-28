@@ -108,7 +108,8 @@ public class AdminService {
         String Url = "https://greenstepapp.com/mypage";
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String content = "["+submitMission.getMission().getMissionName()+"]미션 인증이 완료되었습니다. 지금 바로 피드에 공유해보세요!";
-        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url, null);
+        String imgUrl = "nullImg";
+        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url, imgUrl);
 
         return new SubmitMissionResponseDto(submitMission);
     }
