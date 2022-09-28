@@ -97,9 +97,9 @@ public class NotificationService {
     }
 
     @Async
-    public void send(Member receiver, NotificationType notificationType, String notificationContent, String url) {
+    public void send(Member receiver, NotificationType notificationType, String notificationContent, String url, String imgUrl) {
 
-        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, notificationContent, url));
+        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, notificationContent, url, imgUrl));
 
         String receiverId = String.valueOf(receiver.getId());
         String eventId = receiverId + "_" + System.currentTimeMillis();
@@ -113,12 +113,13 @@ public class NotificationService {
 
 
     }
-    private Notification createNotification(Member receiver, NotificationType notificationType, String notificationContent, String url) {
+    private Notification createNotification(Member receiver, NotificationType notificationType, String notificationContent, String url, String imgUrl) {
         return Notification.builder()
                 .receiver(receiver)
                 .notificationType(notificationType)
                 .notificationContent(notificationContent)
                 .url(url)
+                .imgUrl(imgUrl)
                 .isRead(false) // 현재 읽음상태
                 .build();
     }

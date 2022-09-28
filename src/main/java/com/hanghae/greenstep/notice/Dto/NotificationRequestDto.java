@@ -14,4 +14,5 @@ public class NotificationRequestDto {
     private NotificationType notificationType;
     private String notificationContent;
     private String url;
+    private String imgUrl;
 }

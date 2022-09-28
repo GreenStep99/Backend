@@ -15,11 +15,12 @@ public class NotificationDto {
     private Long id;
     private String notificationContent;
     private String url;
+    private String imgUrl;
     private Boolean status;
 
     public static NotificationDto create(Notification notification) {
         return new NotificationDto(notification.getId(), notification.getNotificationContent(),
-                notification.getUrl(), notification.getIsRead());
+                notification.getUrl(), notification.getImgUrl(), notification.getIsRead());
     }
 
 }

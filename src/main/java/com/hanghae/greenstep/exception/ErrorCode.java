@@ -42,7 +42,8 @@ public enum ErrorCode {
     NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND.value(), "N005", "존재하지 않는 알림입니다."),
     FAIL_DELETE_All_NOTIFICATION(HttpStatus.BAD_REQUEST.value(), "N006", "전체 알림 삭제를 실패했습니다."),
     FAIL_DELETE_NOTIFICATION(HttpStatus.BAD_REQUEST.value(), "N007", "알림 삭제를 실패했습니다."),
-    VALID_NOT_URL(HttpStatus.BAD_REQUEST.value(), "N008", "유효하지 않는 URL 입니다.");
+    VALID_NOT_URL(HttpStatus.BAD_REQUEST.value(), "N008", "유효하지 않는 URL 입니다."),
+    VALID_NOT_IMG_URL(HttpStatus.BAD_REQUEST.value(), "N009", "유효하지 않는 이미지입니다.");
 
 
     private final int httpStatus;
