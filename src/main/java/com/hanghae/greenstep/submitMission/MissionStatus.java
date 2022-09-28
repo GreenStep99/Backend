@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static com.hanghae.greenstep.shared.Status.REJECTED;
+
 @Entity
 @NoArgsConstructor
 @Getter
@@ -40,5 +42,6 @@ public class MissionStatus {
 
     public void update(Status verification) {
         this.missionStatus = verification;
+        if(verification == REJECTED) this.missionStatus = Status.DEFAULT;
     }
 }
