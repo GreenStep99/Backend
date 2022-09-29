@@ -6,7 +6,6 @@ import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Status;
 import com.hanghae.greenstep.submitMission.MissionStatus;
 import com.hanghae.greenstep.submitMission.MissionStatusRepository;
-import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,22 +73,5 @@ public class MissionService {
         }
         return missionResponseDtoList;
     }
-
-    //n+1문제 없음
-//    @Transactional(readOnly = true)
-//    public ResponseEntity<?> getMissionDetail(Long missionId, HttpServletRequest request) {
-//        check.accessTokenCheck(request);
-//        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomException(ErrorCode.MISSION_NOT_FOUND));
-//        return new ResponseEntity<>(Message.success(MissionResponseDto.builder()
-//                .missionId(mission.getId())
-//                .missionName(mission.getMissionName())
-//                .missionImageUrl(mission.getMissionImageUrl())
-//                .missionContent(mission.getMissionContent())
-//                .missionType(mission.getMissionType())
-//                .missionName(mission.getMissionName())
-//                .onShow(mission.getOnShow())
-//                .build()), HttpStatus.OK);
-//    }
-
 
 }

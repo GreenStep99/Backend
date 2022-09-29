@@ -2,7 +2,6 @@ package com.hanghae.greenstep.shared.scheduler;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
-import com.hanghae.greenstep.mission.Mission;
 import com.hanghae.greenstep.mission.MissionRepository;
 import com.hanghae.greenstep.submitMission.MissionStatusRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +24,16 @@ public class MissionScheduler {
     private final MemberRepository memberRepository;
 
 
-//    @Scheduled(cron = "0 0 0 1/1 * ?")
-////    @Scheduled(cron = "0 0/1 * 1/1 * ?")
-//    @Transactional
-//    public void resetAndUpdateDailyMission() {
-//        log.info("Scheduled Run");
-//        List<Member> allMember = memberRepository.findAll();
-//        for (Member member : allMember) {
-//            member.resetDailyPoint();
-//        }
-//        missionStatusRepository.deleteAllDailyMissionStatus();
+    @Scheduled(cron = "0 0 0 1/1 * ?")
+//    @Scheduled(cron = "0 0/1 * 1/1 * ?")
+    @Transactional
+    public void resetAndUpdateDailyMission() {
+        log.info("Scheduled Run");
+        List<Member> allMember = memberRepository.findAll();
+        for (Member member : allMember) {
+            member.resetDailyPoint();
+        }
+        missionStatusRepository.deleteAllDailyMissionStatus();
 //        List<Mission> allDailyMissionList = missionRepository.findAllDailyMission();
 //        for (Mission mission : allDailyMissionList) {
 //            mission.updateOnShow(false);
@@ -44,8 +43,8 @@ public class MissionScheduler {
 //            log.info(mission.getMissionName());
 //            mission.updateOnShow(true);
 //        }
-//    }
-//
+    }
+
 //    @Scheduled(cron = "0 0 0 ? * SUN")
 //    @Transactional
 //    public void resetAndUpdateWeeklyMission() {

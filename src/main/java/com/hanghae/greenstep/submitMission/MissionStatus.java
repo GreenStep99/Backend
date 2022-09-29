@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static com.hanghae.greenstep.shared.Status.REJECTED;
+
 @Entity
 @NoArgsConstructor
 @Getter

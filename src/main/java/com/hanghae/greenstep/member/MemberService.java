@@ -4,7 +4,6 @@ package com.hanghae.greenstep.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
-import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoMemberInfoDto;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoPhotoDto;
 import com.hanghae.greenstep.kakaoAPI.KakaoSocialService;
@@ -13,15 +12,21 @@ import com.hanghae.greenstep.member.Dto.MemberResponseDto;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.util.Arrays;
 
 import static com.hanghae.greenstep.shared.Status.DONE;
 import static com.hanghae.greenstep.shared.Status.WAITING;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberService {
     private final Check check;
@@ -48,6 +53,18 @@ public class MemberService {
         int waitingMissionCount = submitMissionRepository.countByMemberAndStatus(member, WAITING);
         return new MemberResponseDto(member, missionCount, waitingMissionCount);}
 
+    public void deleteAllCookies(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies(); // 모든 쿠키 가져오기
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName(); // 쿠키 이름 가져오기
+                String value = cookie.getValue(); // 쿠키 값 가져오기
+                log.info("쿠키 이름 : " + name + "   쿠키값 : " + value);
+                cookie.setMaxAge(0); // 유효시간을 0으로 설정
+                response.addCookie(cookie);
+            }
+        }
+    }
 
     public KakaoPhotoDto getKakaoPhoto(HttpServletRequest request) throws JsonProcessingException {
         String accessToken = request.getHeader("Kakao_Authorization");

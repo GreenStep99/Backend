@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -46,5 +47,4 @@ public class SubmitMissionController {
         submitMissionService.submitMission(missionId, request, missionRequestDto);
         return new ResponseEntity<>(Message.success("전송 완료"),HttpStatus.OK);
     }
-
 }

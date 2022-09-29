@@ -35,9 +35,4 @@ public class MissionController {
         return new ResponseEntity<>(Message.success(missionResponseDtoList), HttpStatus.OK);
     }
 
-//    @GetMapping("/missions/{missionId}")
-//    public ResponseEntity<?> getMissionDetail(@PathVariable Long missionId, HttpServletRequest request) {
-//        return missionService.getMissionDetail(missionId, request);
-//    }
-
 }

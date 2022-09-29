@@ -49,7 +49,6 @@ public class NotificationService {
 
             // 503 에러를 방지하기 위해 처음 연결 진행 시 더미 데이터를 전달
             String eventId = makeTimeIncludeId(userId);
-            log.info("나나나나나나나나나나나나"+eventId);
             // 수 많은 이벤트 들을 구분하기 위해 이벤트 ID에 시간을 통해 구분을 해줌
             sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + userId + "]");
 
@@ -61,7 +60,6 @@ public class NotificationService {
             log.info("다다다다다다다다다다");
             throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
         }
-        log.info("라라라라라라라라라라라라라라라라라라");
         return emitter;
     }
 
