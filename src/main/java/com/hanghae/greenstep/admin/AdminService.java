@@ -133,7 +133,6 @@ public class AdminService {
         submitMission.update(verification, info, admin.getName());
         Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
         missionStatus.ifPresent(status -> status.update(verification));
-        if(verification==REJECTED) missionStatusRepository.deleteByMission(submitMission.getMission());
     }
 
     public void earnMissionPoints(SubmitMission submitMission) {
