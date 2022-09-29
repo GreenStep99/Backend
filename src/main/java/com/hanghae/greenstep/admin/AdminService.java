@@ -10,9 +10,10 @@ import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.notice.NotificationService;
+import com.hanghae.greenstep.notice.NotificationType;
+import com.hanghae.greenstep.shared.Authority;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Status;
-import com.hanghae.greenstep.shared.notice.NotificationType;
 import com.hanghae.greenstep.submitMission.Dto.SubmitMissionResponseDto;
 import com.hanghae.greenstep.submitMission.Dto.VerificationInfoDto;
 import com.hanghae.greenstep.submitMission.MissionStatus;
@@ -33,7 +34,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.hanghae.greenstep.shared.Authority.ROLE_ADMIN;
+import static com.hanghae.greenstep.shared.Status.DONE;
+import static com.hanghae.greenstep.shared.Status.REJECTED;
+
 
 @Service
 @RequiredArgsConstructor
@@ -75,8 +78,8 @@ public class AdminService {
     //n+1 문제 없음
     public AdminLoginResponseDto login(AdminLoginRequestDto adminLoginRequestDto, HttpServletResponse response) {
         blockSqlSentence(adminLoginRequestDto);
-        Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), ROLE_ADMIN).orElseThrow(
-                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member admin = memberRepository.findByEmailAndRole(adminLoginRequestDto.getEmail(), Authority.ROLE_ADMIN).orElseThrow(
+                () -> new CustomException(ErrorCode.MEMBER_NOT_ALLOWED));
         if (!admin.validatePassword(passwordEncoder, adminLoginRequestDto.getPassword())) {
             throw new CustomException(ErrorCode.INVALID_MEMBER_INFO);
         }
@@ -102,13 +105,25 @@ public class AdminService {
         if(verificationInfoDto != null) info = verificationInfoDto.getInfo();
         if(Boolean.TRUE.equals(submitMission.getMember().getAcceptMail())) publisher.publishEvent(new VerifiedEvent(verification,submitMission,info));
         changeMissionStatus(verification, submitMission, admin, info);
-        earnMissionPoints(submitMission);
+        if(verification==DONE)earnMissionPoints(submitMission);
+
+        if(verification == Status.REJECTED){
+            //홈으로 이동하는 url
+            String Url = "/mission";
+            //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
+            String content = "["+submitMission.getMission().getMissionName()+"]미션 인증이 거부되었습니다. 다시 시도해 주세요!";
+            String imgUrl = "nullImg";
+            notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url, imgUrl);
+
+            return new SubmitMissionResponseDto(submitMission);
+        }
 
         //마이페이지로 이동하는 url
-        String Url = "https://www.greenstepapp.com/mypage";
+        String Url = "/mypage";
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
-        String content = submitMission.getMember().getNickname()+"님! 미션 인증이 완료되었습니다!";
-        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url);
+        String content = "["+submitMission.getMission().getMissionName()+"]미션 인증이 완료되었습니다. 지금 바로 피드에 공유해보세요!";
+        String imgUrl = "nullImg";
+        notificationService.send(submitMission.getMember(), NotificationType.APPROVE, content, Url, imgUrl);
 
         return new SubmitMissionResponseDto(submitMission);
     }
@@ -118,6 +133,7 @@ public class AdminService {
         submitMission.update(verification, info, admin.getName());
         Optional<MissionStatus> missionStatus = missionStatusRepository.findByMemberAndMission(submitMission.getMember(), submitMission.getMission());
         missionStatus.ifPresent(status -> status.update(verification));
+        if(verification==REJECTED) missionStatusRepository.deleteByMission(submitMission.getMission());
     }
 
     public void earnMissionPoints(SubmitMission submitMission) {
@@ -125,7 +141,8 @@ public class AdminService {
             submitMission.getMember().earnDailyPoint();
         if (Objects.equals(submitMission.getMission().getMissionType(), "weekly"))
             submitMission.getMember().earnWeeklyPoint();
-        submitMission.getMember().earnChallengePoint();
+        if (Objects.equals(submitMission.getMission().getMissionType(), "challenge"))
+            submitMission.getMember().earnChallengePoint();
     }
 
     public void blockSqlSentence(AdminLoginRequestDto requestDto) {

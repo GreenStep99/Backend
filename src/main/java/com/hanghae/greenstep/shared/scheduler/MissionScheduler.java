@@ -2,7 +2,6 @@ package com.hanghae.greenstep.shared.scheduler;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
-import com.hanghae.greenstep.mission.Mission;
 import com.hanghae.greenstep.mission.MissionRepository;
 import com.hanghae.greenstep.submitMission.MissionStatusRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,9 @@ public class MissionScheduler {
 
     private final MemberRepository memberRepository;
 
+
     @Scheduled(cron = "0 0 0 1/1 * ?")
+//    @Scheduled(cron = "0 0/1 * 1/1 * ?")
     @Transactional
     public void resetAndUpdateDailyMission() {
         log.info("Scheduled Run");
@@ -43,7 +44,7 @@ public class MissionScheduler {
 //            mission.updateOnShow(true);
 //        }
     }
-
+    
     @Scheduled(cron = "0 0 0 ? * SUN")
     @Transactional
     public void resetAndUpdateWeeklyMission() {
@@ -75,4 +76,5 @@ public class MissionScheduler {
 //            mission.updateOnShow(true);
 //        }
     }
+
 }

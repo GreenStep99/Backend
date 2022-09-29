@@ -4,7 +4,6 @@ package com.hanghae.greenstep.member;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
-import com.hanghae.greenstep.jwt.TokenProvider;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoMemberInfoDto;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoPhotoDto;
 import com.hanghae.greenstep.kakaoAPI.KakaoSocialService;
@@ -24,7 +23,6 @@ import static com.hanghae.greenstep.shared.Status.WAITING;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final TokenProvider tokenProvider;
     private final Check check;
     private final MemberRepository memberRepository;
     private final SubmitMissionRepository submitMissionRepository;
@@ -35,6 +33,9 @@ public class MemberService {
         Member member = memberRepository.findByEmail(check.accessTokenCheck(request).getEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
+        if(!memberRequestDto.getNickname().matches("^[a-zA-Z가-힣\\d]{1,8}$")||
+                !memberRequestDto.getName().matches("^[가-힣]{2,6}$"))
+            throw new CustomException(ErrorCode.INVALID_INPUT);
         member.update(memberRequestDto);
         return new MemberResponseDto(member);
     }

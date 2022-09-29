@@ -31,6 +31,7 @@ public class RankService {
                             .profilePhoto(member.getProfilePhoto())
                             .nickName(member.getNickname())
                             .name(member.getName())
+                            .dailyMissionPoint(member.getDailyMissionPoint())
                             .build()
             );
         }

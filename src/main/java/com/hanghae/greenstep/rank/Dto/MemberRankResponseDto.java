@@ -15,11 +15,12 @@ public class MemberRankResponseDto {
     private String profilePhoto;
     private String nickName;
     private String name;
+    private Long dailyMissionPoint;
 
     public MemberRankResponseDto(Member member){
         this.memberId =member.getId();
         this.profilePhoto = member.getProfilePhoto();
         this.nickName = member.getNickname();
         this.name = member.getName();
-    }
+        this.dailyMissionPoint = member.getDailyMissionPoint();}
 }
