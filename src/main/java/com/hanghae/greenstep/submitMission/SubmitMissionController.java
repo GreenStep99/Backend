@@ -37,6 +37,9 @@ public class SubmitMissionController {
 
     @PatchMapping("/profiles/missions")
     public ResponseEntity<?> hideMyMissions( @RequestBody Long[] missionsIdList, HttpServletRequest request){
+        for(Long id : missionsIdList){
+            System.out.println(id);
+        }
         List<MyMissionsDto> myMissionsDtoList = submitMissionService.hideMyMissions(missionsIdList, request);
         return new ResponseEntity<>(Message.success(myMissionsDtoList), HttpStatus.OK);
     }
