@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hanghae.greenstep.kakaoAPI.Dto.KakaoPhotoDto;
 import com.hanghae.greenstep.member.Dto.MemberRequestDto;
 import com.hanghae.greenstep.member.Dto.MemberResponseDto;
-import com.hanghae.greenstep.shared.CookieUtil;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class MemberController {
-    private final CookieUtil cookieUtil;
     private final MemberService memberService;
 
     @PatchMapping("/info")
@@ -38,11 +36,6 @@ public class MemberController {
     public ResponseEntity<?> getKakaoPhoto(HttpServletRequest request) throws JsonProcessingException {
         KakaoPhotoDto kakaoPhotoDto = memberService.getKakaoPhoto(request);
         return new ResponseEntity<>(Message.success(kakaoPhotoDto), HttpStatus.OK);
-    }
-
-    @GetMapping("/cookies")
-    public void deleteCookies(HttpServletRequest request, HttpServletResponse response){
-        cookieUtil.deleteAllCookies(request, response);
     }
 
 }

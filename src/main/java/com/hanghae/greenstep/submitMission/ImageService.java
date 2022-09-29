@@ -4,13 +4,11 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.util.IOUtils;
 import com.hanghae.greenstep.submitMission.Dto.ImageSizeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
@@ -32,7 +30,6 @@ public class ImageService {
 
     private final AmazonS3Client amazonS3Client;
 
-    @Transactional
     public String getImgUrlBase64(String base64) throws IOException {
         String[] strings = base64.split(",");
         String extension = switch (strings[0]) { // check image's extension
@@ -43,14 +40,14 @@ public class ImageService {
         };
         byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
 
-        log.info("작동");
         InputStream imgStream = new ByteArrayInputStream(data);
         InputStream resizedImg = checkImage(imgStream);
-        log.info(resizedImg.toString());
+
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(IOUtils.toByteArray(resizedImg).length);
+        metadata.setContentLength(resizedImg.available());
         metadata.setContentType("image/" + extension.substring(1));
         metadata.setCacheControl("public, max-age=31536000");
+
         long now = new Date().getTime();
         String fileName = now + "_" + UUID.randomUUID() + extension;
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, resizedImg, metadata)
@@ -60,26 +57,29 @@ public class ImageService {
 
     public InputStream checkImage(InputStream imgStream) throws IOException {
         BufferedImage inputImage = ImageIO.read(imgStream);
-        log.info(imgStream + "      이미지: " + inputImage);
         int imageHeight = inputImage.getHeight(null);
         int imageWidth = inputImage.getWidth(null);
-        log.info(imageWidth + "   " + imageHeight);
-        if (imageHeight > 320 && imageWidth > 320) return resize(imgStream, imageWidth, imageHeight);
-        else return imgStream;
+        if (imageHeight > 320 && imageWidth > 320) return resize(inputImage, imageWidth, imageHeight);
+        else {
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            ImageIO.write(inputImage,"png",outStream);
+            return new ByteArrayInputStream(outStream.toByteArray());
+        }
     }
     /* 리사이즈 실행 메소드 */
-    public InputStream resize(InputStream inputStream, int width, int height) throws IOException {
-        BufferedImage inputImage = ImageIO.read(inputStream);
+    public InputStream resize(BufferedImage inputImage, int width, int height) throws IOException {
+
         ImageSizeDto sizeDto = defineSize(height, width);
+        Image resizedImage = inputImage.getScaledInstance(sizeDto.getWidth(),sizeDto.getHeight(),Image.SCALE_SMOOTH);
+
         BufferedImage outputImage = new BufferedImage(sizeDto.getWidth(), sizeDto.getHeight(), inputImage.getType());
 
-        Graphics2D graphics2D = outputImage.createGraphics();
-        graphics2D.drawImage(inputImage, 0, 0, sizeDto.getWidth(), sizeDto.getHeight(), null); // 그리기
+        Graphics graphics2D = outputImage.getGraphics();
+        graphics2D.drawImage(resizedImage, 0, 0, null); // 그리기
         graphics2D.dispose(); // 자원해제
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(outputImage, "png", os);
-        log.info(" DONE");
         return new ByteArrayInputStream(os.toByteArray());
     }
 

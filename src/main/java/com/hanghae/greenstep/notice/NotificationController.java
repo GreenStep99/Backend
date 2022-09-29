@@ -29,7 +29,6 @@ public class NotificationController {
     public SseEmitter subscribe(HttpServletRequest request,
                                 @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
                                 String lastEventId) {
-        log.info("찍혀라"+request);
 
 
         return notificationService.subscribe(request, lastEventId);
