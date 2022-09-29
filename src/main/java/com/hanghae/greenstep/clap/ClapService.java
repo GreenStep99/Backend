@@ -7,8 +7,8 @@ import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.feed.FeedRepository;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.NotificationService;
+import com.hanghae.greenstep.notice.NotificationType;
 import com.hanghae.greenstep.shared.Check;
-import com.hanghae.greenstep.shared.notice.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,10 +37,11 @@ public class ClapService {
             clapRepository.save(clap);
             Integer clapCount = clapRepository.countByFeed(feed);
             feed.update(clapCount);
-            String Url = "https://www.greenstepapp.com/feed";
+            String Url = "/detailposts/"+feed.getId();
             //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송
-            String content = clap.getFeed().getMember().getNickname()+"님! 박수를 받으셨습니다.";
-            notificationService.send(clap.getFeed().getMember(), NotificationType.PRAISE, content, Url);
+            String content = member.getNickname()+"님이 당신의 그린스텝에 박수를 보냈어요!";
+            String imgUrl = feed.getImgUrl();
+            notificationService.send(clap.getFeed().getMember(), NotificationType.PRAISE, content, Url, imgUrl);
             return true;
         }
             clapRepository.deleteById(foundClap.getId());

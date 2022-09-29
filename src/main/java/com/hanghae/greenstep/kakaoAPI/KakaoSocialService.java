@@ -46,6 +46,8 @@ public class KakaoSocialService {
     String kakaoClientId;
     @Value("${kakao.redirect_uri}")
     String RedirectURI;
+    @Value("${kakao.logout_redirect_uri}")
+    String RedirectLogoutURI;
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -75,10 +77,10 @@ public class KakaoSocialService {
             String email = kakaoMemberInfo.getEmail();
             String profileImage = kakaoMemberInfo.getProfilePhoto();
             // role: 일반 사용자
-            kakaoUser = new Member(kakaoId, email, "이름을 입력해주세요", ROLE_MEMBER, nickname,  encodedPassword, profileImage, "kakao", true);
+            kakaoUser = new Member(kakaoId, email, nickname, ROLE_MEMBER,  encodedPassword, profileImage, "kakao", true);
             memberRepository.save(kakaoUser);
         }
-        if(Objects.equals(kakaoUser.getName(),"이름을 입력해주세요")){
+        if(Objects.equals(kakaoUser.getNickname(),"")){
             newComer =true;
         }
 
@@ -152,30 +154,11 @@ public class KakaoSocialService {
     public LoginResponseDto loginInfo(TokenDto tokenDto) {
         return LoginResponseDto.builder()
                 .memberId(tokenDto.getMember().getId())
-                .nickname(tokenDto.getMember().getNickname())
+                .name(tokenDto.getMember().getName())
                 .profilePhoto(tokenDto.getMember().getProfilePhoto())
                 .newComer(tokenDto.getNewComer())
                 .build();
     }
-
-
-    @Transactional
-    public void kakaoLogout(HttpServletRequest request) throws JsonProcessingException {
-        Member member = check.accessTokenCheck(request);
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = kakaoTokenHeaderMaker(request);
-        RestTemplate rt = new RestTemplate();
-        ResponseEntity<String> response = rt.exchange(
-                "https://kauth.kakao.com/oauth/authorize?client_id="+kakaoClientId+"&redirect_uri="+RedirectURI+"&response_type=code",
-                HttpMethod.GET,
-                kakaoTokenRequest,
-                String.class
-        );
-        String responseBody = response.getBody();
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(responseBody);
-        Long id = jsonNode.get("id").asLong();
-     }
-
 
     @Transactional
     public void deleteMemberInfo(HttpServletRequest request) throws JsonProcessingException {
