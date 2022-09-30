@@ -133,7 +133,9 @@ public class Member extends Timestamped {
 
     public void loseTenPoint(){
         this.missionPoint -= 10L;
+        if(this.dailyMissionPoint > 0){
         this.dailyMissionPoint -= 10L;
+        }
     }
 
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password){
