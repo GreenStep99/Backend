@@ -48,7 +48,13 @@ public class NotificationController {
 
     }
 
-    //알림 조회 - 구독자가 현재 읽지않은 알림 갯수
+    //알림 목록 접근 시 존재하는 목록들 전체 열람 확인처리
+    @PostMapping("/notification/open")
+    public void readNotification(HttpServletRequest request) {
+        notificationService.openNotification(request);
+    }
+
+    //알림 조회 - 구독자가 현재 열어보지 않은 알림 갯수
     @GetMapping(value = "/notifications/count")
     public NotificationCountDto countUnReadNotifications(HttpServletRequest request) {
         return notificationService.countUnReadNotifications(request);
