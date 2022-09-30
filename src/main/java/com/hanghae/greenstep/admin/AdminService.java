@@ -137,11 +137,11 @@ public class AdminService {
 
     public void earnMissionPoints(SubmitMission submitMission) {
         if (Objects.equals(submitMission.getMission().getMissionType(), "daily"))
-            submitMission.getMember().earnDailyPoint();
+            submitMission.getMember().earnTenPoint();
         if (Objects.equals(submitMission.getMission().getMissionType(), "weekly"))
-            submitMission.getMember().earnWeeklyPoint();
+            submitMission.getMember().earnTwentyPoint();
         if (Objects.equals(submitMission.getMission().getMissionType(), "challenge"))
-            submitMission.getMember().earnChallengePoint();
+            submitMission.getMember().earnThirtyPoint();
     }
 
     public void blockSqlSentence(AdminLoginRequestDto requestDto) {
