@@ -2,6 +2,8 @@ package com.hanghae.greenstep.notice;
 
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
+import com.hanghae.greenstep.feed.Dto.FeedResponseDto;
+import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
 import com.hanghae.greenstep.notice.Dto.NotificationDto;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -119,6 +122,7 @@ public class NotificationService {
                 .url(url)
                 .imgUrl(imgUrl)
                 .isRead(false) // 현재 읽음상태
+                .isOpen(false) // 현재 알림 유무 상태
                 .build();
     }
 
@@ -127,7 +131,6 @@ public class NotificationService {
 
         Member member = check.accessTokenCheck(request);
         Long userId = member.getId();
-        //try 안에 있던 repo 조회 밖으로 뺌
         List<Notification> notifications = notificationRepository.findAllByUserId(userId);
         try {
             return notifications.stream()
@@ -136,7 +139,6 @@ public class NotificationService {
         }catch (Exception e){
             throw  new CustomException(ErrorCode.FAIL_LOAD_NOTIFICATION);
         }finally {
-            //추가코드
             if (notifications.stream()!=null){
                 notifications.stream().close();
             }
@@ -149,7 +151,7 @@ public class NotificationService {
         Member member = check.accessTokenCheck(request);
         Long userId = member.getId();
         //유저의 알람리스트에서 ->isRead(false)인 갯수를 측정 ,
-        Long count = notificationRepository.countUnReadNotifications(userId);
+        Long count = notificationRepository.countUnOpenNotifications(userId);
         return NotificationCountDto.builder()
                 .count(count)
                 .build();
@@ -162,6 +164,18 @@ public class NotificationService {
         Optional<Notification> notification = notificationRepository.findById(notificationId);
         Notification checkNotification = notification.orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_NOTIFICATION));
         checkNotification.read(); // 읽음처리
+        return findAllNotifications(request);
+
+    }
+
+    @Transactional
+    public List<NotificationDto> openNotification(HttpServletRequest request) {
+        Member member = check.accessTokenCheck(request);
+        Long receiverId = member.getId();
+        List<Notification> notificationList = notificationRepository.findAllByUserId(receiverId);
+        for(Notification notification : notificationList){
+            notification.open();//열람 확인 처리
+        }
         return findAllNotifications(request);
 
     }
@@ -184,7 +198,7 @@ public class NotificationService {
             Optional<Notification> notification = notificationRepository.findById(notificationId);
             if(notification.isPresent()){
                 notificationRepository.deleteById(notificationId);
-                return new ResponseEntity<>(Message.success("알림 목록 전체 삭제 성공"),HttpStatus.OK);
+                return new ResponseEntity<>(Message.success("알림 목록 삭제 성공"),HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(Message.success("존재하지 않는 알림입니다."),HttpStatus.BAD_REQUEST);
             }

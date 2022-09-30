@@ -38,6 +38,9 @@ public class Notification extends Timestamped {
     private Boolean isRead;
     //읽었는지에 대한 여부
 
+    @Column(nullable = false)
+    private Boolean isOpen;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationType notificationType;
@@ -49,17 +52,21 @@ public class Notification extends Timestamped {
     private Member receiver;
     //회원정보
     @Builder
-    public Notification(Member receiver, NotificationType notificationType, String notificationContent, String url, String imgUrl, Boolean isRead) {
+    public Notification(Member receiver, NotificationType notificationType, String notificationContent, String url, String imgUrl, Boolean isRead, Boolean isOpen) {
         this.receiver = receiver;
         this.notificationType = notificationType;
         this.notificationContent = new NotificationContent(notificationContent);
         this.url = new RelatedURL(url);
         this.imgUrl = new RelatedIMGURL(imgUrl);
         this.isRead = isRead;
+        this.isOpen = isOpen;
     }
 
     public void read() {
         isRead = true;
+    }
+    public void open() {
+        isOpen = true;
     }
 
     public String getNotificationContent() {
