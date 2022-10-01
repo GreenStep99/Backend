@@ -193,7 +193,7 @@ public class NotificationService {
 
     }
     @Transactional
-    public ResponseEntity<Object> deleteByNotifications(Long notificationId) {
+    public ResponseEntity<Object> deleteByNotification(Long notificationId) {
         try{
             Optional<Notification> notification = notificationRepository.findById(notificationId);
             if(notification.isPresent()){
@@ -205,7 +205,17 @@ public class NotificationService {
         }catch (Exception e){
             throw new CustomException(ErrorCode.FAIL_DELETE_NOTIFICATION);
         }
+    }
 
+    @Transactional
+    public ResponseEntity<Object> deleteByNotifications(Long[] notificationIdList) {
+        for(Long notificationId : notificationIdList) {
+            Notification notification = notificationRepository.findById(notificationId).orElseThrow(
+                    () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
+            );
+            notificationRepository.delete(notification);
+        }
+        return new ResponseEntity<>(Message.success("알림 목록 삭제 성공"),HttpStatus.OK);
 
     }
 }
