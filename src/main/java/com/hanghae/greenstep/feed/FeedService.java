@@ -44,6 +44,7 @@ public class FeedService {
                 .submitMissionId(submitMission.getId())
                 .build();
         feedRepository.save(feed);
+        submitMission.getMember().earnTenPoint();
         submitMission.toggleOnFeed();
         return new FeedResponseDto(feed);
     }
@@ -117,6 +118,7 @@ public class FeedService {
             SubmitMission submitMission = submitMissionRepository.findById(feed.getSubmitMissionId()).orElseThrow(
                     () -> new CustomException(ErrorCode.POST_NOT_FOUND)
             );
+            submitMission.getMember().loseTenPoint();
             submitMission.toggleOnFeed();
             feedRepository.delete(feed);
         }

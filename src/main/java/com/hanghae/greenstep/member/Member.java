@@ -118,17 +118,24 @@ public class Member extends Timestamped {
         this.dailyMissionPoint = 0L;
     }
 
-    public void earnDailyPoint(){
+    public void earnTenPoint(){
         this.missionPoint += 10L;
         this.dailyMissionPoint += 10L;
     }
-    public void earnWeeklyPoint(){
+    public void earnTwentyPoint(){
         this.missionPoint += 20L;
         this.dailyMissionPoint += 20L;
     }
-    public void earnChallengePoint(){
+    public void earnThirtyPoint(){
         this.missionPoint += 30L;
         this.dailyMissionPoint += 30L;
+    }
+
+    public void loseTenPoint(){
+        this.missionPoint -= 10L;
+        if(this.dailyMissionPoint > 0){
+        this.dailyMissionPoint -= 10L;
+        }
     }
 
     public boolean validatePassword(PasswordEncoder passwordEncoder, String password){
