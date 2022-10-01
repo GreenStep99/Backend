@@ -61,8 +61,8 @@ public class NotificationController {
     }
 
     //알림 전체 삭제
-    @DeleteMapping(value = "/notifications/delete")
-    public ResponseEntity<Object> deleteNotifications(HttpServletRequest request) {
+    @DeleteMapping(value = "/notifications/delete/all")
+    public ResponseEntity<Object> deleteNotificationAll(HttpServletRequest request) {
 
         return notificationService.deleteAllByNotifications(request);
 
@@ -72,7 +72,14 @@ public class NotificationController {
     @DeleteMapping(value = "/notifications/delete/{notificationId}")
     public ResponseEntity<Object> deleteNotification(@PathVariable Long notificationId) {
 
-        return notificationService.deleteByNotifications(notificationId);
+        return notificationService.deleteByNotification(notificationId);
+    }
+
+    //선택 알림 삭제
+    @DeleteMapping(value = "/notifications/delete")
+    public ResponseEntity<Object> deleteNotifications(@RequestBody Long[] notificationIdList) {
+
+        return notificationService.deleteByNotifications(notificationIdList);
     }
 
 }
