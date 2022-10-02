@@ -211,7 +211,7 @@ public class NotificationService {
     public ResponseEntity<Object> deleteByNotifications(Long[] notificationIdList) {
         for(Long notificationId : notificationIdList) {
             Notification notification = notificationRepository.findById(notificationId).orElseThrow(
-                    () -> new CustomException(ErrorCode.FEED_NOT_FOUND)
+                    () -> new CustomException(ErrorCode.NOT_EXIST_NOTIFICATION)
             );
             notificationRepository.delete(notification);
         }
