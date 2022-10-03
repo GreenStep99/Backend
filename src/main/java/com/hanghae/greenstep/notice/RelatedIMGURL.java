@@ -15,7 +15,7 @@ import java.util.Objects;
 public class RelatedIMGURL {
     private static final int MAX_LENGTH = 255;
 
-    @Column(nullable = false, length = MAX_LENGTH)
+    @Column(nullable = false)
     private String imgUrl;
 
     public RelatedIMGURL(String imgUrl) {
