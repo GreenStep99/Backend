@@ -49,7 +49,7 @@ public class ImageService {
         metadata.setCacheControl("public, max-age=31536000");
 
         long now = new Date().getTime();
-        String fileName = now + "_" + UUID.randomUUID() + extension;
+        String fileName = "submit_mission/" + now + "_" + UUID.randomUUID() + extension;
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, resizedImg, metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
@@ -62,7 +62,7 @@ public class ImageService {
         if (imageHeight > 320 && imageWidth > 320) return resize(inputImage, imageWidth, imageHeight);
         else {
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            ImageIO.write(inputImage,"webp",outStream);
+            ImageIO.write(inputImage,"png",outStream);
             return new ByteArrayInputStream(outStream.toByteArray());
         }
     }
@@ -79,7 +79,7 @@ public class ImageService {
         graphics2D.dispose(); // 자원해제
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(outputImage, "webp", os);
+        ImageIO.write(outputImage, "png", os);
         return new ByteArrayInputStream(os.toByteArray());
     }
 
