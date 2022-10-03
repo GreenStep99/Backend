@@ -17,7 +17,6 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
     Long countUnOpenNotifications(@Param("userId") Long userId);
 
     Optional<Notification> findById(Long NotificationsId);
-    Optional<Notification> findByReceiverId(Long receiverId);
 
     void deleteAllByReceiverId(Long receiverId);
 
