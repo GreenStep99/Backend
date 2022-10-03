@@ -30,7 +30,6 @@ public class ImageService {
 
     private final AmazonS3Client amazonS3Client;
 
-
     public String getImgUrlBase64(String base64) throws IOException {
         String[] strings = base64.split(",");
         String extension = switch (strings[0]) { // check image's extension
@@ -50,7 +49,7 @@ public class ImageService {
         metadata.setCacheControl("public, max-age=31536000");
 
         long now = new Date().getTime();
-        String fileName = "submit_mission/" + now + "_" + UUID.randomUUID() + extension;
+        String fileName = now + "_" + UUID.randomUUID() + extension;
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, resizedImg, metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
@@ -94,5 +93,7 @@ public class ImageService {
         int resizedWidth = width / ratio;
         return (new ImageSizeDto(320, resizedWidth));
     }
+
+
 }
 

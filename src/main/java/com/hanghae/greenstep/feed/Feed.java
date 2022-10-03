@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 public class Feed extends Timestamped {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Id
     private Long id;
 
