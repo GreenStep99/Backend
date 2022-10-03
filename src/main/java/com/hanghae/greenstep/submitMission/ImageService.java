@@ -62,7 +62,7 @@ public class ImageService {
         if (imageHeight > 320 && imageWidth > 320) return resize(inputImage, imageWidth, imageHeight);
         else {
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            ImageIO.write(inputImage,"png",outStream);
+            ImageIO.write(inputImage,"webp",outStream);
             return new ByteArrayInputStream(outStream.toByteArray());
         }
     }
@@ -79,7 +79,7 @@ public class ImageService {
         graphics2D.dispose(); // 자원해제
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(outputImage, "png", os);
+        ImageIO.write(outputImage, "webp", os);
         return new ByteArrayInputStream(os.toByteArray());
     }
 

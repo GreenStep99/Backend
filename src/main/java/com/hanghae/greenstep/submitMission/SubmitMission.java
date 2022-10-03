@@ -21,7 +21,7 @@ import javax.persistence.*;
 public class SubmitMission extends Timestamped {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
