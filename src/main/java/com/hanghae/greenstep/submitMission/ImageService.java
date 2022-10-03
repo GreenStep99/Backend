@@ -49,7 +49,7 @@ public class ImageService {
         metadata.setCacheControl("public, max-age=31536000");
 
         long now = new Date().getTime();
-        String fileName = now + "_" + UUID.randomUUID() + extension;
+        String fileName = "submit_mission/" + now + "_" + UUID.randomUUID() + extension;
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, resizedImg, metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
