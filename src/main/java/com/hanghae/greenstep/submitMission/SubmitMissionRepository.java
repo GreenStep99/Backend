@@ -23,4 +23,7 @@ public interface SubmitMissionRepository extends JpaRepository<SubmitMission,Lon
     int countByMemberAndStatus(Member member, Status status);
 
     List<SubmitMission> findAllByMemberAndStatus(Member member, Status waiting);
+
+
+    List<SubmitMission> findAllByStatus(Status status);
 }

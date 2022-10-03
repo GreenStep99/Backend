@@ -22,7 +22,6 @@ import java.util.List;
 public class FeedService {
 
     private final Check check;
-
     private final SubmitMissionRepository submitMissionRepository;
     private final FeedRepository feedRepository;
     private final ClapRepository clapRepository;
