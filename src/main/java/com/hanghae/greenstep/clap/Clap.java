@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Clap {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long memberId;

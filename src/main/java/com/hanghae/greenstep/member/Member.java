@@ -39,7 +39,7 @@ public class Member extends Timestamped {
     @Column(nullable = false,length = 60)
     private String name;
 
-    @Column(nullable = false, length = 60)
+    @Column(length = 60)
     private String nickname;
 
     @Column(nullable = false)

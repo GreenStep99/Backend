@@ -17,7 +17,7 @@ import static com.hanghae.greenstep.shared.Status.REJECTED;
 public class MissionStatus {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
