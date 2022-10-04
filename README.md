@@ -9,8 +9,10 @@
 **하루하루 일상 속에서 지구를 지키는 한 발, 그린 스탭.**
 
 >
-> 매일매일 달라지는 환경 미션을 달성하고 환경 보호에 이바지해요! 
-> 인증 받은 사진을 공유하고 서로에게 칭찬을 나눠요. 
+> 매일매일 달라지는 환경 미션을 달성하고 환경 보호에 이바지해요!  
+>
+> 인증 받은 사진을 공유하고 서로에게 칭찬을 나눠요.   
+>
 > 소셜로그인으로 간편하게! PWA로 편하게! 함께해요!
 > 
 > **개발기간**
@@ -34,14 +36,13 @@
 
 ## ⚒️기술스택  
 
-- **백엔드**   
+**백엔드**   
 <div align='left' >
     <img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=white">
     <img src="https://img.shields.io/badge/spring-6DB33F?style=flat-square&logo=spring&logoColor=white">
     <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=black">
     <img src="https://img.shields.io/badge/gradle-02303A?style=flat-square&logo=gradle&logoColor=black">
     <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=black">
-    <br/>
     <img src="https://img.shields.io/badge/amazon%20aws-f7f7f7?style=flat-square&logo=amazon%20aws&logoColor=f89400">
     <img src="https://img.shields.io/badge/CodeDepoly-1F497D?style=flat-square&logo=CodeDepoly&logoColor=white">
     <img src="https://img.shields.io/badge/S3-FC5230?style=flat-square&logo=S3&logoColor=white">
@@ -49,9 +50,9 @@
     <img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=white">
     <img src="https://img.shields.io/badge/github%20actions-0769AD?style=flat-square&logo=github%20actions&logoColor=white">
 </div> 
-<br/>    <br/>    <br/>
+<br/>    <br/> 
 
-- **프론트엔드**
+**프론트엔드**
 <div align='left'>
     <img src="https://img.shields.io/badge/html-E34F26?style=flat-square&logo=html5&logoColor=white">
     <img src="https://img.shields.io/badge/css-1572B6?style=flat-square&logo=css3&logoColor=white">
@@ -59,7 +60,6 @@
     <img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
     <img src="https://img.shields.io/badge/react-61DAFB?style=flat-square&logo=react&logoColor=black">
     <img src="https://img.shields.io/badge/redux-764ABC?style=flat-square&logo=redux&logoColor=black">
-    <br/>
     <img src="https://img.shields.io/badge/figma-F24E1E?style=flat-square&logo=figma&logoColor=black">
     <img src="https://img.shields.io/badge/aws-232F3E?style=flat-square&logo=aws&logoColor=black">
     <img src="https://img.shields.io/badge/github-white?style=flat-square&logo=github&logoColor=black">
@@ -76,8 +76,8 @@
 ## 기능 선정 과정
 | # | 기능 명 | 결정된 기술 | 선택한 이유 |  #issue or WIKI |
 |---|---|---|---|---|
-| 1 |  배포 | AWS  |   |  |   
-| 2 |  실시간 알람 | SSE  |   |  [#127](https://github.com/GreenStep99/Backend/issues/127)  |   
+| 1 |  배포 | AWS  | AWS 하나로 모든 배포 환경을 체크 할 수 있어 편리하며 새로운 시스템을 도입하는 부담감이 적다.  |  |   
+| 2 |  실시간 알람 | SSE  | 단방향 통신으로 핸드셰이크 발생량이 웹소켓보다 작고 가벼워 더 합리적이다. |  [#127](https://github.com/GreenStep99/Backend/issues/127)  |   
 | 3 |  이미지 리사이징 | CDN, BufferedImage  | 촬영 후 사진이 바로 전송되기 때문에 서버에서 리사이징 하는 것이 적합하다는 의견이 나왔고 추가적으로 CDN을 이용하여 프론트의 랜더링 속도를 안정화 하기로 결정  | [#131](https://github.com/GreenStep99/Backend/issues/131) |    
 | 4 |  History Table |  envers | 간단한 어노테이션으로 특정 테이블의 변경 내역을 자동 생성해주는 점에서 직접 class를 생성하는 것보다 리소스를 적게 차지한다고 판단함  |[#69](https://github.com/GreenStep99/Backend/issues/69)  |
 
