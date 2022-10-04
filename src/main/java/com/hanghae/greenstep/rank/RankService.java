@@ -22,8 +22,8 @@ public class RankService {
         return makePointRankList(memberDailyRankList);
     }
 
-    public List<MemberRankResponseDto> makePointRankList(List<Member> memberRankList){
-        List<MemberRankResponseDto> memberRankResponseDtoList =new ArrayList<>();
+    public List<MemberRankResponseDto> makePointRankList(List<Member> memberRankList) {
+        List<MemberRankResponseDto> memberRankResponseDtoList = new ArrayList<>();
         for (Member member : memberRankList) {
             memberRankResponseDtoList.add(
                     MemberRankResponseDto.builder()

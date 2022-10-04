@@ -12,15 +12,10 @@ import com.hanghae.greenstep.member.Dto.MemberResponseDto;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.util.Arrays;
 
 import static com.hanghae.greenstep.shared.Status.DONE;
 import static com.hanghae.greenstep.shared.Status.WAITING;

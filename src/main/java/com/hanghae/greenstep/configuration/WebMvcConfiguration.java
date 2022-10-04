@@ -12,7 +12,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000","http://localhost:8080", "http://54.180.30.74:8080", "http://54.180.30.74", "https://greenstepserver.link", "https://greenstepapp.com", "https://greenstepserver.link/subscribe")
                 .allowedMethods("*")
                 .exposedHeaders("Authorization","Kakao_Authorization","Access_Token_Expire_Time")
-                .allowCredentials(true)//make client read header("jwt-token")
+                .allowCredentials(true)
         ;
     }
 }

@@ -15,7 +15,6 @@ import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
 import com.hanghae.greenstep.shared.Check;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +25,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -39,8 +37,7 @@ import java.util.UUID;
 import static com.hanghae.greenstep.shared.Authority.ROLE_MEMBER;
 
 @RequiredArgsConstructor
-@Service
-@Slf4j
+@Servic
 public class KakaoSocialService {
     @Value("${kakao.client_id}")
     String kakaoClientId;
@@ -176,7 +173,6 @@ public class KakaoSocialService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         long id = jsonNode.get("id").asLong();
-        log.info(id+"번 회원 탈퇴 완료");
     }
 
     public HttpEntity<MultiValueMap<String, String>> kakaoTokenHeaderMaker(HttpServletRequest request){

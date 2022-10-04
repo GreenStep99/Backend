@@ -24,6 +24,5 @@ public interface SubmitMissionRepository extends JpaRepository<SubmitMission,Lon
 
     List<SubmitMission> findAllByMemberAndStatus(Member member, Status waiting);
 
-
     List<SubmitMission> findAllByStatus(Status status);
 }
