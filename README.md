@@ -115,7 +115,7 @@
 
 | # | 문제상황 | 원인 | 해결한 방법 | 상세(WIKI)|   
 |---|---|---|---|---|
-| 1 |  update 적용 안되는 문제 |   |   |[PatchMapping - update 적용 안되는 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#patchmapping-jpa "위키로 이동합니다.")|   
+| 1 |  update 적용 안되는 문제 | 변경감지가 제대로 작동하지 않고 시행중 데이터가 소실될 위험이 있는 문제  | @Transactional과 member을 토큰이 아닌 memberRepository에서 직접 불러옴으로서 JPA가 적용될 수 있도록 코드 변경  |[PatchMapping - update 적용 안되는 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#patchmapping-jpa "위키로 이동합니다.")|   
 | 2 |  Base64파일 업로드 기능 구현 |multipartFile 변환에 익숙해져 있어 Base64형식에 대한 이해도와 변환 코드에 대한 이해도가 낮아 생긴 문제  | multipart파일로 변환하지 않고 ByteArrayStream을 사용하여 Base64를 바로 InputStream으로 변환  | [촬영한 사진 업로드](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%A4%91-%EC%B4%AC%EC%98%81%ED%95%9C-%EC%82%AC%EC%A7%84-%EC%97%85%EB%A1%9C%EB%93%9C--base64-%ED%8C%8C%EC%9D%BC- "위키로 이동합니다.")  |
 | 3 | @RequestBody로 단일 값을 받아오지 못하는 오류 | API통신, Json이해 부족  |   | [@RequestBody에서 스트링 값만 받아오는 경우](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#requestbody%EC%97%90%EC%84%9C-%EC%8A%A4%ED%8A%B8%EB%A7%81-%EA%B0%92%EB%A7%8C-%EB%B0%9B%EC%95%84%EC%98%A4%EB%8A%94-%EA%B2%BD%EC%9A%B0 "위키로 이동합니다.") |
 | 4 |  이미지 리사이징 | S3서버 부하 낮추고 랜더링 속도 개선을 목적으로 진행한 기능 구현 | BufferedImage를 사용하여 같은 비율로 최소값을 모바일 환경에 맞는 320으로  수정하여 S3에 저장, 이후 CDN을 연결하여 로딩 시간 축소  |  [이미지 리사이징](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A6%AC%EC%82%AC%EC%9D%B4%EC%A7%95 "위키로 이동합니다.")   |
