@@ -33,11 +33,12 @@
 
 
 ## 기능 선정 과정
-| # | 기능 명 | 고려한 기술 | 선택한 이유 |   
-|---|---|---|---|
-| 1 |  배포 | AWS  |   |   
-| 2 |  실시간 알람 | SSE  |   |   
-| 2 |  이미지 리사이징 | CDN, BufferedImage  |   |     
+| # | 기능 명 | 결정된 기술 | 선택한 이유 |  #issue or WIKI |
+|---|---|---|---|---|
+| 1 |  배포 | AWS  |   |  |   
+| 2 |  실시간 알람 | SSE  |   |  [#127](https://github.com/GreenStep99/Backend/issues/127)  |   
+| 3 |  이미지 리사이징 | CDN, BufferedImage  | 촬영 후 사진이 바로 전송되기 때문에 서버에서 리사이징 하는 것이 적합하다는 의견이 나왔고 추가적으로 CDN을 이용하여 프론트의 랜더링 속도를 안정화 하기로 결정  | [#131](https://github.com/GreenStep99/Backend/issues/131) |    
+| 4 |  History Table |  envers | 간단한 어노테이션으로 특정 테이블의 변경 내역을 자동 생성해주는 점에서 직접 class를 생성하는 것보다 리소스를 적게 차지한다고 판단함  |[#69](https://github.com/GreenStep99/Backend/issues/69)  |
 
 
 
@@ -46,9 +47,8 @@
 
 
 ## 기능상세
-40
 | # | 페이지 | 기능 명 | 사용된 기술 | #issue|  
-|---|---|---|---|
+|---|---|---|---|---|
 | 1 |  마이 페이지 | 카카오톡 소셜 로그인, 회원탈퇴  |   |   |
 | 2 |  마이 페이지 | 포스트 아카이빙 기능  |   |   |
 | 3 |  마이 페이지 | 포스트 숨기기 기능  |   |  |
@@ -76,7 +76,7 @@
 | # | 문제상황 | 원인 | 해결한 방법 | 상세(WIKI)|   
 |---|---|---|---|---|
 | 1 |  update 적용 안되는 문제 |   |   |[PatchMapping - update 적용 안되는 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#patchmapping-jpa "위키로 이동합니다.")|   
-| 2 |  Base64파일 업로드 기능 구현 | 레퍼런스와 S3에 대한 이해도 부족  |   | [촬영한 사진 업로드](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%A4%91-%EC%B4%AC%EC%98%81%ED%95%9C-%EC%82%AC%EC%A7%84-%EC%97%85%EB%A1%9C%EB%93%9C--base64-%ED%8C%8C%EC%9D%BC-"위키로 이동합니다.")  |
+| 2 |  Base64파일 업로드 기능 구현 | 레퍼런스와 S3에 대한 이해도 부족  |   | [촬영한 사진 업로드](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%A4%91-%EC%B4%AC%EC%98%81%ED%95%9C-%EC%82%AC%EC%A7%84-%EC%97%85%EB%A1%9C%EB%93%9C--base64-%ED%8C%8C%EC%9D%BC- "위키로 이동합니다.")  |
 | 3 | @RequestBody로 단일 값을 받아오지 못하는 오류 | API통신, Json이해 부족  |   | [@RequestBody에서 스트링 값만 받아오는 경우](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#requestbody%EC%97%90%EC%84%9C-%EC%8A%A4%ED%8A%B8%EB%A7%81-%EA%B0%92%EB%A7%8C-%EB%B0%9B%EC%95%84%EC%98%A4%EB%8A%94-%EA%B2%BD%EC%9A%B0 "위키로 이동합니다.") |
 | 4 |  이미지 리사이징 | S3서버 부하 낮추고 랜더링 속도 개선을 목적 |   |  [이미지 리사이징](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A6%AC%EC%82%AC%EC%9D%B4%EC%A7%95 "위키로 이동합니다.")   |
 | 5 |  자동배포 |   |   |  [자동배포](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#주소 "위키로 이동합니다.")   |
