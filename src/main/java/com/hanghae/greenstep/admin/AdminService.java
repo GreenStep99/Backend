@@ -35,7 +35,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.hanghae.greenstep.shared.Status.DONE;
-import static com.hanghae.greenstep.shared.Status.REJECTED;
 
 
 @Service

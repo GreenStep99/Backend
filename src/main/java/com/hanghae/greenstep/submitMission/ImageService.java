@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.hanghae.greenstep.submitMission.Dto.ImageSizeDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.UUID;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ImageService {
     @Value("${cloud.aws.s3.bucket}")
@@ -93,7 +91,6 @@ public class ImageService {
         int resizedWidth = width / ratio;
         return (new ImageSizeDto(320, resizedWidth));
     }
-
 
 }
 

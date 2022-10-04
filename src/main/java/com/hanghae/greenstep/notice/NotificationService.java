@@ -2,15 +2,12 @@ package com.hanghae.greenstep.notice;
 
 import com.hanghae.greenstep.exception.CustomException;
 import com.hanghae.greenstep.exception.ErrorCode;
-import com.hanghae.greenstep.feed.Dto.FeedResponseDto;
-import com.hanghae.greenstep.feed.Feed;
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
 import com.hanghae.greenstep.notice.Dto.NotificationDto;
 import com.hanghae.greenstep.shared.Check;
 import com.hanghae.greenstep.shared.Message;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -20,13 +17,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -54,7 +49,6 @@ public class NotificationService {
                 sendLostData(lastEventId, userId, emitterId, emitter);
             }
         }catch (Exception e){
-            log.info("다다다다다다다다다다");
             throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
         }
         return emitter;

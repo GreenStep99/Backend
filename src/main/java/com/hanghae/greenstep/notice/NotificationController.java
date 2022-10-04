@@ -3,7 +3,6 @@ package com.hanghae.greenstep.notice;
 import com.hanghae.greenstep.notice.Dto.NotificationCountDto;
 import com.hanghae.greenstep.notice.Dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Slf4j
+
 @RestController
 @RequiredArgsConstructor
 public class NotificationController {

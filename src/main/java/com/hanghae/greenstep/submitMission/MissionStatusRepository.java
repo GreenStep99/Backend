@@ -26,5 +26,4 @@ public interface MissionStatusRepository extends JpaRepository<MissionStatus,Lon
     @Query(value = "delete from MissionStatus m where m.missionType = 'challenge'")
     void deleteAllChallengeMissionStatus();
 
-    void deleteByMission(Mission mission);
 }

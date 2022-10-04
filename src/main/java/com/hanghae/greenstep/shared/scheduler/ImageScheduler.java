@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.hanghae.greenstep.submitMission.SubmitMission;
 import com.hanghae.greenstep.submitMission.SubmitMissionRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,7 +17,6 @@ import java.util.Objects;
 
 import static com.hanghae.greenstep.shared.Status.REJECTED;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ImageScheduler {
