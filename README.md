@@ -121,6 +121,8 @@
 | 4 |  이미지 리사이징 | S3서버 부하 낮추고 랜더링 속도 개선을 목적으로 진행한 기능 구현 | BufferedImage를 사용하여 같은 비율로 최소값을 모바일 환경에 맞는 320으로  수정하여 S3에 저장, 이후 CDN을 연결하여 로딩 시간 축소  |  [이미지 리사이징](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A6%AC%EC%82%AC%EC%9D%B4%EC%A7%95 "위키로 이동합니다.")   |
 | 5 |  깃 액션을 이용한 빌드 실패 |   |   |  [깃 액션을 이용한 빌드 실패](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EA%B9%83-%EC%95%A1%EC%85%98%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%B9%8C%EB%93%9C-%EC%8B%A4%ED%8C%A8 "위키로 이동합니다.")   |
 | 6 |  ACM 인증서 발급이 계속해서 지연되는 문제 |   |   |  [ACM 인증서 발급이 계속해서 지연되는 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting "위키로 이동합니다.")   |
-| 9 |  SSE |   |   |  [SSE](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#주소 "위키로 이동합니다.")   |
+| 7 |  Code Deploy를 이용한 서버 배포 실패 |   |   |  [Code Deploy를 이용한 서버 배포 실패](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#code-deploy%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%84%9C%EB%B2%84-%EB%B0%B0%ED%8F%AC-%EC%8B%A4%ED%8C%A8 "위키로 이동합니다.")   |
+| 8 |  Code Deploy를 이용한 서버 배포 과정이 매우 느리게 진행되는 문제 |   |   |  [Code Deploy를 이용한 서버 배포 과정이 매우 느리게 진행되는 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#code-deploy%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%84%9C%EB%B2%84-%EB%B0%B0%ED%8F%AC-%EA%B3%BC%EC%A0%95%EC%9D%B4-%EB%A7%A4%EC%9A%B0-%EB%8A%90%EB%A6%AC%EA%B2%8C-%EC%A7%84%ED%96%89%EB%90%98%EB%8A%94-%EB%AC%B8%EC%A0%9C "위키로 이동합니다.")   |
+| 9 |  N+1 문제 |   |   |  [N+1 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#n1-%EB%AC%B8%EC%A0%9C "위키로 이동합니다.")   |
 | 10 |  S3 백업 | S3에 대한 이해도를 늘리고, 자료 보관과 리커버리에 대한 경각심 강화  | S3의 버전 관리를 설정하고 사전에 백업 계획을 작성하여 객체가 손실되더라도 복원할 수 있도록 준비해야하며, S3자체가 중요도가 높을 경우, 백업이 가능한 S3 옵션을 사용하거나 지역간 교차 백업, 클라우드 백업등을 이용하여 만약의 상황 준비   |  [S3 객체 복원](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#주소 "위키로 이동합니다.")   |
 
