@@ -2,17 +2,22 @@
 
 ![003](https://user-images.githubusercontent.com/108536712/190843747-b6555f56-30e2-452d-9279-c25f704570bc.png)
 
-우리가 그리는 푸른 발자국이 지구를 구하도록 
-하루하루 일상 속에서 지구를 지키는 한 발, 그린 스탭.     
-
-바로가기: <https://greenstepapp.com>    
--> 모바일로 접속해주세요!   
+## 프로젝트 소개
 
 
+**우리가 그리는 푸른 발자국이 지구를 구하도록** 
+**하루하루 일상 속에서 지구를 지키는 한 발, 그린 스탭.**
 
-**개발기간**
-2022.08.26- 2022. 10.05   
-
+>
+> 매일매일 달라지는 환경 미션을 달성하고 환경 보호에 이바지해요! 
+> 인증 받은 사진을 공유하고 서로에게 칭찬을 나눠요. 
+> 소셜로그인으로 간편하게! PWA로 편하게! 함께해요!
+> 
+> **개발기간**
+> 2022.08.26- 2022. 10.05   
+> 
+> 바로가기: <https://greenstepapp.com>    -> 모바일로 접속해주세요!
+> 
 
 
 
@@ -22,12 +27,48 @@
 - Designer: 이시은   
 
 
+## 🕸️아키텍처
+![그린스텝 발표자료 _ 복사본-005](https://user-images.githubusercontent.com/108536712/193769500-054076d4-ccc5-46c9-a7f9-6e6163476e25.png)
 
-## ⚒️기술스택
+
+
+## ⚒️기술스택  
+
 - **백엔드**   
+<div align='center' >
+    <img src="https://img.shields.io/badge/java-007396?style=flat-square&logo=java&logoColor=white">
+    <img src="https://img.shields.io/badge/spring-6DB33F?style=flat-square&logo=spring&logoColor=white">
+    <img src="https://img.shields.io/badge/springboot-6DB33F?style=flat-square&logo=springboot&logoColor=black">
+    <img src="https://img.shields.io/badge/gradle-02303A?style=flat-square&logo=gradle&logoColor=black">
+    <img src="https://img.shields.io/badge/mysql-4479A1?style=flat-square&logo=mysql&logoColor=black">
+    <br/>
+    <img src="https://img.shields.io/badge/amazon%20aws-f7f7f7?style=flat-square&logo=amazon%20aws&logoColor=f89400">
+    <img src="https://img.shields.io/badge/CodeDepoly-1F497D?style=flat-square&logo=CodeDepoly&logoColor=white">
+    <img src="https://img.shields.io/badge/S3-FC5230?style=flat-square&logo=S3&logoColor=white">
+    <img src="https://img.shields.io/badge/CloudFront-FF9900?style=flat-square&logo=CloudFront&logoColor=white">
+    <img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=white">
+    <img src="https://img.shields.io/badge/github%20actions-0769AD?style=flat-square&logo=github%20actions&logoColor=white">
+</div> 
+<br/>    <br/>    <br/>
 
+- **프론트엔드**
+<div align='center'>
+    <img src="https://img.shields.io/badge/html-E34F26?style=flat-square&logo=html5&logoColor=white">
+    <img src="https://img.shields.io/badge/css-1572B6?style=flat-square&logo=css3&logoColor=white">
+    <img src="https://img.shields.io/badge/sass-CC6699?style=flat-square&logo=sass&logoColor=white">
+    <img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
+    <img src="https://img.shields.io/badge/react-61DAFB?style=flat-square&logo=react&logoColor=black">
+    <img src="https://img.shields.io/badge/redux-764ABC?style=flat-square&logo=redux&logoColor=black">
+    <br/>
+    <img src="https://img.shields.io/badge/figma-F24E1E?style=flat-square&logo=figma&logoColor=black">
+    <img src="https://img.shields.io/badge/aws-232F3E?style=flat-square&logo=aws&logoColor=black">
+    <img src="https://img.shields.io/badge/github-white?style=flat-square&logo=github&logoColor=black">
+    <img src="https://img.shields.io/badge/github%20actions-0769AD?style=flat-square&logo=github%20actions&logoColor=white">
+</div> 
+<br/><br/>
+  
 
-- **프론트엔드**   
+   
 
 
 
@@ -80,8 +121,7 @@
 | 3 | @RequestBody로 단일 값을 받아오지 못하는 오류 | API통신, Json이해 부족  |   | [@RequestBody에서 스트링 값만 받아오는 경우](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#requestbody%EC%97%90%EC%84%9C-%EC%8A%A4%ED%8A%B8%EB%A7%81-%EA%B0%92%EB%A7%8C-%EB%B0%9B%EC%95%84%EC%98%A4%EB%8A%94-%EA%B2%BD%EC%9A%B0 "위키로 이동합니다.") |
 | 4 |  이미지 리사이징 | S3서버 부하 낮추고 랜더링 속도 개선을 목적 |   |  [이미지 리사이징](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%A6%AC%EC%82%AC%EC%9D%B4%EC%A7%95 "위키로 이동합니다.")   |
 | 5 |  깃 액션을 이용한 빌드 실패 |   |   |  [깃 액션을 이용한 빌드 실패](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#%EA%B9%83-%EC%95%A1%EC%85%98%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%B9%8C%EB%93%9C-%EC%8B%A4%ED%8C%A8 "위키로 이동합니다.")   |
-| 6 |  ACM 인증서 발급이 계속해서 지연되는 문제 |   |   |  [ACM 인증서 발급이 계속해서 지연되는 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#acm-%EC%9D%B8%EC%A6%9D%EC%84%9C-%EB%B0%9C%EA%B8%89%EC%9D%B4-%EA%B3%84%EC%86%8D%ED%95%B4%EC%84%9C-%EC%A7%80%EC%97%B0%EB%90%98%EB%8A%94-%EB%AC%B8%EC%A0%9C "위키로 이동합니다.")   |
-| 7 |  Code Deploy를 이용한 서버 배포 실패 |   |   |  [Code Deploy를 이용한 서버 배포 실패](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting "위키로 이동합니다.")   |
+| 6 |  ACM 인증서 발급이 계속해서 지연되는 문제 |   |   |  [ACM 인증서 발급이 계속해서 지연되는 문제](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting "위키로 이동합니다.")   |
 | 9 |  SSE |   |   |  [SSE](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#주소 "위키로 이동합니다.")   |
 | 10 |  S3 백업 | s3에 대한 이해 부족  |   |  [S3 객체 복원](https://github.com/GreenStep99/Backend/wiki/Trouble-Shooting#주소 "위키로 이동합니다.")   |
 
