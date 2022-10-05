@@ -49,6 +49,8 @@
     <img src="https://img.shields.io/badge/CloudFront-FF9900?style=flat-square&logo=CloudFront&logoColor=white">
     <img src="https://img.shields.io/badge/github-181717?style=flat-square&logo=github&logoColor=white">
     <img src="https://img.shields.io/badge/github%20actions-0769AD?style=flat-square&logo=github%20actions&logoColor=white">
+    <img src="https://img.shields.io/badge/kakao-FFCC00?style=flat-square&logo=kakao&logoColor=brown">
+    <img src="https://img.shields.io/badge/SMTP-CC0000?style=flat-square&logo=Gmail&logoColor=white">
 </div> 
 <br/>    <br/> 
 
@@ -56,9 +58,10 @@
 <div align='left'>
     <img src="https://img.shields.io/badge/html-E34F26?style=flat-square&logo=html5&logoColor=white">
     <img src="https://img.shields.io/badge/css-1572B6?style=flat-square&logo=css3&logoColor=white">
-    <img src="https://img.shields.io/badge/sass-CC6699?style=flat-square&logo=sass&logoColor=white">
+    <img src="https://img.shields.io/badge/styledComponents-CC6699?style=flat-square&logo=styled-components&logoColor=white">
     <img src="https://img.shields.io/badge/javascript-F7DF1E?style=flat-square&logo=javascript&logoColor=black">
     <img src="https://img.shields.io/badge/react-61DAFB?style=flat-square&logo=react&logoColor=black">
+    <img src="https://img.shields.io/badge/yarn-009999?style=flat-square&logo=yarn&logoColor=black">
     <img src="https://img.shields.io/badge/redux-764ABC?style=flat-square&logo=redux&logoColor=black">
     <img src="https://img.shields.io/badge/figma-F24E1E?style=flat-square&logo=figma&logoColor=black">
     <img src="https://img.shields.io/badge/aws-232F3E?style=flat-square&logo=aws&logoColor=black">
