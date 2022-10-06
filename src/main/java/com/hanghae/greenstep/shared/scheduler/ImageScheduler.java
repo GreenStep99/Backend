@@ -27,9 +27,6 @@ public class ImageScheduler {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Value("${cloud.aws.s3.base_url}")
-    String baseUrl;
-
     @Scheduled(cron = "0 0 0 1 * *")
     @Transactional
     public void deleteImages() {
@@ -48,6 +45,7 @@ public class ImageScheduler {
                         }
                     }
                 }
+
         }
     }
 }
