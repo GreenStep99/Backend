@@ -2,6 +2,7 @@ package com.hanghae.greenstep.shared.scheduler;
 
 import com.hanghae.greenstep.member.Member;
 import com.hanghae.greenstep.member.MemberRepository;
+import com.hanghae.greenstep.mission.Mission;
 import com.hanghae.greenstep.mission.MissionRepository;
 import com.hanghae.greenstep.submitMission.MissionStatusRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +35,14 @@ public class MissionScheduler {
             member.resetDailyPoint();
         }
         missionStatusRepository.deleteAllDailyMissionStatus();
-//        List<Mission> allDailyMissionList = missionRepository.findAllDailyMission();
-//        for (Mission mission : allDailyMissionList) {
-//            mission.updateOnShow(false);
-//        }
-//        List<Mission> dailyMissionList = missionRepository.findDailyMission();
-//        for (Mission mission : dailyMissionList) {
-//            log.info(mission.getMissionName());
-//            mission.updateOnShow(true);
-//        }
+        List<Mission> allDailyMissionList = missionRepository.findAllDailyMission();
+        for (Mission mission : allDailyMissionList) {
+            mission.updateOnShow(false);
+        }
+        List<Mission> dailyMissionList = missionRepository.findDailyMission();
+        for (Mission mission : dailyMissionList) {
+            mission.updateOnShow(true);
+        }
     }
     
     @Scheduled(cron = "0 0 0 ? * SUN")
@@ -50,15 +50,14 @@ public class MissionScheduler {
     public void resetAndUpdateWeeklyMission() {
         log.info("Scheduled Run");
         missionStatusRepository.deleteAllWeeklyMissionStatus();
-//        List<Mission> allDailyMissionList = missionRepository.findAllWeeklyMission();
-//        for (Mission mission : allDailyMissionList) {
-//            mission.updateOnShow(false);
-//        }
-//        List<Mission> dailyMissionList = missionRepository.findWeeklyMission();
-//        for (Mission mission : dailyMissionList) {
-//            log.info(mission.getMissionName());
-//            mission.updateOnShow(true);
-//        }
+        List<Mission> allDailyMissionList = missionRepository.findAllWeeklyMission();
+        for (Mission mission : allDailyMissionList) {
+            mission.updateOnShow(false);
+        }
+        List<Mission> dailyMissionList = missionRepository.findWeeklyMission();
+        for (Mission mission : dailyMissionList) {
+            mission.updateOnShow(true);
+        }
     }
 
     @Scheduled(cron = "0 0 0 1/1 * ?")
@@ -66,15 +65,14 @@ public class MissionScheduler {
     public void resetAndUpdateChallengeMission() {
         log.info("Scheduled Run");
         missionStatusRepository.deleteAllChallengeMissionStatus();
-//        List<Mission> allDailyMissionList = missionRepository.findAllChallengeMission();
-//        for (Mission mission : allDailyMissionList) {
-//            mission.updateOnShow(false);
-//        }
-//        List<Mission> dailyMissionList = missionRepository.findChallengeMission();
-//        for (Mission mission : dailyMissionList) {
-//            log.info(mission.getMissionName());
-//            mission.updateOnShow(true);
-//        }
+        List<Mission> allDailyMissionList = missionRepository.findAllChallengeMission();
+        for (Mission mission : allDailyMissionList) {
+            mission.updateOnShow(false);
+        }
+        List<Mission> dailyMissionList = missionRepository.findChallengeMission();
+        for (Mission mission : dailyMissionList) {
+            mission.updateOnShow(true);
+        }
     }
 
 }
